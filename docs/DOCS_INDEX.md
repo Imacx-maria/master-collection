@@ -23,6 +23,7 @@ Last verified: 2026-04-19
 |----------|------|---------|-------------------|
 | Extension MVP | `docs/plans/001-master-collection-extension-mvp.md` | Build the first inside-Webflow app scope | After app MVP scaffold and verification |
 | Website Platform | `docs/plans/002-master-collection-website-platform.md` | Build the site/account/checkout/package-access plan | After site skeleton, auth, checkout, and package API are implemented |
+| App Build Plan | `docs/plans/003-master-collection-app-build-plan.md` | Detailed implementation plan for the first Webflow Designer Extension build | After app MVP scaffold and verification |
 | Future Extension Plan | `docs/plans/000-master-collection-extension-future-plan.md` | Larger future plan including CMS/Hybrid/backend expansion | Archive or revise after MVP validates |
 
 ## Append-Only Documents
