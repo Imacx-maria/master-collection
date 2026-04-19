@@ -124,14 +124,14 @@ Current commands:
 
 ```bash
 cd site
-npm run dev
-npm run build
-npm run test
-npm run lint
-npm run typecheck
+bun run dev
+bun run build
+bun run test
+bun run lint
+bun run typecheck
 ```
 
-Do not use bun for the website. Keep bun confined to the separate `app/` Webflow extension.
+Use Bun for the website. Vercel must use `site/` as the Root Directory and should detect Bun from `site/bun.lock`.
 
 ## Credentials
 

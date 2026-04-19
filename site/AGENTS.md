@@ -52,12 +52,12 @@ Use the same shadcn/Flow-Goodies neutral light/dark baseline documented in `../A
 
 ## Commands
 
-Use npm in this folder:
+Use Bun in this folder:
 
 ```bash
-npm run dev
-npm run build
-npm run test
-npm run lint
-npm run typecheck
+bun run dev
+bun run build
+bun run test
+bun run lint
+bun run typecheck
 ```

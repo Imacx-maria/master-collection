@@ -84,26 +84,26 @@ C:\Users\maria\Desktop\pessoal\FLOW_PARTY\Flow-Goodies-extension-fg-api-update
 
 ## Commands
 
-The website runtime has been initialized in `site/` with npm:
+The website runtime has been initialized in `site/` with Bun:
 
 ```bash
 # site/
-npm run dev
-npm run build
-npm run test
-npm run lint
-npm run typecheck
+bun run dev
+bun run build
+bun run test
+bun run lint
+bun run typecheck
 ```
 
-The Webflow extension runtime is separate under `app/`:
+The Webflow extension runtime is separate under `app/` and also uses Bun:
 
 ```bash
 
 # app/
-npm run dev
-npm run build
-npm run test
-npm run lint
+bun run dev
+bun run build
+bun run test
+bun run lint
 ```
 
 ## Secrets
