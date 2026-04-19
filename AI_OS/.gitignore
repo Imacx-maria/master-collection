@@ -1,0 +1,7 @@
+# Project-specific artifacts
+*.js
+*.json
+clipboard_*
+SESSION-PROMPTS/SESSIONS/
+.DS_Store
+Thumbs.db

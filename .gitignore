@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+.vercel/
+coverage/
+
+.env
+.env.*
+!.env.example
+
+CLAUDE.local.md
+settings.local.json
+
+# The Webflow Designer Extension is versioned in its own GitHub repo.
+app/
