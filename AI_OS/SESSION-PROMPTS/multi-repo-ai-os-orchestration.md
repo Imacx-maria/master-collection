@@ -68,8 +68,8 @@ Global rules:
 4. Do not copy personal `~/.codex` behavior into repositories.
 5. Sync only portable AI_OS material.
 6. Do not sync personal-only skills by default, including:
-   - `SKILLS/gws-manager/`
-   - `SKILLS/user/`
+   - personal-only skills such as `SKILLS/gws-manager/` or `SKILLS/user/`
+   - mirrored global skills that already exist in Claude/Codex native skill systems
    - any skill tied to Maria-specific accounts, machine paths, or personal infrastructure
 7. Do not rewrite project-specific `CLAUDE.md`, `AGENTS.md`, `AI.md`, `AI_DECISION_LOG.md`, dated session handoffs, repo-specific prompts, or custom skills unless the change is clearly safe and justified.
 8. Do not do broad docs cleanup. Only inspect docs entry health where it affects the AI layer.
@@ -149,7 +149,8 @@ Only after finishing Phase 1 across all repositories:
 1. Select only repositories classified as `low-risk for safe-sync`.
 2. For those repositories only, apply a safe sync:
    - sync portable `AI_OS/` core files from master
-   - sync portable `AI_OS/references/`, `AI_OS/templates/`, and portable `AI_OS/SKILLS/`
+   - sync portable `AI_OS/references/`, `AI_OS/templates/`, and `AI_OS/SKILLS/AGENTS.md`
+   - preserve only project-specific local skill folders under `AI_OS/SKILLS/`
    - sync `AI_OS/SESSION-PROMPTS/AI_SESSION_START.md`
    - sync `AI_OS/SESSION-PROMPTS/SESSION_HANDOFF_TEMPLATE.md`
    - sync `.claude/` only if in scope and clearly safe

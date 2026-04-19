@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductPreviewSurface } from "@/components/catalog/product-preview-surface";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { getProductBySlug, products } from "@/lib/products";
 
@@ -30,9 +29,9 @@ export default async function PreviewPage({
           Master Collection
         </Link>
         <Badge variant="outline">public preview</Badge>
-        <div className="ml-auto">
-          <ThemeToggle />
-        </div>
+        <Link className="ml-auto text-sm font-medium underline underline-offset-4" href={productHref}>
+          Back to product
+        </Link>
       </header>
       <section className="grid min-h-[calc(100svh-57px)] gap-6 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <ProductPreviewSurface product={product} />

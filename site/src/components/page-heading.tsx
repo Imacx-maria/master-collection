@@ -12,7 +12,7 @@ export function PageHeading({
   actions?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-4 border-b border-border bg-background px-4 py-5 sm:px-6 lg:flex-row lg:items-end lg:justify-between">
+    <div className="mx-auto flex max-w-[1400px] flex-col gap-4 border-b border-border bg-background px-6 py-6 sm:px-10 lg:flex-row lg:items-end lg:justify-between lg:px-14">
       <div className="max-w-3xl">
         {eyebrow ? <p className="font-mono text-[11px] uppercase text-muted-foreground">{eyebrow}</p> : null}
         <h1 className="mt-1 text-2xl font-semibold">{title}</h1>

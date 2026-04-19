@@ -5,7 +5,7 @@
 This repository is the master `AI_OS` template that gets copied into other projects.
 It is documentation-first: mostly Markdown guidance, reusable skills, session templates, and sync scripts.
 Primary stack: Markdown, shell, batch, and repo-structure conventions rather than an app runtime.
-Use the nearest `AGENTS.md` for local rules in `SKILLS/`, `SESSION-PROMPTS/`, `references/`, and `templates/`.
+Use the nearest `AGENTS.md` for local rules in `SESSION-PROMPTS/`, `references/`, `templates/`, and `SKILLS/` only when a project keeps local skills.
 
 For Codex and other repo-native coding agents, this file is the primary operational entry point.
 Keep Claude-specific behavior in `CLAUDE.md` snippets and `.claude/` tooling; keep cross-tool rules here and in `AI.md`.
@@ -16,7 +16,7 @@ Keep Claude-specific behavior in `CLAUDE.md` snippets and `.claude/` tooling; ke
 git status --short
 find . -maxdepth 2 -type f | sort
 rg -n "^# " AI_OPERATING_SYSTEM.md CONTEXT_RULES.md MODEL_SELECTION_GUIDE.md NEW_PROJECT_SETUP.md
-find SKILLS -name 'SKILL.md' -print | sort
+find SKILLS -maxdepth 2 -type f | sort
 find SESSION-PROMPTS/SESSIONS -maxdepth 2 -type f | sort
 ```
 
@@ -76,7 +76,7 @@ Destructive git operations still require explicit user permission.
 
 ### Directory Map
 
-- `SKILLS/` — reusable skills and local references → see `SKILLS/AGENTS.md`
+- `SKILLS/` — local/project-specific skill overrides only → see `SKILLS/AGENTS.md`
 - `SESSION-PROMPTS/` — boot prompts, handoff template, dated session artifacts → see `SESSION-PROMPTS/AGENTS.md`
 - `references/` — load-on-demand references and provider-specific notes → see `references/AGENTS.md`
 - `templates/` — starter files copied into project roots → see `templates/AGENTS.md`
@@ -86,7 +86,7 @@ Destructive git operations still require explicit user permission.
 ```bash
 rg -n "Codex|Claude|Gemini|OpenAI" AI_OPERATING_SYSTEM.md CONTEXT_RULES.md MODEL_SELECTION_GUIDE.md templates SESSION-PROMPTS references
 rg -n "AGENTS.md|AI.md|CLAUDE.md" NEW_PROJECT_SETUP.md DOCS_INDEX_TEMPLATE.md templates SESSION-PROMPTS
-find SKILLS -path '*/references/*' -type f | sort
+find SKILLS -maxdepth 2 -type f | sort
 find SESSION-PROMPTS/SESSIONS -maxdepth 2 -type f | sort
 ```
 
@@ -94,7 +94,7 @@ find SESSION-PROMPTS/SESSIONS -maxdepth 2 -type f | sort
 
 - AI_OS intentionally separates cross-tool rules from tool-native configuration.
 - `CLAUDE.md` and `.claude/` remain Claude-specific. Root `AGENTS.md` and `AI.md` carry repo-level guidance that Codex and other agents can read.
-- Prompt-building is intentionally split by provider: `SKILLS/my-precious/SKILL.md` for Claude and `SKILLS/my-precious-codex/SKILL.md` for OpenAI/Codex.
+- Prompt-building lives in the tool-native global skill systems: Claude uses Claude-native skills/commands, and Codex uses `~/.codex/skills`.
 - Some docs are intentionally provider-specific, such as `templates/CLAUDE_MD_SNIPPET.md` and `references/CLAUDE-CODE-INSTRUCTION-FOLLOWING.md`. Do not flatten them into generic docs unless the behavior is actually cross-tool.
 
 ## Definition of Done

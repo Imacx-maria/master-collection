@@ -15,7 +15,7 @@ export default function AccountPage() {
         eyebrow="Local account fixture"
         title="Account dashboard"
       />
-      <div className="grid gap-6 p-4 sm:p-6">
+      <div className="mx-auto grid max-w-[1400px] gap-6 px-6 py-8 sm:px-10 lg:px-14">
         <section className="grid gap-4 md:grid-cols-3">
           {[
             ["Owned products", items.length],

@@ -92,7 +92,7 @@ Planned:
 - React
 - shadcn/ui
 - Tailwind v4
-- Flow-Goodies neutral light/dark styling baseline
+- Flow-Goodies neutral light styling baseline
 
 No runtime has been initialized yet.
 

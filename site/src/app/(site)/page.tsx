@@ -25,7 +25,7 @@ export default function HomePage() {
         eyebrow="Master Collection"
         title="Catalog workspace"
       />
-      <div className="grid gap-8 p-4 sm:p-6">
+      <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-8 sm:px-10 lg:px-14">
         <section className="grid gap-4 border-b border-border pb-8 lg:grid-cols-[1fr_320px]">
           <div className="grid gap-4 md:grid-cols-3">
             {[

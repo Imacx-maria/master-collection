@@ -9,7 +9,7 @@ export default function CheckoutCancelPage() {
         eyebrow="Checkout"
         title="Checkout canceled"
       />
-      <div className="p-4 sm:p-6">
+      <div className="mx-auto max-w-[1400px] px-6 py-8 sm:px-10 lg:px-14">
         <LinkButton href="/">Back to catalog</LinkButton>
       </div>
     </>

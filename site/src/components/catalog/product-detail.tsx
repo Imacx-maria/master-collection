@@ -2,9 +2,11 @@ import { Check, ExternalLink, LockKeyhole, PackageCheck } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
+import { getCreatorBySlug } from "@/lib/creators";
 import { formatMoney } from "@/lib/format";
-import { getProductBySlug, type ProductType } from "@/lib/products";
+import { getProductBySlug, getProductsByCreator, type ProductType } from "@/lib/products";
 import { ProductPreviewSurface } from "./product-preview-surface";
+import { TemplateShowcaseDetail } from "./template-showcase-detail";
 
 export function ProductDetail({
   slug,
@@ -17,6 +19,17 @@ export function ProductDetail({
 
   if (!product || product.type !== type) {
     notFound();
+  }
+
+  if (product.type === "template") {
+    const creator = product.creatorSlug ? getCreatorBySlug(product.creatorSlug) : undefined;
+    const relatedProducts = product.creatorSlug
+      ? getProductsByCreator(product.creatorSlug, "template")
+          .filter((item) => item.slug !== product.slug)
+          .slice(0, 4)
+      : [];
+
+    return <TemplateShowcaseDetail creator={creator} product={product} relatedProducts={relatedProducts} />;
   }
 
   const checkoutHref = `/sign-in?intent=checkout&product=${product.slug}`;

@@ -11,7 +11,7 @@ export default function BillingPage() {
         eyebrow="Account"
         title="Billing"
       />
-      <div className="p-4 sm:p-6">
+      <div className="mx-auto max-w-[1400px] px-6 py-8 sm:px-10 lg:px-14">
         <div className="overflow-hidden rounded-md border border-border">
           <table className="w-full min-w-[620px] text-left text-sm">
             <thead className="border-b border-border bg-muted">

@@ -232,7 +232,7 @@ This applies to every model and every tool.
 
 ## Documentation Governance
 
-See `SKILLS/docs-strategy/SKILL.md`. Key rules:
+Use the active tool's documentation-governance skill when available, such as Codex `docs-strategy` or the Claude-native equivalent. Key rules:
 - One source of truth per topic
 - Predictable naming and placement
 - Wrong documentation steers models wrong — accuracy is critical

@@ -48,7 +48,7 @@ Do not implement Webflow token/site/page entry on the website.
 
 ## UI
 
-Use the same shadcn/Flow-Goodies neutral light/dark baseline documented in `../AGENTS.md`.
+Use the same shadcn/Flow-Goodies neutral light baseline documented in `../AGENTS.md`. Keep dark mode disabled until Maria explicitly asks to re-enable it.
 
 ## Commands
 

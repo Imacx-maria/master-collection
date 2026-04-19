@@ -70,7 +70,7 @@ Both `site/` and `app/` should use the same simple visual baseline:
 
 - shadcn/ui
 - `radix-lyra`
-- neutral light/dark mode
+- neutral light mode for now; dark mode is reference-only until explicitly re-enabled
 - Tailwind v4 CSS variables
 - lucide icons
 - compact Flow-Goodies-style UI

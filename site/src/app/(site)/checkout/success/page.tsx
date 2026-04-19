@@ -10,7 +10,7 @@ export default function CheckoutSuccessPage() {
         eyebrow="Checkout"
         title="Checkout success"
       />
-      <div className="mx-auto max-w-2xl p-4 sm:p-6">
+      <div className="mx-auto max-w-2xl px-6 py-8 sm:px-10 lg:px-14">
         <div className="rounded-md border border-border bg-card p-5">
           <Badge variant="outline">fulfillment pending webhook</Badge>
           <h2 className="mt-4 text-xl font-semibold">Preparing library access</h2>

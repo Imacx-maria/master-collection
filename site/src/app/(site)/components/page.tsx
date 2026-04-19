@@ -12,7 +12,7 @@ export default function ComponentsPage() {
         eyebrow="Catalog"
         title="Components"
       />
-      <div className="p-4 sm:p-6">
+      <div className="mx-auto max-w-[1400px] px-6 py-8 sm:px-10 lg:px-14">
         <CatalogSection products={components} title="Component packages" />
       </div>
     </>

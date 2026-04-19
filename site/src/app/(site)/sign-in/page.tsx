@@ -9,7 +9,7 @@ export default function SignInPage() {
         eyebrow="Auth"
         title="Sign in"
       />
-      <div className="mx-auto max-w-xl p-4 sm:p-6">
+      <div className="mx-auto max-w-xl px-6 py-8 sm:px-10 lg:px-14">
         <AuthStatusPanel mode="sign-in" />
       </div>
     </>

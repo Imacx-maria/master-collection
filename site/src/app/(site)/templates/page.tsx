@@ -12,7 +12,7 @@ export default function TemplatesPage() {
         eyebrow="Catalog"
         title="Templates"
       />
-      <div className="p-4 sm:p-6">
+      <div className="mx-auto max-w-[1400px] px-6 py-8 sm:px-10 lg:px-14">
         <CatalogSection products={templates} title="Template packages" />
       </div>
     </>

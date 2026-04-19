@@ -35,7 +35,7 @@ export default async function AccountLibraryDetailPage({
         eyebrow="Owned product"
         title={item.product.title}
       />
-      <div className="grid gap-6 p-4 sm:p-6 xl:grid-cols-[minmax(0,1fr)_420px]">
+      <div className="mx-auto grid max-w-[1400px] gap-6 px-6 py-8 sm:px-10 lg:px-14 xl:grid-cols-[minmax(0,1fr)_420px]">
         <section className="grid gap-6">
           <ProductPreviewSurface product={item.product} />
           <div className="grid gap-4 md:grid-cols-2">

@@ -9,7 +9,7 @@ export default function InstallationsPage() {
         eyebrow="Account"
         title="Installations"
       />
-      <div className="p-4 sm:p-6">
+      <div className="mx-auto max-w-[1400px] px-6 py-8 sm:px-10 lg:px-14">
         <div className="rounded-md border border-border bg-card p-5">
           <Badge variant="outline">waiting for app events</Badge>
           <h2 className="mt-4 text-lg font-semibold">No install events yet</h2>
