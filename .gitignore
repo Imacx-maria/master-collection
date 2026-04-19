@@ -14,4 +14,4 @@ CLAUDE.local.md
 settings.local.json
 
 # The Webflow Designer Extension is versioned in its own GitHub repo.
-app/
+/app/
