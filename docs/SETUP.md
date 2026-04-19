@@ -44,6 +44,14 @@ site
 
 Do not connect the Webflow app to Vercel unless a future architecture decision creates a separate hosted backend or public app surface for it.
 
+Current Vercel status checked on 2026-04-19:
+
+- Vercel CLI is installed.
+- `vercel whoami` reports that the configured token is not valid.
+- No Vercel project has been linked for this repo yet.
+
+When the site runtime exists, log in again with Vercel CLI and link only the website/platform project.
+
 ## AI_OS
 
 Project AI_OS path:
