@@ -4,7 +4,7 @@ Last verified: 2026-04-19
 
 ## Current State
 
-This repository is currently documentation and folder structure only.
+This repository now contains shared documentation plus the first runnable website/platform scaffold.
 
 Maria created:
 
@@ -96,7 +96,7 @@ Planned:
 
 No runtime has been initialized yet.
 
-## Planned Site Stack
+## Site Stack
 
 Path:
 
@@ -104,7 +104,7 @@ Path:
 C:\Users\maria\Desktop\pessoal\FLOW_PARTY\MASTER-COLLECTION\site
 ```
 
-Planned:
+Initialized:
 
 - Next.js App Router
 - TypeScript
@@ -112,10 +112,26 @@ Planned:
 - Tailwind v4
 - Clerk
 - Stripe Checkout Sessions
-- Postgres database later
-- package storage later
+- fixture-backed product/account/package data
+- install-code and package API skeletons
 
-No runtime has been initialized yet.
+Planned later:
+
+- Postgres database
+- package storage
+
+Current commands:
+
+```bash
+cd site
+npm run dev
+npm run build
+npm run test
+npm run lint
+npm run typecheck
+```
+
+Do not use bun for the website. Keep bun confined to the separate `app/` Webflow extension.
 
 ## Credentials
 

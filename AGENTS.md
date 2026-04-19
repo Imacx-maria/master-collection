@@ -84,9 +84,7 @@ C:\Users\maria\Desktop\pessoal\FLOW_PARTY\Flow-Goodies-extension-fg-api-update
 
 ## Commands
 
-No app/site runtimes have been initialized yet. Add concrete commands here only after the relevant folder is scaffolded.
-
-Expected future commands:
+The website runtime has been initialized in `site/` with npm:
 
 ```bash
 # site/
@@ -94,6 +92,12 @@ npm run dev
 npm run build
 npm run test
 npm run lint
+npm run typecheck
+```
+
+The Webflow extension runtime is separate under `app/`:
+
+```bash
 
 # app/
 npm run dev
@@ -109,4 +113,3 @@ Do not print or commit secret values.
 Use `.env.example` for variable names. Use ignored `.env.local` files only when execution requires real credentials.
 
 Existing reference credential paths from the old Flowbridge work are documented in the imported plans. Treat them as reference locations, not as values to copy into chat or docs.
-

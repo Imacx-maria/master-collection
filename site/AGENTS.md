@@ -52,14 +52,12 @@ Use the same shadcn/Flow-Goodies neutral light/dark baseline documented in `../A
 
 ## Commands
 
-No site runtime has been scaffolded yet.
-
-Expected future commands:
+Use npm in this folder:
 
 ```bash
 npm run dev
 npm run build
 npm run test
 npm run lint
+npm run typecheck
 ```
-
