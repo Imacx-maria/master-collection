@@ -40,7 +40,6 @@ export const creators: Creator[] = [
     ],
     stats: [
       { value: "4", label: "Templates" },
-      { value: "£400+", label: "Total value" },
       { value: "12+", label: "Years" },
     ],
     bio: [

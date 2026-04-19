@@ -45,7 +45,7 @@ export function CreatorProfile({
               </LinkButton>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3 lg:min-w-[320px]">
+          <div className="grid grid-cols-2 gap-3 lg:min-w-[240px]">
             {creator.stats.map((stat) => (
               <div className="rounded-md border border-border bg-muted/50 p-4 text-center" key={stat.label}>
                 <strong className="block text-2xl font-semibold">{stat.value}</strong>
@@ -120,19 +120,21 @@ export function CreatorProfile({
             </div>
             <Badge variant="outline">{products.length} templates</Badge>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-4">
             {products.map((product) => (
               <article
-                className="overflow-hidden rounded-md border border-border bg-background"
+                className="flex h-full flex-col overflow-hidden rounded-md border border-border bg-background"
                 key={product.id}
               >
-                {featured?.id === product.id ? (
-                  <div className="bg-foreground px-3 py-1.5 text-center font-mono text-[11px] uppercase text-background">
-                    Featured
-                  </div>
-                ) : null}
-                <div className="flex min-h-32 items-center justify-center bg-muted text-xs text-muted-foreground">Preview</div>
-                <div className="p-4">
+                <div className="relative flex aspect-square items-center justify-center bg-muted text-xs text-muted-foreground">
+                  {featured?.id === product.id ? (
+                    <div className="absolute inset-x-0 top-0 bg-foreground px-3 py-1.5 text-center font-mono text-[11px] uppercase text-background">
+                      Featured
+                    </div>
+                  ) : null}
+                  Preview
+                </div>
+                <div className="flex flex-1 flex-col p-4">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-sm font-semibold">{product.title}</h3>
                     <span className="text-sm font-semibold">{formatMoney(product.priceCents, product.currency)}</span>
@@ -142,7 +144,7 @@ export function CreatorProfile({
                       <Badge key={tag}>{tag}</Badge>
                     ))}
                   </div>
-                  <LinkButton className="mt-4 w-full" href={`/templates/${product.slug}`} size="sm" variant="outline">
+                  <LinkButton className="mt-auto w-full" href={`/templates/${product.slug}`} size="sm" variant="outline">
                     View
                   </LinkButton>
                 </div>
