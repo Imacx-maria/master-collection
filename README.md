@@ -13,7 +13,7 @@ This parent repository maps to:
 https://github.com/Imacx-maria/master-collection.git
 ```
 
-It owns the shared documentation, AI_OS, and the `site/` application. The `app/` folder is intentionally ignored here because it is an independent repository:
+It owns the shared documentation, AI_OS, and the `site/` application. The local `app/` folder is intentionally ignored here because it is an independent repository:
 
 ```text
 https://github.com/Imacx-maria/master-collection-app.git
@@ -32,7 +32,7 @@ docs/DOCS_INDEX.md
 docs/ARCHITECTURE.md
 ```
 
-Then read the child guidance for the folder you are touching:
+Then read the child guidance for the folder you are touching. The `site/` guidance is tracked in this repository; the `app/` guidance is tracked in the separate app repository and appears locally when that repo is checked out at `app/`.
 
 ```text
 app/AGENTS.md
