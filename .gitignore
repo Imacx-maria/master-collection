@@ -15,3 +15,7 @@ settings.local.json
 
 # The Webflow Designer Extension is versioned in its own GitHub repo.
 /app/
+
+# Test outputs from design-skill-lab
+_tests/
+
