@@ -1,9 +1,9 @@
 ---
 name: design-skill-lab
 description: |
-  Unified design workflow with 11 distinct visual styles. Always use when the user asks to build, design, or style any web page, landing page, component, dashboard, e-commerce, portfolio, blog, or app — even if no style is specified. Triggers on style names: brutalist, editorial, Jocril, luxury, bento, playful, warm, sanctuary, spritify, memoir, basalt, or descriptors like "hotel site", "kids site", "agency site", "calming UI", "blog design".
+  Unified design workflow with 12 distinct visual styles. Always use when the user asks to build, design, or style any web page, landing page, component, dashboard, e-commerce, portfolio, blog, or app — even if no style is specified. Triggers on style names: brutalist, editorial, technical-refined, jocril, luxury, bento, playful, warm, sanctuary, spritify, memoir, basalt, warm-editorial, or descriptors like "AI product", "literary tech", "SaaS site", "dev tool", "hotel site", "kids site", "agency site", "calming UI", "blog design".
 
-  Runs a mandatory 4-phase workflow: ANALYSE (extract inspiration qualities without copying), TRANSLATE (derive a project-specific DESIGN.md that diverges from the library default in at least 2 tokens), BUILD (implement), REVIEW (style-aware critique + universal checks). Never skip phases. Never copy reference images or templates verbatim. Replaces 11 individual design skills.
+  Runs a mandatory 4-phase workflow: ANALYSE (extract inspiration qualities without copying), TRANSLATE (derive a project-specific DESIGN.md that diverges from the library default in at least 2 tokens), BUILD (implement), REVIEW (style-aware critique + universal checks). Never skip phases. Never copy reference images or templates verbatim. Replaces 12 individual design skills.
 allowed-tools:
   - Read
   - Write
@@ -16,7 +16,7 @@ allowed-tools:
 
 # Design System Picker
 
-A unified design workflow with 11 style libraries. The workflow always runs in 4 phases — `ANALYSE → TRANSLATE → BUILD → REVIEW`. Each style library contains tokens (YAML `DESIGN.md`), craft guide (prose reference), and style-specific review checks.
+A unified design workflow with 12 style libraries. The workflow always runs in 4 phases — `ANALYSE → TRANSLATE → BUILD → REVIEW`. Each style library contains tokens (YAML `DESIGN.md`), craft guide (prose reference), and style-specific review checks.
 
 ## The Non-Negotiable Rules
 
@@ -102,6 +102,12 @@ State the divergences explicitly at the top of the DESIGN.md in the Provenance s
 
 Goal: implement using the project DESIGN.md as the source of truth.
 
+**Step 3.0.05 — Load motion tactics (conditional).** If `style-tuning.axes.motion.value` is `medium` or `high`, load `references/motion-tactics.md`. Skip if `low` (CSS transitions are sufficient — no orchestration contract needed).
+
+The file defines the technical contract per tier: `medium` = CSS animations + IntersectionObserver only, no JS animation library; `high` = GSAP 3.12+ orchestration with ScrollTrigger / SplitText / Flip / parallax / FLIP / CustomEase + Webflow's Club GSAP plugin set (DrawSVG, MorphSVG, ScrambleText, Inertia, Physics2D, MotionPathHelper, ScrollSmoother). The pre-build checklist at the bottom is the contract — including the `prefers-reduced-motion` fallback (non-negotiable at every tier above `low`).
+
+This step exists because `motion: high` was being interpreted as "more CSS animations" — which is `medium` dressed up. Real `high` requires a different mental model and a JS animation runtime; the file makes that contract explicit before markup is generated.
+
 **Step 3.0 — Load layout patterns.** Before generating markup for any section with multiple items, load `references/layout-patterns.md`. Decide explicitly per section: bento, uniform grid, list, or hero+supporting. Don't default to `auto-fit minmax(...)` — this produces orphan rows and visual misalignment.
 
 For each multi-item section, document the decision in your build:
@@ -169,7 +175,7 @@ Present this when context isn't clear enough to auto-detect. If context makes th
 |---|-------|----------|----------------|
 | 1 | **Neo-Brutalist** | Bold landing pages, edgy brands, tech showcases | Anton + Roboto Mono, sharp corners, grid backgrounds, grayscale images |
 | 2 | **Editorial Portfolio** | Photography/art portfolios, creative professionals | Compressed uppercase Inter, hover-reveal panels, off-white #f4f3f0 |
-| 3 | **Jocril Technical** | Developer tools, SaaS dashboards, technical products | Geist Sans/Mono, teal #2DD4CD accents, dashed borders |
+| 3 | **Technical Refined** | Developer tools, SaaS dashboards, technical products | Geist Sans/Mono, teal #2DD4CD accents, dashed borders |
 | 4 | **Basalt E-Commerce** | Luxury beauty, skincare, fashion, lifestyle shops | EB Garamond + Inter, grayscale products, split-layout pages |
 | 5 | **Memoir Blog** | Writer portfolios, newsletters, content platforms | Manrope + Source Serif italic, creamy #F4F2F0, blog card grids |
 | 6 | **Creative Studio** | Agency sites, design studios, brand showcases | Dark charcoal #2d2f2e + coral #ff531f, full-color imagery, rounded cards |
@@ -177,13 +183,15 @@ Present this when context isn't clear enough to auto-detect. If context makes th
 | 8 | **Playful Bento** | Marketing sites, creative tools, energetic brands | Bold bento grids, hierarchy-aware cards, vibrant colors |
 | 9 | **Spritify** | Kids products, family brands, fun apps | League Spartan, switchable color schemes, playful components |
 | 10 | **Sanctuary Tech** | Crisis support, healthcare, legal aid, privacy tools | Monospace type, dashed borders, muted tones, generous whitespace |
-| 11 | **Custom / Freestyle** | When none of the above fit | Uses base principles below, derive a fresh DESIGN.md bottom-up |
+| 11 | **Warm Editorial** | AI products, technical writing, thoughtful tools | Anthropic Serif weight 500, parchment #F5F4ED, terracotta #C96442, ring shadows, light/dark chapter alternation |
+| 12 | **Custom / Freestyle** | When none of the above fit | Uses base principles below, derive a fresh DESIGN.md bottom-up |
 
 ## Auto-Detection Rules
 
 Skip the menu when context is clear. These map brief cues to a **starting** library — Phase 2 still has to derive a diverged project DESIGN.md.
 
-- **Jocril project** (detected by project path or mention) → Style 3
+- **AI product / AI assistant / agent / co-pilot / literary-tech / "warm but technical"** → Style 11 (Warm Editorial)
+- **SaaS / dev tool / dashboard / technical product (cool/clinical leaning)** → Style 3 (Technical Refined). Jocril projects (detected by path or mention) also map here.
 - **E-commerce / product pages** → Style 4 (Basalt) — but check if the brand calls for Style 6 (Creative Studio) or Style 8 (Playful Bento) first
 - **Blog / newsletter / writing** → Style 5 (Memoir)
 - **Portfolio / showcase of work** → Style 2 (Editorial)
@@ -203,21 +211,31 @@ design-skill-lab/
 ├── SKILL.md                              # this file — workflow orchestrator
 ├── references/
 │   ├── base-principles.md                # universal rules (typography, a11y, spacing)
+│   ├── build-tactics.md                  # tactical do/don't recipes for build moment
 │   ├── inspiration-analysis.md           # how to extract from an image without copying
 │   ├── user-overrides.md                 # detection + protocol for user colors/fonts/URL/image, fidelity scale
+│   ├── style-tuning.md                   # 8-question interview + per-library defaults table (Phase 2.1)
 │   ├── layout-patterns.md                # bento vs uniform vs list, alignment rules, span vocabulary
-│   ├── styles/                           # 11 style libraries
+│   ├── motion-tactics.md                 # technical contract per motion tier (medium=CSS+IO, high=GSAP+ScrollTrigger+SplitText+Flip)
+│   ├── typography-safety.md              # tier+modifier model, language adjustments, failure modes
+│   ├── sidecar-contract.md               # .design.md → tokens.json + tailwind.config.js transform spec (Phase 4.8.1)
+│   ├── scripts/
+│   │   └── generate-sidecars.py          # auto-generator for sidecars; deterministic transform from .design.md frontmatter
+│   ├── styles/                           # 12 style libraries
 │   │   ├── neo-brutalist.md              # craft guide (prose)
 │   │   ├── neo-brutalist.design.md       # tokens YAML + rationale
 │   │   ├── editorial-portfolio.md
 │   │   ├── editorial-portfolio.design.md
-│   │   ├── jocril-technical.md
-│   │   ├── jocril-technical.design.md
-│   │   └── ... (same pattern for all 11)
+│   │   ├── technical-refined.md
+│   │   ├── technical-refined.design.md
+│   │   ├── warm-editorial.md
+│   │   ├── warm-editorial.design.md
+│   │   └── ... (same pattern for all 12)
 │   └── style-reviews/                    # per-style review lenses
 │       ├── neo-brutalist.md
 │       ├── editorial-portfolio.md
-│       └── ... (same pattern for all 11)
+│       ├── warm-editorial.md
+│       └── ... (same pattern for all 12)
 ```
 
 ## Quick Reference — When to Load What
@@ -226,6 +244,7 @@ design-skill-lab/
 |-----------|------|
 | User provides colors / fonts / image / URL | `references/user-overrides.md` (run first in Phase 1) |
 | User mentions image/inspiration | `references/inspiration-analysis.md` |
+| `style-tuning.axes.motion` is `medium` or `high` | `references/motion-tactics.md` (Phase 3 — technical contract per tier; medium=CSS-only, high=GSAP) |
 | About to build markup with grids/cards | `references/layout-patterns.md` (Phase 3 — pick pattern deliberately) |
 | Chosen a library, starting build | `references/styles/<style>.md` + `.design.md` |
 | About to deliver, pre-review | `references/style-reviews/<style>.md` |
