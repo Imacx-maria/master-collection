@@ -1,18 +1,19 @@
 # Master Collection Architecture
 
-Last verified: 2026-04-19
+Last verified: 2026-04-25
 
 ## System Shape
 
-Master Collection has one parent project and two child surfaces:
+Master Collection has one parent project and three child surfaces:
 
 ```text
 MASTER-COLLECTION/
-  site/  public/account website
-  app/   Webflow Designer Extension
+  site/              public/account website
+  app/               Webflow Designer Extension
+  chrome-extension/  Chrome extension companion
 ```
 
-Both children share one parent documentation layer:
+All children share one parent documentation layer:
 
 ```text
 docs/
@@ -25,7 +26,9 @@ The website is the storefront, account, and package-access surface.
 
 The app is the inside-Webflow installer.
 
-The website and app communicate through install codes and package APIs. They should not duplicate responsibilities.
+The Chrome extension is the browser companion for Webflow Designer utilities that are better handled by a browser extension than by the inside-Webflow app.
+
+The website, app, and Chrome extension should not duplicate responsibilities.
 
 ## Website Responsibilities
 
@@ -55,6 +58,17 @@ The Webflow app owns:
 - patching XscpData with target page and asset IDs
 - copying/pasting/installing into Webflow
 
+## Chrome Extension Responsibilities
+
+The Chrome extension owns:
+
+- running as a Manifest V3 Chrome extension on Webflow Designer URLs
+- Paste Guard browser interception
+- interaction cleanup tooling
+- a compact popup UI aligned with the Master Collection app visual baseline
+
+The Chrome extension should not own checkout, account access, package APIs, or the inside-Webflow install flow.
+
 ## Package Flow
 
 ```text
@@ -68,6 +82,7 @@ App redeems install code
 App fetches package and assets
 App uploads assets to buyer's Webflow site
 App patches XscpData
+Chrome extension can assist with browser-side paste safety when installed
 Buyer installs/pastes into current Webflow page
 ```
 
@@ -94,6 +109,14 @@ Site MVP:
 - install codes
 - package API for the app
 
+Chrome extension MVP:
+
+- Manifest V3 copied into `chrome-extension/`
+- Master Collection Companion branding
+- compact neutral popup UI
+- system light/dark detection with small override
+- Paste Guard and interaction tooling preserved from the source extension
+
 ## Future Expansion
 
 Future work may add:
@@ -106,4 +129,3 @@ Future work may add:
 - bundle/full-collection purchase model
 
 Do not pull future work into the MVP without explicit approval.
-

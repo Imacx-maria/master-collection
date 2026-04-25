@@ -8,7 +8,7 @@ This project has one shared AI brain at the parent root:
 C:\Users\maria\Desktop\pessoal\FLOW_PARTY\MASTER-COLLECTION\AI_OS
 ```
 
-Do not create separate `AI_OS/` folders inside `app/` or `site/`.
+Do not create separate `AI_OS/` folders inside `app/`, `site/`, or `chrome-extension/`.
 
 ## Boot
 
@@ -18,17 +18,19 @@ Do not create separate `AI_OS/` folders inside `app/` or `site/`.
 4. Load the relevant child guidance:
    - `app/AGENTS.md` for the Webflow Designer Extension.
    - `site/AGENTS.md` for the website/platform.
+   - `chrome-extension/AGENTS.md` for the Chrome extension companion.
 5. Load the relevant plan from `docs/plans/`.
 
 ## Project Map
 
 ```text
 MASTER-COLLECTION/
-  app/   Master Collection Webflow Designer Extension
-  site/  Master Collection website/platform
+  app/               Master Collection Webflow Designer Extension
+  site/              Master Collection website/platform
+  chrome-extension/  Master Collection Chrome extension companion
 ```
 
-The app and site are siblings. Both are children of the Master Collection product. Neither owns the other.
+The app, site, and Chrome extension are siblings. All are children of the Master Collection product. None owns the others.
 
 ## Source Of Truth
 
@@ -39,4 +41,3 @@ C:\Users\maria\Desktop\pessoal\FLOW_PARTY\MASTER-COLLECTION\docs
 ```
 
 Child folders may have local `AGENTS.md`, `AI.md`, and `CLAUDE.md` files, but they should route to the parent docs instead of duplicating architecture decisions.
-

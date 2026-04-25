@@ -1,4 +1,4 @@
-# AI_OS Current Standard — v2026-04-05
+# AI_OS Current Standard — v2026-04-23
 
 > This file defines what a fully up-to-date AI_OS installation looks like.
 > Use it to audit any project: compare what exists against this checklist.
@@ -10,9 +10,9 @@
 
 | File | Required | Notes |
 |---|---|---|
-| `AI_OPERATING_SYSTEM.md` | Yes | Universal rules for all AI agents; must use 2-strike escalation language |
+| `AI_OPERATING_SYSTEM.md` | Yes | Universal rules for all AI agents; must use 2-strike escalation language and include the adaptive reasoning rule |
 | `CONTEXT_RULES.md` | Yes | Must include Agent Teams bullet under Claude Code tool-specific config |
-| `MODEL_SELECTION_GUIDE.md` | Yes | Must include Gemini 3.x series, GPT-5.4 / 5.4 Mini / 5.4 Nano / 5.3-Codex, and Opus/Sonnet 4.6 |
+| `MODEL_SELECTION_GUIDE.md` | Yes | Must include Gemini 3.x series, GPT-5.4 / 5.4 Mini / 5.4 Nano / 5.3-Codex, Opus/Sonnet 4.6, and an adaptive reasoning router / budget ladder |
 | `AI_DECISION_LOG.md` | Yes | Project-specific — never overwrite from master |
 | `DOCS_INDEX_TEMPLATE.md` | Yes | Template for docs index with temperature classification |
 | `NEW_PROJECT_SETUP.md` | Yes | Setup guide (master only) |
@@ -181,3 +181,4 @@ If a project has root `AGENTS.md`, it must:
 | 2026-03-29 | Added explicit Codex/root-entry-layer requirements for `AI.md` and `AGENTS.md`, and added `ai-os-migration-audit.md` to the standard session-prompt set. |
 | 2026-04-04 | Added Codex global setup requirements, `my-precious-codex`, Windows/WSL guidance, and refreshed OpenAI model guidance to GPT-5.4 / GPT-5.3-Codex era defaults. |
 | 2026-04-05 | Added `SESSION-PROMPTS/CODEX-RUNBOOKS/` as the standard location for reusable Codex execution prompts shared by absolute path. |
+| 2026-04-23 | Added adaptive reasoning as a required cross-tool operating concept in `AI_OPERATING_SYSTEM.md` and required an adaptive reasoning router / budget ladder in `MODEL_SELECTION_GUIDE.md`. |

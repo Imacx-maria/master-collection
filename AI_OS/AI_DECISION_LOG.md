@@ -310,6 +310,29 @@ Implications:
 
 ---
 
+Date:
+2026-04-25
+
+Project / Context:
+Master Collection - Chrome extension companion
+
+Decision:
+Add `chrome-extension/` as a third sibling surface under the Master Collection parent project, copied from `C:\Users\maria\Desktop\pessoal\FLOW_PARTY\webflow-ix-cleaner` and renamed **Master Collection Companion**.
+
+Reasoning:
+The browser-side companion extension already exists and should ship with the Master Collection product without mutating the original source folder. Treating it as a sibling keeps the website, inside-Webflow app, and Chrome extension responsibilities explicit.
+
+Alternatives Considered:
+- Modify `webflow-ix-cleaner` in place (rejected: would destroy the source reference and mix product identities)
+- Put the extension under `app/` (rejected: the Webflow Designer Extension and Chrome extension have different runtimes and packaging)
+
+Implications:
+- `chrome-extension/` owns Manifest V3 browser companion behavior.
+- The popup must follow the same compact neutral visual baseline as the app.
+- The original `webflow-ix-cleaner` folder remains read-only reference material.
+
+---
+
 # Guidelines
 
 Good entries should:

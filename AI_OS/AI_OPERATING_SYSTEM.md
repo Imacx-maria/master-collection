@@ -92,6 +92,51 @@ Check `references/prompt-pathologies.md` for systemic failures across iterations
 
 ---
 
+## Adaptive Reasoning
+
+Treat reasoning depth as a budget, not a constant.
+
+Default operating rule across tools:
+
+1. start with the lightest credible pass
+2. deepen only when the task signals need
+3. verify in proportion to risk
+4. stop when the answer is good enough for the task
+
+Signals that justify more depth:
+
+- ambiguity that could change the outcome
+- irreversible or user-visible risk
+- conflicting evidence
+- novelty or lack of local precedent
+- many dependent systems, files, or tools
+- non-trivial verification cost
+
+Stop when:
+
+- the request is satisfied
+- the evidence supports the claims being made
+- remaining uncertainty is below the task's tolerance
+- another pass is unlikely to materially improve the result
+
+Escalate when:
+
+- ambiguity materially changes implementation
+- the safest path is no longer obvious
+- conflicting evidence remains after inspection
+- the task hits the 2-strike threshold
+- multiple policy or system layers need coordination
+
+Verification depth should track task risk:
+
+- low risk -> sanity-check only
+- medium risk -> tool-backed confirmation
+- high risk -> explicit fresh verification
+
+See `MODEL_SELECTION_GUIDE.md` for how to map this adaptive reasoning rule to model choice, effort, and escalation.
+
+---
+
 ## Reasoning Effort
 
 Always specify effort level with model recommendations. All providers support some form of effort control:

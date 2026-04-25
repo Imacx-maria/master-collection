@@ -1,9 +1,10 @@
 # Master Collection
 
-Master Collection is the parent workspace for two connected product surfaces:
+Master Collection is the parent workspace for three connected product surfaces:
 
 - `site/` - the website/platform for catalog, previews, auth, checkout, account library, install codes, and package access.
 - `app/` - the Webflow Designer Extension that runs inside Webflow and installs purchased packages into the buyer's current site/page.
+- `chrome-extension/` - the Chrome extension companion for Webflow Designer browser-side utilities.
 
 ## Git Layout
 
@@ -32,9 +33,10 @@ docs/DOCS_INDEX.md
 docs/ARCHITECTURE.md
 ```
 
-Then read the child guidance for the folder you are touching. The `site/` guidance is tracked in this repository; the `app/` guidance is tracked in the separate app repository and appears locally when that repo is checked out at `app/`.
+Then read the child guidance for the folder you are touching. The `site/` and `chrome-extension/` guidance are tracked in this repository; the `app/` guidance is tracked in the separate app repository and appears locally when that repo is checked out at `app/`.
 
 ```text
 app/AGENTS.md
 site/AGENTS.md
+chrome-extension/AGENTS.md
 ```

@@ -2,12 +2,13 @@
 
 ## Project
 
-Master Collection is a two-surface product:
+Master Collection is a three-surface product:
 
 - `site/` — public website, product previews, auth, checkout, account library, install codes, package access.
 - `app/` — Webflow Designer Extension that runs inside Webflow and installs a purchased package into the current site/page.
+- `chrome-extension/` — Chrome extension companion for browser-side Webflow Designer utilities such as Paste Guard.
 
-Both folders are children of the Master Collection parent project. Do not treat the site as a child of the app or the app as a child of the site.
+All child folders belong to the Master Collection parent project. Do not treat one child surface as the owner of another.
 
 ## Start Here
 
@@ -62,11 +63,18 @@ The Webflow app owns:
 - XscpData patching
 - clipboard paste/install handoff
 
+The Chrome extension owns:
+
+- browser-side companion controls for Webflow Designer
+- Paste Guard
+- interaction cleanup tooling
+- lightweight UI aligned with the app visual baseline
+
 The website must not ask buyers for Webflow site IDs, page IDs, or API tokens.
 
 ## UI Baseline
 
-Both `site/` and `app/` should use the same simple visual baseline:
+All UI surfaces should use the same simple visual baseline:
 
 - shadcn/ui
 - `radix-lyra`
@@ -75,6 +83,8 @@ Both `site/` and `app/` should use the same simple visual baseline:
 - lucide icons
 - compact Flow-Goodies-style UI
 - no decorative marketing theme at this stage
+
+For the Chrome extension popup, use neutral CSS variables directly and default to system light/dark detection with a small override control.
 
 Reference styling source:
 
@@ -105,6 +115,8 @@ bun run build
 bun run test
 bun run lint
 ```
+
+The Chrome extension under `chrome-extension/` is a Manifest V3 extension copied from the prior companion extension. It has no package runtime yet; validate it by checking `manifest.json` and loading the folder as an unpacked extension in Chrome.
 
 ## Secrets
 

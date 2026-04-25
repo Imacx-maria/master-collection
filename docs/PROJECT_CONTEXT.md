@@ -1,6 +1,6 @@
 # Master Collection Project Context
 
-Last verified: 2026-04-19
+Last verified: 2026-04-25
 
 ## Origin
 
@@ -17,17 +17,19 @@ The old minimal converter/playground is no longer the intended user-facing produ
 C:\Users\maria\Desktop\pessoal\FLOW_PARTY\MASTER-COLLECTION
 ```
 
-3. The app and site are sibling child projects:
+3. The app, site, and Chrome extension are sibling child projects:
 
 ```text
 app/
 site/
+chrome-extension/
 ```
 
 4. Documentation and AI_OS live only at the parent root.
 5. The app is a Webflow Designer Extension for inside-Webflow installation.
 6. The site is the online platform for catalog, previews, auth, checkout, account library, package access, and install codes.
-7. Both app and site should use the same simple shadcn/Flow-Goodies visual baseline.
+7. All UI surfaces should use the same simple neutral/Flow-Goodies visual baseline.
+8. The Chrome extension is named **Master Collection Companion**.
 
 ## Relevant Imported Plans
 
@@ -47,10 +49,12 @@ User buys through Stripe
 Site grants account/library access
 Site provides install code
 User opens Webflow project
+User may install Master Collection Companion in Chrome
 User opens Master Collection app
 User pastes install code
 App fetches package
 App uploads assets and patches XscpData
+Chrome extension can assist with browser-side paste safety
 User installs/pastes into Webflow
 ```
 
@@ -73,4 +77,3 @@ Use:
 - compact spacing
 
 No extra marketing design at this planning stage.
-
