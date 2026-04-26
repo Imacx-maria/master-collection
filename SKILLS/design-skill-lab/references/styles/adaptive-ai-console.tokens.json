@@ -1,0 +1,571 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "marketing-black": {
+        "$value": "#08090a",
+        "$type": "color"
+      },
+      "deep-black": {
+        "$value": "#010102",
+        "$type": "color"
+      },
+      "panel-dark": {
+        "$value": "#0f1011",
+        "$type": "color"
+      },
+      "surface-elevated": {
+        "$value": "#191a1b",
+        "$type": "color"
+      },
+      "surface-hover": {
+        "$value": "#28282c",
+        "$type": "color"
+      },
+      "text-primary": {
+        "$value": "#f7f8f8",
+        "$type": "color"
+      },
+      "text-secondary": {
+        "$value": "#d0d6e0",
+        "$type": "color"
+      },
+      "text-tertiary": {
+        "$value": "#8a8f98",
+        "$type": "color"
+      },
+      "text-quaternary": {
+        "$value": "#62666d",
+        "$type": "color"
+      },
+      "brand-indigo": {
+        "$value": "#5e6ad2",
+        "$type": "color"
+      },
+      "accent-violet": {
+        "$value": "#7170ff",
+        "$type": "color"
+      },
+      "accent-hover": {
+        "$value": "#828fff",
+        "$type": "color"
+      },
+      "security-lavender": {
+        "$value": "#7a7fad",
+        "$type": "color"
+      },
+      "success": {
+        "$value": "#27a644",
+        "$type": "color"
+      },
+      "emerald": {
+        "$value": "#10b981",
+        "$type": "color"
+      },
+      "border-primary": {
+        "$value": "#23252a",
+        "$type": "color"
+      },
+      "border-secondary": {
+        "$value": "#34343a",
+        "$type": "color"
+      },
+      "border-tertiary": {
+        "$value": "#3e3e44",
+        "$type": "color"
+      },
+      "border-subtle": {
+        "$value": "rgba(255,255,255,0.05)",
+        "$type": "color"
+      },
+      "border-standard": {
+        "$value": "rgba(255,255,255,0.08)",
+        "$type": "color"
+      },
+      "surface-ghost": {
+        "$value": "rgba(255,255,255,0.02)",
+        "$type": "color"
+      },
+      "surface-subtle": {
+        "$value": "rgba(255,255,255,0.04)",
+        "$type": "color"
+      },
+      "surface-standard": {
+        "$value": "rgba(255,255,255,0.05)",
+        "$type": "color"
+      },
+      "overlay": {
+        "$value": "rgba(0,0,0,0.85)",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "72px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 510,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.0,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-1.584px",
+        "$type": "dimension"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "64px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 510,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.0,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-1.408px",
+        "$type": "dimension"
+      }
+    },
+    "display": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "48px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 510,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.0,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-1.056px",
+        "$type": "dimension"
+      }
+    },
+    "heading-1": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "32px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.13,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.704px",
+        "$type": "dimension"
+      }
+    },
+    "heading-3": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "20px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 590,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.33,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.24px",
+        "$type": "dimension"
+      }
+    },
+    "body-lg": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "18px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.6,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.165px",
+        "$type": "dimension"
+      }
+    },
+    "body": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.5,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    },
+    "body-medium": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 510,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.5,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    },
+    "caption": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "13px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 510,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.5,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.13px",
+        "$type": "dimension"
+      }
+    },
+    "label": {
+      "fontFamily": {
+        "$value": "Inter Variable, SF Pro Display, -apple-system, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 510,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.4,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    },
+    "mono-body": {
+      "fontFamily": {
+        "$value": "Berkeley Mono, ui-monospace, SF Mono, Menlo, monospace",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "14px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.5,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "micro": {
+      "$value": "2px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "card": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "panel": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "large-panel": {
+      "$value": "22px",
+      "$type": "dimension"
+    },
+    "pill": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "px": {
+      "$value": "1px",
+      "$type": "dimension"
+    },
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "80px",
+      "$type": "dimension"
+    }
+  },
+  "shadow": {
+    "micro": {
+      "$value": "rgba(0,0,0,0.03) 0px 1.2px 0px 0px",
+      "$type": "shadow"
+    },
+    "inset-panel": {
+      "$value": "rgba(0,0,0,0.2) 0px 0px 12px 0px inset",
+      "$type": "shadow"
+    },
+    "ring": {
+      "$value": "rgba(0,0,0,0.2) 0px 0px 0px 1px",
+      "$type": "shadow"
+    },
+    "elevated": {
+      "$value": "rgba(0,0,0,0.4) 0px 2px 4px",
+      "$type": "shadow"
+    },
+    "focus": {
+      "$value": "rgba(0,0,0,0.1) 0px 4px 12px",
+      "$type": "shadow"
+    }
+  },
+  "motion": {
+    "fast": {
+      "$value": "120ms",
+      "$type": "duration"
+    },
+    "base": {
+      "$value": "180ms",
+      "$type": "duration"
+    },
+    "reveal": {
+      "$value": "300ms",
+      "$type": "duration"
+    },
+    "stream": {
+      "$value": "600ms",
+      "$type": "duration"
+    },
+    "ease-standard": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "cubicBezier"
+    }
+  },
+  "container": {
+    "marketing-max-width": {
+      "$value": "1200px",
+      "$type": "dimension"
+    },
+    "app-shell": {
+      "$value": "full",
+      "$type": "dimension"
+    },
+    "padding-x": {
+      "$value": "32px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Adaptive AI Console",
+    "description": "Dark-mode-native AI/product console style inspired by Linear's engineered restraint — near-black surfaces, Inter Variable precision, indigo-violet interaction accent, dense operational rows, command palette, AI composer, and accountable generated-action surfaces.",
+    "style-base": "adaptive-ai-console",
+    "style-tuning": {
+      "axes": {
+        "color-mode": {
+          "value": "dark",
+          "rationale": "Dark is the native medium; light mode would require a separate product-console interpretation."
+        },
+        "fonts": {
+          "value": "sans",
+          "rationale": "Inter Variable is the whole typographic identity; mono is supporting chrome only."
+        },
+        "layout": {
+          "value": "grid-based",
+          "rationale": "Product-console surfaces need predictable columns, rows, panels, and inspector rails."
+        },
+        "content-width": {
+          "value": "standard",
+          "rationale": "Marketing pages use a 1200px cap; app shells can go full workspace but still use disciplined panels."
+        },
+        "corners": {
+          "value": "soft",
+          "rationale": "6-12px functional radius; precise, not playful."
+        },
+        "motion": {
+          "value": "low",
+          "rationale": "Motion is functional and stateful, not theatrical."
+        },
+        "color-loudness": {
+          "value": "monochrome",
+          "rationale": "Achromatic dark UI with one indigo-violet action/active accent."
+        },
+        "imagery": {
+          "value": "abstract",
+          "rationale": "Product chrome, console fragments, command palette, and AI streams replace photography."
+        },
+        "page-load": {
+          "value": "functional",
+          "rationale": "AI/product interfaces may need skeletons, streaming states, and loading affordances rather than a branded intro."
+        }
+      }
+    },
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.brand-indigo}",
+        "textColor": "#ffffff",
+        "typography": "{typography.label}",
+        "rounded": "{rounded.md}",
+        "padding": "8px 16px",
+        "hoverBackground": "{colors.accent-hover}"
+      },
+      "button-ghost": {
+        "backgroundColor": "{colors.surface-ghost}",
+        "textColor": "#e2e4e7",
+        "border": "1px solid {colors.border-standard}",
+        "rounded": "{rounded.md}",
+        "padding": "8px 14px"
+      },
+      "card": {
+        "backgroundColor": "{colors.surface-ghost}",
+        "textColor": "{colors.text-primary}",
+        "border": "1px solid {colors.border-standard}",
+        "rounded": "{rounded.card}",
+        "padding": "{spacing.xl}"
+      },
+      "panel": {
+        "backgroundColor": "{colors.panel-dark}",
+        "textColor": "{colors.text-primary}",
+        "border": "1px solid {colors.border-subtle}",
+        "rounded": "{rounded.panel}",
+        "padding": "{spacing.xl}"
+      },
+      "command-palette": {
+        "backgroundColor": "{colors.surface-elevated}",
+        "textColor": "{colors.text-primary}",
+        "border": "1px solid {colors.border-standard}",
+        "rounded": "{rounded.panel}",
+        "shadow": "{shadows.elevated}"
+      },
+      "ai-composer": {
+        "backgroundColor": "{colors.surface-ghost}",
+        "textColor": "{colors.text-secondary}",
+        "border": "1px solid {colors.border-standard}",
+        "rounded": "{rounded.card}",
+        "padding": "12px 14px"
+      },
+      "status-chip": {
+        "backgroundColor": "transparent",
+        "textColor": "{colors.text-secondary}",
+        "border": "1px solid {colors.border-primary}",
+        "rounded": "{rounded.pill}",
+        "typography": "{typography.label}"
+      }
+    }
+  }
+}

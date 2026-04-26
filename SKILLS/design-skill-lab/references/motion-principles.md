@@ -436,6 +436,7 @@ Run when `motion != low`. Builds on the existing audit in `motion-tactics.md` §
 - [ ] **Reduced motion** — `prefers-reduced-motion: reduce` skips animation, content still appears.
 - [ ] **LCP** — hero content paints within LCP budget, even if GSAP fails or hasn't run yet (`.js-ready` gate present).
 - [ ] **Mobile** — parallax and pinned sequences are gated behind `(min-width: 768px)` OR simplified on mobile.
+- [ ] **CSS-vs-GSAP transform handoff (high tier only)** — no `.js-ready` CSS rule sets `transform:` on a GSAP-tweened element. CSS owns opacity for the pre-JS hide; GSAP owns transform fully. Mixing them stacks two `translate()` calls in the inline style and leaves the element permanently masked. (Full pattern: `motion-tactics.md` § CSS-vs-GSAP transform handoff.)
 
 ---
 
@@ -446,6 +447,7 @@ Run when `motion != low`. Builds on the existing audit in `motion-tactics.md` §
 - ❌ **Linear easing on UI.** Robotic. Reserved for continuous loops and scrub-driven scroll only.
 - ❌ **Animating Layout properties.** `width`/`height`/`top`/`left` = jank. Transform + opacity only.
 - ❌ **Hero hidden behind animation that depends on JS.** No `.js-ready` gate = invisible content if JS fails. See motion-tactics.md § Required pattern.
+- ❌ **CSS transform as pre-seed for GSAP-tweened elements.** `transform: translateY(110%)` in CSS + `gsap.to({yPercent: 0})` produces stacked translates in the inline style, leaving the element permanently masked. Split responsibility: CSS handles opacity for the `.js-ready` pre-JS hide; GSAP fully owns transform. See motion-tactics.md § CSS-vs-GSAP transform handoff.
 - ❌ **Auto-running motion >5s without pause control.** WCAG 2.2.2 violation.
 - ❌ **Same fixed duration for every animation.** A 300ms button hover and a 300ms hero reveal feel wrong because the *content scale* differs. Match duration to content scale per the table.
 - ❌ **Spring physics on UI state transitions that need to feel uniform.** Spring's velocity-responsiveness is a bug here. Fixed timing wins.

@@ -1,0 +1,392 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "page-black": {
+        "$value": "#030303",
+        "$type": "color"
+      },
+      "stage-black": {
+        "$value": "#070707",
+        "$type": "color"
+      },
+      "charcoal": {
+        "$value": "#111111",
+        "$type": "color"
+      },
+      "graphite": {
+        "$value": "#1a1a1a",
+        "$type": "color"
+      },
+      "text-primary": {
+        "$value": "#f4f4f0",
+        "$type": "color"
+      },
+      "text-secondary": {
+        "$value": "#c9c7c1",
+        "$type": "color"
+      },
+      "text-muted": {
+        "$value": "#8a8882",
+        "$type": "color"
+      },
+      "text-ghost": {
+        "$value": "rgba(244,244,240,0.45)",
+        "$type": "color"
+      },
+      "hairline": {
+        "$value": "rgba(255,255,255,0.12)",
+        "$type": "color"
+      },
+      "hairline-faint": {
+        "$value": "rgba(255,255,255,0.06)",
+        "$type": "color"
+      },
+      "accent-acid": {
+        "$value": "#62ff6a",
+        "$type": "color"
+      },
+      "accent-warm": {
+        "$value": "#d7c0a2",
+        "$type": "color"
+      },
+      "overlay": {
+        "$value": "rgba(0,0,0,0.48)",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "Inter Tight, Satoshi, Neue Montreal, Helvetica Neue, Arial, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "clamp(72px, 12vw, 168px)",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 300,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.88,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.055em",
+        "$type": "dimension"
+      },
+      "textTransform": {
+        "$value": "uppercase",
+        "$type": "string"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "Inter Tight, Satoshi, Neue Montreal, Helvetica Neue, Arial, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "clamp(56px, 9vw, 120px)",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 300,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.9,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.045em",
+        "$type": "dimension"
+      },
+      "textTransform": {
+        "$value": "uppercase",
+        "$type": "string"
+      }
+    },
+    "headline-md": {
+      "fontFamily": {
+        "$value": "Inter Tight, Satoshi, Neue Montreal, Helvetica Neue, Arial, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "clamp(32px, 5vw, 64px)",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.98,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.035em",
+        "$type": "dimension"
+      }
+    },
+    "editorial": {
+      "fontFamily": {
+        "$value": "Cormorant Garamond, Libre Baskerville, Georgia, serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "clamp(18px, 1.7vw, 24px)",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.15,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "body-sm": {
+      "fontFamily": {
+        "$value": "Inter Tight, Helvetica Neue, Arial, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "13px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.45,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.01em",
+        "$type": "dimension"
+      }
+    },
+    "label": {
+      "fontFamily": {
+        "$value": "Inter Tight, Helvetica Neue, Arial, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      },
+      "textTransform": {
+        "$value": "uppercase",
+        "$type": "string"
+      }
+    },
+    "mono": {
+      "fontFamily": {
+        "$value": "JetBrains Mono, IBM Plex Mono, ui-monospace, monospace",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "11px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.4,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.01em",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sharp": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "pill": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "72px",
+      "$type": "dimension"
+    },
+    "scene": {
+      "$value": "100svh",
+      "$type": "dimension"
+    },
+    "long-scene": {
+      "$value": "160svh",
+      "$type": "dimension"
+    }
+  },
+  "motion": {
+    "fast": {
+      "$value": "180ms",
+      "$type": "duration"
+    },
+    "base": {
+      "$value": "420ms",
+      "$type": "duration"
+    },
+    "scene": {
+      "$value": "900ms",
+      "$type": "duration"
+    },
+    "scrub": {
+      "$value": "scroll-linked",
+      "$type": "duration"
+    },
+    "ease-cinematic": {
+      "$value": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "$type": "cubicBezier"
+    },
+    "ease-mask": {
+      "$value": "cubic-bezier(0.77, 0, 0.175, 1)",
+      "$type": "cubicBezier"
+    }
+  },
+  "container": {
+    "max-width": {
+      "$value": "none",
+      "$type": "dimension"
+    },
+    "caption-width": {
+      "$value": "36ch",
+      "$type": "dimension"
+    },
+    "page-padding": {
+      "$value": "clamp(18px, 3vw, 48px)",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Motion-Directed Spatial Portfolio",
+    "description": "Animation-led dark portfolio and case-study style for creative technologists, Webflow specialists, spatial product studios, and premium digital portfolios. The page is designed as scroll keyframes — spatial hero object, oversized thin typography, grayscale media, sparse metadata, product/process fragments, and motion-directed transitions.",
+    "style-base": "motion-directed-spatial-portfolio",
+    "style-tuning": {
+      "axes": {
+        "color-mode": {
+          "value": "dark",
+          "rationale": "The style depends on dark cinematic space; light mode removes the stage."
+        },
+        "fonts": {
+          "value": "mix",
+          "rationale": "Thin geometric sans display plus a small editorial serif counterpoint."
+        },
+        "layout": {
+          "value": "loose",
+          "rationale": "Composition is scene-directed, with intentional overlap, cropping, and spatial layers."
+        },
+        "content-width": {
+          "value": "full-bleed",
+          "rationale": "Media and spatial scenes use the viewport as canvas."
+        },
+        "corners": {
+          "value": "sharp",
+          "rationale": "Media and scenes should feel cinematic and architectural, not card-like."
+        },
+        "motion": {
+          "value": "high",
+          "rationale": "Scroll choreography is the style's core proof."
+        },
+        "color-loudness": {
+          "value": "monochrome",
+          "rationale": "Grayscale/dark palette with one project-specific shock accent."
+        },
+        "imagery": {
+          "value": "3d",
+          "rationale": "Spatial object/media layers are load-bearing, even when built with CSS or photographic assets."
+        },
+        "page-load": {
+          "value": "subtle",
+          "rationale": "A short mask/fade reveal is acceptable; avoid long loaders unless the site is pure portfolio theatre."
+        }
+      }
+    },
+    "components": {
+      "fixed-nav": {
+        "backgroundColor": "transparent",
+        "textColor": "{colors.text-primary}",
+        "typography": "{typography.label}",
+        "position": "fixed"
+      },
+      "ghost-button": {
+        "backgroundColor": "transparent",
+        "textColor": "{colors.text-primary}",
+        "border": "1px solid {colors.hairline}",
+        "rounded": "{rounded.pill}",
+        "padding": "7px 12px"
+      },
+      "project-frame": {
+        "backgroundColor": "{colors.charcoal}",
+        "textColor": "{colors.text-primary}",
+        "border": "1px solid {colors.hairline-faint}",
+        "rounded": "{rounded.sharp}",
+        "padding": "0px"
+      },
+      "scene-caption": {
+        "textColor": "{colors.text-secondary}",
+        "typography": "{typography.editorial}",
+        "maxWidth": "{container.caption-width}"
+      }
+    }
+  }
+}

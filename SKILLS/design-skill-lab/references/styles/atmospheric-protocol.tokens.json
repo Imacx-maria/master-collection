@@ -1,0 +1,588 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "primary": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#A1A1AA",
+        "$type": "color"
+      },
+      "tertiary": {
+        "$value": "#71717A",
+        "$type": "color"
+      },
+      "quaternary": {
+        "$value": "#52525B",
+        "$type": "color"
+      },
+      "background": {
+        "$value": "#030508",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#080A10",
+        "$type": "color"
+      },
+      "surface-card": {
+        "$value": "#0A0D14",
+        "$type": "color"
+      },
+      "surface-glass": {
+        "$value": "rgba(3, 5, 8, 0.80)",
+        "$type": "color"
+      },
+      "surface-elevated": {
+        "$value": "#10131C",
+        "$type": "color"
+      },
+      "on-surface": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "on-surface-muted": {
+        "$value": "#D4D4D8",
+        "$type": "color"
+      },
+      "border-hairline": {
+        "$value": "rgba(255, 255, 255, 0.05)",
+        "$type": "color"
+      },
+      "border-soft": {
+        "$value": "rgba(255, 255, 255, 0.08)",
+        "$type": "color"
+      },
+      "border-strong": {
+        "$value": "rgba(255, 255, 255, 0.12)",
+        "$type": "color"
+      },
+      "accent-bloom": {
+        "$value": "#6366F1",
+        "$type": "color"
+      },
+      "accent-flow": {
+        "$value": "#8F47AE",
+        "$type": "color"
+      },
+      "accent-particle": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "accent-soft-bloom": {
+        "$value": "rgba(99, 102, 241, 0.20)",
+        "$type": "color"
+      },
+      "accent-soft-flow": {
+        "$value": "rgba(143, 71, 174, 0.20)",
+        "$type": "color"
+      },
+      "data-positive": {
+        "$value": "#10B981",
+        "$type": "color"
+      },
+      "data-warning": {
+        "$value": "#F59E0B",
+        "$type": "color"
+      },
+      "focus": {
+        "$value": "#3898EC",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "Instrument Serif, 'Source Serif 4', Georgia, serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "88px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.05,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.025em",
+        "$type": "dimension"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "Instrument Serif, 'Source Serif 4', Georgia, serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "72px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.0,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.025em",
+        "$type": "dimension"
+      }
+    },
+    "display-italic": {
+      "fontFamily": {
+        "$value": "Instrument Serif, 'Source Serif 4', Georgia, serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "88px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.05,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.025em",
+        "$type": "dimension"
+      }
+    },
+    "headline-lg": {
+      "fontFamily": {
+        "$value": "Instrument Serif, 'Source Serif 4', Georgia, serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "48px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "headline-md": {
+      "fontFamily": {
+        "$value": "Instrument Serif, 'Source Serif 4', Georgia, serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "32px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.2,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.015em",
+        "$type": "dimension"
+      }
+    },
+    "card-title": {
+      "fontFamily": {
+        "$value": "Inter, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "18px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.3,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.005em",
+        "$type": "dimension"
+      }
+    },
+    "body-lg": {
+      "fontFamily": {
+        "$value": "Inter, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.6,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    },
+    "body-md": {
+      "fontFamily": {
+        "$value": "Inter, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "14px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.55,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    },
+    "body-sm": {
+      "fontFamily": {
+        "$value": "Inter, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.625,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    },
+    "label-md": {
+      "fontFamily": {
+        "$value": "Inter, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.33,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    },
+    "overline": {
+      "fontFamily": {
+        "$value": "Inter, system-ui, sans-serif",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "11px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.45,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0.10em",
+        "$type": "dimension"
+      },
+      "textTransform": {
+        "$value": "uppercase",
+        "$type": "string"
+      }
+    },
+    "data": {
+      "fontFamily": {
+        "$value": "JetBrains Mono, 'IBM Plex Mono', SFMono-Regular, Consolas, monospace",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.45,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "pill": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "4xl": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "5xl": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "6xl": {
+      "$value": "128px",
+      "$type": "dimension"
+    },
+    "pad-button": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "pad-card": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "pad-glass": {
+      "$value": "20px",
+      "$type": "dimension"
+    }
+  },
+  "shadow": {
+    "card-soft": {
+      "$value": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+      "$type": "shadow"
+    },
+    "card-bloom": {
+      "$value": "0 25px 50px -12px rgba(99, 102, 241, 0.20)",
+      "$type": "shadow"
+    },
+    "card-flow": {
+      "$value": "0 25px 50px -12px rgba(143, 71, 174, 0.18)",
+      "$type": "shadow"
+    },
+    "inset-highlight": {
+      "$value": "inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+      "$type": "shadow"
+    },
+    "ring-hairline": {
+      "$value": "0 0 0 0.67px rgba(255, 255, 255, 0.05)",
+      "$type": "shadow"
+    }
+  },
+  "motion": {
+    "fast": {
+      "$value": "150ms",
+      "$type": "duration"
+    },
+    "base": {
+      "$value": "300ms",
+      "$type": "duration"
+    },
+    "reveal": {
+      "$value": "700ms",
+      "$type": "duration"
+    },
+    "ambient-slow": {
+      "$value": "8000ms",
+      "$type": "duration"
+    },
+    "ambient-flow": {
+      "$value": "20000ms",
+      "$type": "duration"
+    },
+    "ease-standard": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "cubicBezier"
+    },
+    "ease-signature": {
+      "$value": "cubic-bezier(0.2, 0.7, 0.2, 1)",
+      "$type": "cubicBezier"
+    },
+    "ease-ambient": {
+      "$value": "cubic-bezier(0.4, 0, 0.6, 1)",
+      "$type": "cubicBezier"
+    }
+  },
+  "container": {
+    "max-width": {
+      "$value": "1280px",
+      "$type": "dimension"
+    },
+    "padding-x": {
+      "$value": "32px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Atmospheric Protocol",
+    "description": "Editorial-meets-technical dark system — Instrument Serif display headlines (often paired with italic continuation), Inter for UI and data chrome, glass cards on near-black surface, and a load-bearing gradient atmosphere chosen from three named variants (Bloom, Flow, Particle).",
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.primary}",
+        "textColor": "#000000",
+        "typography": "{typography.label-md}",
+        "rounded": "{rounded.pill}",
+        "padding": "{spacing.pad-button}"
+      },
+      "button-secondary": {
+        "backgroundColor": "transparent",
+        "textColor": "{colors.on-surface-muted}",
+        "typography": "{typography.label-md}",
+        "rounded": "{rounded.md}",
+        "padding": "{spacing.sm}",
+        "border": "0.67px solid {colors.border-strong}"
+      },
+      "button-link": {
+        "backgroundColor": "transparent",
+        "textColor": "{colors.tertiary}",
+        "typography": "{typography.label-md}",
+        "rounded": "0px",
+        "padding": "0px"
+      },
+      "nav-pill": {
+        "backgroundColor": "{colors.surface-glass}",
+        "textColor": "{colors.on-surface}",
+        "rounded": "{rounded.pill}",
+        "padding": "{spacing.sm}",
+        "border": "0.67px solid {colors.border-soft}",
+        "blur": "12px"
+      },
+      "card": {
+        "backgroundColor": "{colors.surface-card}",
+        "textColor": "{colors.on-surface}",
+        "rounded": "{rounded.2xl}",
+        "padding": "{spacing.pad-card}",
+        "shadow": "{shadows.card-soft}"
+      },
+      "card-featured": {
+        "backgroundColor": "{colors.surface-card}",
+        "textColor": "{colors.on-surface}",
+        "rounded": "{rounded.2xl}",
+        "padding": "{spacing.pad-card}",
+        "shadow": "{shadows.card-bloom}",
+        "note": "Use card-bloom shadow only on 1-2 hero/featured cards per page; standard cards stay on card-soft"
+      },
+      "card-glass": {
+        "backgroundColor": "{colors.surface-glass}",
+        "textColor": "{colors.on-surface}",
+        "rounded": "{rounded.lg}",
+        "padding": "{spacing.pad-glass}",
+        "border": "0.67px solid {colors.border-hairline}",
+        "blur": "12px",
+        "shadow": "{shadows.card-soft}"
+      },
+      "data-pill": {
+        "backgroundColor": "{colors.surface-elevated}",
+        "textColor": "{colors.on-surface-muted}",
+        "typography": "{typography.data}",
+        "rounded": "{rounded.sm}",
+        "padding": "{spacing.xs}",
+        "border": "0.67px solid {colors.border-hairline}"
+      },
+      "overline-tag": {
+        "backgroundColor": "{colors.surface-glass}",
+        "textColor": "{colors.on-surface}",
+        "typography": "{typography.overline}",
+        "rounded": "{rounded.pill}",
+        "padding": "{spacing.xs}",
+        "border": "0.67px solid {colors.border-soft}"
+      }
+    }
+  }
+}

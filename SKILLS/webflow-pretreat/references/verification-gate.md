@@ -517,7 +517,7 @@ VERDICT: (a) AND (b) AND (c) AND (d) for every library  →  PASS / FAIL (which 
 
 **Property:** The output ZIP is flat at the Webflow root (no orphan top-level folder). Every source-ZIP entry that is not a declared-mutation target is present in the output ZIP with identical relative path (minus the single stripped root prefix, if the source-ZIP had one) and byte-identical content. Every local asset reference introduced or rewritten by pre-treatment resolves to a file in the output root. Declared mutations are `index.html` (any processed HTML) and, under L-1 Option B, the single-file deletion of `css/[sitename].webflow.css`. No `index-local.html` sibling is emitted (L-19 narrowed 2026-04-18 EXP-008).
 
-**Procedure:** (1) enumerate source-ZIP entry list from the fixture; (2) if ALL source entries share one common top-level folder prefix, subtract that prefix from each entry path; (3) enumerate output-ZIP entry list; (4) diff the two lists with the declared-mutation carve-outs applied; (5) for every non-mutated entry present in both, compare byte content (SHA256 or byte-for-byte compare) to confirm the skill did not silently rewrite it; (6) parse processed HTML and inline CSS for local URL references (`src`, `href`, `poster`, `srcset`, inline `style=url(...)`, `<source src>`, CSS `url(...)`); ignore external URLs, data URIs, fragments, mail/tel links, and page anchors; (7) normalize each local reference relative to the HTML file's root and confirm it exists in the output entry list; (8) compare missing-reference lists against the raw source fixture. If a missing source reference has exactly one same-directory deterministic candidate after URL-decoding, Unicode normalization, case-folding, and whitespace/hyphen/underscore separator equivalence, rewrite to that candidate and record the repair. If no unique candidate exists, preserve the source reference, label it source-premise broken, and do not invent a filename.
+**Procedure:** (1) enumerate source-ZIP entry list from the fixture; (2) if ALL source entries share one common top-level folder prefix, subtract that prefix from each entry path; (3) enumerate output-ZIP entry list; (4) diff the two lists with the declared-mutation carve-outs applied; (5) for every non-mutated entry present in both, compare byte content (SHA256 or byte-for-byte compare) to confirm the skill did not silently rewrite it; (6) parse processed HTML and inline CSS for local URL references (`src`, `href`, `poster`, `srcset`, inline `style=url(...)`, `<source src>`, CSS `url(...)`); ignore external URLs, data URIs, fragments, mail/tel links, and page anchors; (7) normalize each local reference relative to the HTML file's root and confirm it exists in the output entry list; (8) compare missing-reference lists against the raw source fixture. If a missing source reference has exactly one same-directory deterministic candidate after URL-decoding, Unicode normalization, case-folding, and punctuation/separator equivalence, rewrite to that candidate and record the repair. If no unique candidate exists, preserve the source reference, label it source-premise broken, and do not invent a filename.
 
 **Pass criterion:** diff result is empty (after carve-outs), every non-mutated entry's byte content matches between source and output, and there are zero skill-introduced broken local references. Source-premise broken references that are unchanged and have no unique deterministic repair may pass SV-12 only when explicitly listed as source-premise defects in evidence; they remain a promotion/audit HOLD item until the source fixture or asset naming is corrected. Extra entries in output (skill invented a directory, or emitted an `index-local.html` sibling that L-19 narrowed no longer permits) are a FAIL. Missing entries in output (skill dropped a non-mutated asset) are a FAIL. Byte drift on a non-mutated entry is a FAIL. Any local reference that existed in source but resolved there and no longer resolves after pre-treatment is FAIL.
 
@@ -780,6 +780,36 @@ Required PASS rows:
 
 ---
 
+## SV-20 — Visible Text / Glyph Fidelity (L-34)
+
+**Scope:** Both `webflow-paste` and `local-preview` modes. Source content is read-only; any body-text, `<title>`, meta-content, or source-content-attribute mutation is a hard FAIL.
+
+**Procedure:** Run `scripts/content_fidelity_probe.py` with `--source-root <raw-zip-or-folder> --output-root <output-folder> --fail-on-contract --write-manifest`. Exit 0 = PASS; any non-zero exit = FAIL, ZIP must not ship.
+
+```powershell
+python AI_OS\SKILLS\webflow-pretreat\scripts\content_fidelity_probe.py `
+  --source-root fixtures\<fixture>.webflow.zip `
+  --output-root output\{runner}_{source-slug}-file_output `
+  --fail-on-contract --write-manifest
+```
+
+**PASS criterion:** Exit 0. Manifest row `content-fidelity-text-glyph` status=`pass`. Zero changed body-text channels, zero missing/added text items in the diff.
+
+**FAIL criterion:** Any of:
+- Body text node mutation (e.g. `®` → `🍔`, case change, spelling "correction")
+- `<title>` reorder or rewording (even if "improvement")
+- `<meta>` description/og/twitter content changed
+- `alt`, `title`, `placeholder`, `aria-label` attribute value changed
+- Any `data-*` user-authored attribute value changed
+
+**Evidence format:** Paste the probe's `details.changedSamples` array (≤5 items) showing `[channel@path] source → output` with exact values. If exit 0, paste the `evidence` string.
+
+**Failure mode this catches:** BigBuns 2026-04-26: 3× `®` (U+00AE) → `🍔` (U+1F354) in `<span class="mc-fade-text">` and `<span class="mc-logo-footer">`. Señorita Colombia 2026-04-26: 3 pages had `<title>` rewritten (index.html reordered; 2 detail pages had titles generated from scratch and a source typo `Bellza` was corrected). Both mutations passed all 4 prior probes because none checked visible-text fidelity. Root cause: implicit model "thematic helpfulness" — no prompt authorised the edits; skill lacked an explicit "do not edit content" statement. L-34 + SV-20 close that gap.
+
+**Manifest row id:** `content-fidelity-text-glyph`
+
+---
+
 ## Browser Promotion Gate — Required Before PASS / KEEP
 
 SV-1..SV-18 plus the manifest prove the pretreated ZIP's structural contract. They do not prove the result deserves a PASS/KEEP recommendation. Before reporting PASS/KEEP on a fixture, run a browser promotion pass against a three-way baseline:
@@ -909,6 +939,7 @@ The skill's final output MUST include a Structural Verification Gate section for
 | SV-17 wrapper impact boundary + component-local fidelity (L-22) | PASS/FAIL | [source vs output component-fidelity fingerprint diff; every allowed delta cites an L-rule row] |
 | SV-18 output mode contract + pretreat manifest | PASS/FAIL | [`paste_contract_probe.py` command, output mode, `pretreat-manifest.json` path, FAIL/WARN contract rows, source/output `data-w-id` counts] |
 | SV-19 mode-B transport (L-31) | PASS/FAIL/N/A | [webflow-paste only: probe `mode-b-initial-state-transport` PASS with zero missing + `mode-b-d007-anchor-safety` PASS; cross-check `webflow-paste-overlay-neutralization-scope` STAYS PASS with skill-injected=0; anti-regression `mode-b-inline-ix-preserved` STAYS PASS; count of L-31 rules emitted into fb-styles-site (and per library host); local-preview: N/A — L-31 fires only in webflow-paste] |
+| SV-20 visible text/glyph fidelity (L-34) | PASS/FAIL | [`content_fidelity_probe.py --fail-on-contract` exit 0 + manifest row `content-fidelity-text-glyph` status=pass; if FAIL: changedSamples excerpt (channel, path, source→output)] |
 
 Overall: [PASS if all checks PASS, else FAIL — ship=NO]
 ```

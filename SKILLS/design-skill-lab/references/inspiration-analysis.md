@@ -54,7 +54,7 @@ After the briefing, map to the library menu:
 |---|---|
 | Grid-visible, sharp edges, monochrome + accent, uppercase display | Neo-Brutalist |
 | Compressed uppercase type, off-white, hover-reveal panels, image-led | Editorial Portfolio |
-| Clean sans + mono, teal or vivid accent, dashed borders, technical calm | Jocril Technical |
+| Clean sans + mono, teal or vivid accent, dashed borders, technical calm | Technical Refined |
 | Serif display + neutral sans, split layouts, restrained product photography | Basalt E-Commerce |
 | Sans body + serif italic accent, creamy neutral, reading-first card grids | Memoir Blog |
 | Dark charcoal + bright coral/accent, rounded cards, full-color imagery | Creative Studio |

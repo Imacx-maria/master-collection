@@ -1,0 +1,242 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "primary": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#1E1E1F",
+        "$type": "color"
+      },
+      "tertiary": {
+        "$value": "#BFBFBF",
+        "$type": "color"
+      },
+      "neutral": {
+        "$value": "#F5F5F5",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "surface-alt": {
+        "$value": "#E4E4E4",
+        "$type": "color"
+      },
+      "on-primary": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "EB Garamond",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "120px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.95,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "EB Garamond",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "88px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.0,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "display-italic": {
+      "fontFamily": {
+        "$value": "EB Garamond",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "120px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.95,
+        "$type": "number"
+      }
+    },
+    "headline-lg": {
+      "fontFamily": {
+        "$value": "EB Garamond",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "56px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.05,
+        "$type": "number"
+      }
+    },
+    "body-md": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "15px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.55,
+        "$type": "number"
+      }
+    },
+    "label-caps": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "11px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0.12em",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "4px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "4xl": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "5xl": {
+      "$value": "128px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "pad-card": {
+      "$value": "32px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Basalt E-Commerce",
+    "description": "Luxury grayscale e-commerce system for beauty, skincare, fashion, and lifestyle shops. Serif display + neutral sans, floating product imagery, split-layout pages.",
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.primary}",
+        "textColor": "{colors.on-primary}",
+        "typography": "{typography.label-caps}",
+        "rounded": "{rounded.sm}",
+        "padding": "{spacing.md}"
+      },
+      "button-primary-hover": {
+        "backgroundColor": "{colors.secondary}"
+      },
+      "product-card": {
+        "backgroundColor": "{colors.surface-alt}",
+        "textColor": "{colors.primary}",
+        "rounded": "{rounded.sm}",
+        "padding": "{spacing.pad-card}"
+      },
+      "price-label": {
+        "backgroundColor": "{colors.surface}",
+        "textColor": "{colors.primary}",
+        "typography": "{typography.label-caps}",
+        "padding": "{spacing.sm}"
+      }
+    }
+  }
+}

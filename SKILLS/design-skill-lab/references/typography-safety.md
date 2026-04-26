@@ -150,6 +150,7 @@ These are not bugs:
 - **Display caps** (Anton, Druk) in a brand mark → `0.85-0.95` is often the right answer optically. Math-derived 1.08 will feel limp.
 - **Pull-quote hero in serif italic** → `1.0` for a 2-line quote. The italic cant gives perceived breathing room.
 - **Button label** → `1.0` is universal. Don't touch.
+- **Compressed-display billboard register** (Wise-class fintech, activist campaigns, bold-statement landings) at weight 900 with line-height **0.85** at hero sizes (64–126px) → correct. Letters overlap vertically by design, creating a stamped/pressed/billboard quality that no looser leading can replicate. The extreme density IS the brand register. Combined modifiers required: weight ≥800, hero size (≥64px), 1–2 lines max, English copy, no stacked diacritics. If any modifier breaks (3+ lines, non-English with accents, weight <800), open to 0.92–0.95 instead.
 
 If the design-reviewer flags these as failures, override the audit with documented reason in provenance: *"Hero is 1-line controlled copy; tight leading is intentional impact choice (typography-safety.md tier 4 / minimal)."*
 

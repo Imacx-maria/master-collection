@@ -1,0 +1,305 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "primary": {
+        "$value": "#171717",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#434645",
+        "$type": "color"
+      },
+      "tertiary": {
+        "$value": "#FF531F",
+        "$type": "color"
+      },
+      "tertiary-light-1": {
+        "$value": "#FFF0EB",
+        "$type": "color"
+      },
+      "tertiary-light-2": {
+        "$value": "#FFC8B8",
+        "$type": "color"
+      },
+      "tertiary-mid": {
+        "$value": "#FF9D80",
+        "$type": "color"
+      },
+      "neutral": {
+        "$value": "#F5F5F5",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "surface-dark": {
+        "$value": "#2D2F2E",
+        "$type": "color"
+      },
+      "on-primary": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "muted-dark": {
+        "$value": "#767F7A",
+        "$type": "color"
+      },
+      "muted-light": {
+        "$value": "#AFB6B4",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#DDDFDE",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "144px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.95,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.04em",
+        "$type": "dimension"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "112px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.98,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.035em",
+        "$type": "dimension"
+      }
+    },
+    "headline-xl": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "96px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.02,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.03em",
+        "$type": "dimension"
+      }
+    },
+    "headline-lg": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "56px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "body-md": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.55,
+        "$type": "number"
+      }
+    },
+    "label-caps": {
+      "fontFamily": {
+        "$value": "Inter",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 600,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0.08em",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "full": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "4xl": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "5xl": {
+      "$value": "128px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "pad-button": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "pad-band": {
+      "$value": "48px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Creative Studio",
+    "description": "Dark, gallery-like aesthetic for creative agencies and design studios. Charcoal foundation with warm coral accent for CTAs and process bands.",
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.tertiary}",
+        "textColor": "{colors.on-primary}",
+        "typography": "{typography.label-caps}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.pad-button}"
+      },
+      "button-primary-hover": {
+        "backgroundColor": "{colors.tertiary-mid}"
+      },
+      "card-default": {
+        "backgroundColor": "{colors.surface}",
+        "textColor": "{colors.primary}",
+        "rounded": "{rounded.md}",
+        "padding": "{spacing.lg}"
+      },
+      "hero-band": {
+        "backgroundColor": "{colors.surface-dark}",
+        "textColor": "{colors.on-primary}",
+        "padding": "{spacing.section}"
+      },
+      "process-band-1": {
+        "backgroundColor": "{colors.tertiary-light-1}",
+        "textColor": "{colors.primary}",
+        "padding": "{spacing.pad-band}"
+      },
+      "process-band-2": {
+        "backgroundColor": "{colors.tertiary-light-2}",
+        "textColor": "{colors.primary}",
+        "padding": "{spacing.pad-band}"
+      },
+      "process-band-3": {
+        "backgroundColor": "{colors.tertiary-mid}",
+        "textColor": "{colors.primary}",
+        "padding": "{spacing.pad-band}"
+      },
+      "process-band-4": {
+        "backgroundColor": "{colors.tertiary}",
+        "textColor": "{colors.on-primary}",
+        "padding": "{spacing.pad-band}"
+      }
+    }
+  }
+}

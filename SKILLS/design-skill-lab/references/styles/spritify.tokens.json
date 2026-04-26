@@ -1,0 +1,252 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "primary": {
+        "$value": "#03594D",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#555555",
+        "$type": "color"
+      },
+      "tertiary": {
+        "$value": "#82EDA6",
+        "$type": "color"
+      },
+      "accent-pink": {
+        "$value": "#F6BBFD",
+        "$type": "color"
+      },
+      "accent-yellow": {
+        "$value": "#FFFF94",
+        "$type": "color"
+      },
+      "accent-cyan": {
+        "$value": "#AEFBFF",
+        "$type": "color"
+      },
+      "neutral": {
+        "$value": "#F9F8F4",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "on-primary": {
+        "$value": "#F9F8F4",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "League Spartan",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "112px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 800,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.95,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.03em",
+        "$type": "dimension"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "League Spartan",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "88px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 800,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.0,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.025em",
+        "$type": "dimension"
+      }
+    },
+    "headline-lg": {
+      "fontFamily": {
+        "$value": "League Spartan",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "56px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.02,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "body-md": {
+      "fontFamily": {
+        "$value": "League Spartan",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "17px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.5,
+        "$type": "number"
+      }
+    },
+    "label-md": {
+      "fontFamily": {
+        "$value": "League Spartan",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "13px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 600,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0.04em",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "full": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "56px",
+      "$type": "dimension"
+    },
+    "4xl": {
+      "$value": "72px",
+      "$type": "dimension"
+    },
+    "5xl": {
+      "$value": "112px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "72px",
+      "$type": "dimension"
+    },
+    "pad-card": {
+      "$value": "32px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Spritify",
+    "description": "Playful, switchable-color-scheme aesthetic for kids products, family brands, and fun apps. League Spartan type, saturated palette, rounded component shapes.",
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.primary}",
+        "textColor": "{colors.on-primary}",
+        "typography": "{typography.label-md}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.md}"
+      },
+      "button-primary-hover": {
+        "backgroundColor": "{colors.tertiary}",
+        "textColor": "{colors.primary}"
+      },
+      "button-accent": {
+        "backgroundColor": "{colors.accent-pink}",
+        "textColor": "{colors.primary}",
+        "typography": "{typography.label-md}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.md}"
+      },
+      "card-default": {
+        "backgroundColor": "{colors.surface}",
+        "textColor": "{colors.primary}",
+        "rounded": "{rounded.lg}",
+        "padding": "{spacing.pad-card}"
+      },
+      "accent-border-card": {
+        "backgroundColor": "{colors.surface}",
+        "textColor": "{colors.primary}",
+        "rounded": "{rounded.md}",
+        "padding": "{spacing.lg}"
+      }
+    }
+  }
+}

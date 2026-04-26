@@ -1,6 +1,6 @@
 # Build Tactics
 
-Tactical do/don't recipes for the **build moment** — decisions made *before* writing markup, not caught after. Tactics 1–13 come from Refactoring UI (Wathan & Schoger), Don't Make Me Think (Krug), and 100 Things Every Designer Needs to Know (Weinschenk). Tactics 14–17 are conditional gates added from verification-build evidence (kindertech, os-traquinas, ledger, mainframe, oneshot stress test): dark-mode discipline, mobile nav implementation, component reusability, surface-context text scoping.
+Tactical do/don't recipes for the **build moment** — decisions made *before* writing markup, not caught after. Tactics 1–13 come from Refactoring UI (Wathan & Schoger), Don't Make Me Think (Krug), and 100 Things Every Designer Needs to Know (Weinschenk). Tactics 14–17 are conditional gates covering recurring failure modes: dark-mode discipline, mobile nav implementation, component reusability, surface-context text scoping.
 
 Tactics 1–13 always run. Tactics 14, 15, 16, and 17 are **conditional** — run only when their trigger axis or markup pattern is present.
 
@@ -193,7 +193,7 @@ Dark mode is not "invert the colours and ship". Light-mode tokens, recipes, and 
 
 **When to run:** check `style-tuning.axes.color-mode.value`. If `light`, skip this tactic entirely. If `dark` or `both`, run the full checklist before generating any markup that targets the dark palette. For `both`, the rule is independent verification per palette — both passes must hold.
 
-This tactic exists because verification build kindertech-v2 surfaced 5 of 6 Critical issues in the dark variant: contrast, shadow→border substitution, focus visibility, featured-card distinction, and surface elevation. Each one of those is a recipe-level mistake, not a one-off bug.
+This tactic exists because dark-mode builds reliably surface a recurring cluster of Critical issues — contrast, shadow→border substitution, focus visibility, featured-card distinction, and surface elevation. Each one is a recipe-level mistake, not a one-off bug.
 
 ### 14.1 Surfaces — never pure black, never pure white
 
@@ -233,6 +233,26 @@ For dramatic elevation on dark (modals over a backdrop), pair the hairline borde
 
 ❌ Same `box-shadow` token in both modes → invisible in dark.
 ✅ Mode-conditional shadow: light uses vertical-offset shadow, dark uses hairline border + optional inner glow.
+
+**Hard-offset (brutalist) shadow on dark — the deliberate exception.** Some dark-mode styles intentionally break the "shadows are invisible on dark" rule by using a **hard, opaque, offset shadow** as graphic depth rather than realistic light. The Composio reference is canonical: dark cards (`#000`) on a Void Black page (`#0F0F0F`) carry a `box-shadow: rgba(0,0,0,0.15) 4px 4px 0px 0px` — a chunky offset block-shadow that reads as raw retro-computing depth, not as ambient light.
+
+Recipe:
+
+```css
+/* Brutalist dark shadow — graphic, not lit */
+.card--brutalist {
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: rgba(0, 0, 0, 0.15) 4px 4px 0 0;
+}
+```
+
+Use only when:
+- The style explicitly invites brutalist/retro-computing personality (Composio-class developer-tool sites, Bold Grid Manifesto on dark, technical-refined with intentional roughness).
+- The shadow is **opaque and offset**, not soft and ambient — this is graphic depth, not realistic depth.
+- It appears on **select** elements (hero cards, feature highlights), not every card. Floods the page if used as default elevation.
+
+Don't combine with the hairline-border elevation system on the same card — pick one or the other. Mixing reads as confused.
 
 ### 14.3 Accents — desaturate, never invert
 
@@ -302,7 +322,7 @@ If any item is unresolved, fix in tokens before generating markup. This is what 
 
 ## 15. Mobile nav implementation (conditional — runs when `nav` element exists in build)
 
-Every verification build so far shipped without a working mobile nav. The desktop nav-list hides at the breakpoint, and nothing replaces it. This tactic is the implementation contract — minimum viable mobile nav, no excuses.
+Mobile nav is the most commonly skipped surface in build output — the desktop nav-list hides at the breakpoint and nothing replaces it. This tactic is the implementation contract — minimum viable mobile nav, no excuses.
 
 **When to run:** any build that has a `<nav>` with multiple links and a breakpoint-based hide rule for the nav-list. If the nav has only one link or is always visible, skip.
 
@@ -567,7 +587,7 @@ If any item fails, refactor. Component discipline failures are the difference be
 
 ## 17. Surface-context text scoping (conditional — runs when build mixes light/dark surfaces)
 
-Two stress-test failures (Spritify testimonial, Warm Editorial dark section) shipped invisible text because text colours inherited from the *page/section* context instead of being scoped to the *immediate surface*. The pattern is generic and recurs across libraries; this tactic is the build-time gate that catches it before delivery.
+Mixed-surface layouts reliably ship invisible text because text colours inherit from the *page/section* context instead of being scoped to the *immediate surface*. The pattern is generic and recurs across libraries; this tactic is the build-time gate that catches it before delivery.
 
 **When to run:** any build where the markup contains a surface-flip — a light section containing a dark card / panel / testimonial / quote / modal / callout, OR a dark section containing a light variant of the same. Trigger keywords in CSS: `.section--dark`, `.section--inverted`, `[data-theme="dark"]` scoped to a section, or any class that swaps the local background to the opposite of the page's `body`. If the build is single-mode and surfaces don't flip locally, skip.
 
@@ -588,7 +608,7 @@ These are the patterns to scan for:
 
 | Shape | Symptom | Fix |
 |---|---|---|
-| **Light card in dark section** (Spritify, Warm Editorial) | Card body text white-on-white; only avatar / icon visible | Component sets its own `color: var(--text-on-light-surface)` |
+| **Light card in dark section** | Card body text white-on-white; only avatar / icon visible | Component sets its own `color: var(--text-on-light-surface)` |
 | **Dark card in light section** (testimonial-on-coloured) | Card body text dark-on-dark; only background visible | Component sets its own `color: var(--text-on-dark-surface)` |
 | **Inherited via `color: inherit`** | Text "looks fine" in one section, breaks when component reused elsewhere | Replace `inherit` with explicit token from local surface |
 | **JS-gated reveal without fallback** | Content invisible until scroll triggers `.visible`. If JS fails or runs late → permanent invisibility | See 17.4 progressive-enhancement gate |
@@ -638,7 +658,7 @@ The principle: **a component's text colour is determined by its own background, 
 
 If the build uses CSS-driven reveal animations (`opacity: 0` initial state, `opacity: 1` on `.visible` class added by JS), the initial hidden state must be **gated by a `.js-ready` class on the html/body element**. Without this gate, a JS failure leaves all `.reveal` content permanently invisible.
 
-❌ **Broken pattern (Spritify v1):**
+❌ **Broken pattern:**
 ```css
 .reveal { opacity: 0; transform: translateY(20px); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -715,7 +735,142 @@ If the build has reveal animations, also: **disable JS** in the browser (DevTool
 - [ ] Disable-JS test passes: page renders fully readable without JS
 - [ ] Disable-CSS test passes: page renders fully readable without CSS (semantic markup only — sanity check)
 
-If any item fails, refactor before delivery. Surface-context bugs are the most user-visible failure mode in stress test history (2/11 builds in the oneshot run shipped with this defect).
+If any item fails, refactor before delivery. Surface-context bugs are among the most user-visible failure modes the skill can ship — text invisible on its own background.
+
+---
+
+## 18. Interactive state coverage in derived themes (conditional — runs whenever a build adds a non-default theme to a single-theme style)
+
+This tactic exists because a real ship-defect happened: Atmospheric Protocol gained a light-mode derivation (`atmospheric-protocol-light-dark.html`), the surface tokens were carefully re-derived per `effects/liquid-glass.md` § 6.5, the page glass and atmosphere flipped correctly — but the primary CTA buttons rendered as `dark pill + dark text` (invisible) in light mode. Root cause: the dark CSS contained `color: #000000` hardcoded inside `.btn--primary`. The text-token followed the theme inversion (`var(--color-text-primary)` flipped from white → dark), but the hardcoded text colour did not. Result: a visually critical button that the user could not read.
+
+The general lesson: **a style that ships with a single colour-mode default can hide hardcoded values inside interactive selectors that nobody notices, because the inversion only triggers when the new mode arrives.** When you add the new mode, you have to audit every interactive state in every interactive selector.
+
+### 18.1 When this tactic fires
+
+Run this checklist whenever any of the following are true:
+
+- A library declared `color-mode: dark` (or `light`) ships a counterpart variant (light-on-dark or dark-on-light derivation).
+- A theme-toggle or `prefers-color-scheme` switch is being added to a build that previously rendered in a single mode.
+- A CSS-variable refactor introduces `[data-theme="..."]` selectors (or a parent class like `.theme-light`) for the first time.
+
+If the build is single-mode by intent (e.g., Sanctuary Tech, Memoir Blog at default), this tactic does not apply.
+
+### 18.2 The audit — find the hidden hardcoded values
+
+Before claiming the new mode "works," grep the build CSS for every property in this list, in every interactive selector (`.btn*`, `.cta*`, `button`, `input`, `select`, `textarea`, `a:not(.card)`, `.toggle`, `.chip`, `.pill`, `.badge`, `.tag`, `.menu`, `.drawer`, `.dialog`, `.modal`, `.tab`, `nav-*`, `.link`):
+
+| Property | Hardcoded value patterns to flag |
+|---|---|
+| `color` | `#000000`, `#000`, `black`, `#FFFFFF`, `#FFF`, `white`, any hex literal |
+| `background` / `background-color` | hex literal, `black`, `white`, `rgb(0,0,0)`, `rgba(0,0,0,*)` (when not part of an intentional fixed-colour pattern like an accent) |
+| `border-color` / `border` | hex literal, `black`, `white` |
+| `box-shadow` | embedded hex (e.g. `0 0 24px #000`) |
+| `outline-color` | hex literal |
+| `fill` / `stroke` (on inline SVG) | hex literal |
+
+Each hit is a candidate for theme inversion failure. Two outcomes per hit:
+
+- **Intentional fixed colour** (e.g., a brand pill that's always coral on every theme) — leave it but document in DESIGN.md provenance under `theme-locked-colours`.
+- **Inversion-breaking** (the property pairs with a token that DOES invert) — must be overridden in the new theme.
+
+### 18.3 The five interactive states that must be re-audited per new theme
+
+For every interactive selector that the audit flags, re-derive **all five states** in the new theme:
+
+1. **Default / resting state** — base colour, background, border on the unhovered, unfocused element.
+2. **`:hover`** — colour shift, background lift, border highlight. Often inverts the resting state (transparent ↔ filled). Always check that the inverted state still has contrast against the new theme's surface.
+3. **`:focus-visible`** — outline / ring colour and width. The default browser ring is `Highlight` (system colour) which usually works, but custom rings with hardcoded `outline-color: #...` will break.
+4. **`:active`** — pressed / down state. Often a `transform: translateY(1px)` only (theme-safe) but sometimes adds a background tint that needs theme awareness.
+5. **`:disabled`** / `[aria-disabled="true"]` — usually a desaturated muted state. Hardcoded `color: #ccc` breaks on light backgrounds (becomes invisible). Use a token-derived muted colour.
+
+Plus two state-adjacent considerations:
+
+- **Placeholder text** in inputs (`::placeholder`) — usually a fixed grey that fails contrast on the inverted theme. Override per theme.
+- **Selection** (`::selection`) — the highlight colour for selected text. If hardcoded, looks wrong in the new theme.
+
+### 18.4 The override pattern — explicit, not relying on cascade
+
+**Wrong** — assume the cascade will catch it because the variable inverts:
+
+```css
+/* Original, single-mode build */
+.btn--primary {
+  background: var(--color-text-primary);
+  color: #000000;          /* ← hardcoded, will not invert */
+}
+```
+
+This ships broken in the new theme. The text-primary token flipped, the colour did not.
+
+**Right** — explicit per-theme override:
+
+```css
+/* Original — kept as-is, defines the dark-mode (default) behaviour */
+.btn--primary {
+  background: var(--color-text-primary);
+  color: #000000;
+}
+
+/* New theme — explicit override for the hardcoded value */
+:root[data-theme="light"] .btn--primary {
+  color: #FFFFFF;          /* ← inverted intentionally */
+}
+:root[data-theme="light"] .btn--primary:hover { /* ... */ }
+:root[data-theme="light"] .btn--primary:focus-visible { /* ... */ }
+:root[data-theme="light"] .btn--primary:disabled { /* ... */ }
+```
+
+Three rules of the override pattern:
+
+- **Override at the same specificity tier or higher** than the original. `:root[data-theme="light"] .btn--primary` (specificity 0,2,1) beats `.btn--primary` (0,1,0).
+- **Override every state, not just default.** Even if `:hover` uses tokens that invert correctly, declare the override anyway — it makes the per-theme intent explicit and survives future refactors.
+- **Document the inversion in DESIGN.md provenance** under `theme-derivation.interactive-overrides` so a future audit knows why the duplicate rules exist.
+
+### 18.5 The cross-state contrast spot-check
+
+For every primary interactive in the build (CTAs, primary buttons, form submits), compute the contrast ratio of `color` against `background-color` in BOTH themes, in BOTH `:default` and `:hover`. Acceptable: ≥ 4.5:1 (WCAG AA for normal text), ≥ 3:1 for large text (≥18px or ≥14px bold).
+
+A 50ms manual test in DevTools beats catching it in user testing. Toggle the theme; for each visible button, inspect → "Contrast ratio" indicator. Any AA failure is a delivery blocker.
+
+### 18.6 Reduced-transparency + theme-derivation interaction
+
+The `prefers-reduced-transparency` fallback block (mandatory whenever `backdrop-filter` is in use — see `effects/liquid-glass.md`) MUST handle each theme separately:
+
+```css
+@media (prefers-reduced-transparency: reduce) {
+  /* Default fallback — covers the original mode */
+  .glass-surface { background: var(--color-surface-card); backdrop-filter: none; }
+
+  /* Per-theme fallback — covers the derived mode separately */
+  :root[data-theme="light"] .glass-surface {
+    background: #FFFFFF;
+    backdrop-filter: none;
+    border-color: rgba(20, 24, 31, 0.12);
+  }
+}
+```
+
+If the media query block does NOT differentiate per theme, the derived mode inherits the wrong fallback (e.g., dark surface colour on light page) and the reduced-transparency a11y path renders as broken. This is the most common silent regression at this stage — it only surfaces when a tester explicitly enables `prefers-reduced-transparency` in OS settings.
+
+### 18.7 Pre-delivery checklist
+
+- [ ] Grep for every `color`, `background*`, `border-color`, `box-shadow`, `outline*`, `fill`, `stroke` declaration with a hardcoded hex / `black` / `white` value inside an interactive selector — documented or overridden, never silently shipped
+- [ ] Every flagged hit is either listed in `theme-locked-colours` provenance OR has a per-theme override block
+- [ ] Each interactive selector's five states (default, hover, focus-visible, active, disabled) verified in BOTH themes
+- [ ] `::placeholder` and `::selection` colours verified in BOTH themes if used
+- [ ] Contrast spot-check: every primary CTA + form submit ≥ 4.5:1 in both themes, both default and hover
+- [ ] `prefers-reduced-transparency` media query has a separate block per theme
+- [ ] Toggle test: load page in default theme → toggle → visually scan each button and link in viewport → no invisible text, no missing borders
+- [ ] DESIGN.md provenance declares `theme-derivation.interactive-overrides: true` and lists which selectors required overrides
+
+If any item fails, refactor before delivery. Interactive-state inversion bugs are visible to every user the moment the new theme renders — they are not edge cases.
+
+### 18.8 Cross-references
+
+- `effects/liquid-glass.md` § 6.5 — Light-mode glass adaptation, the 5 mandatory rules; this tactic is the build-side companion (those rules cover surfaces; this tactic covers interactives ON those surfaces).
+- `references/styles/atmospheric-protocol.md` § Light-Mode Interpretation (Advanced Derivation) — the canonical case study; the bug that motivated this tactic.
+- `style-reviews/effects/liquid-glass.md` § Light-mode glass — the 5-rule check + interactive state coverage — the verification pass.
+- Tactic 14 (dark-mode discipline) — pair this tactic when adding a light derivation to a dark default; pair Tactic 14 when adding a dark derivation to a light default.
 
 ---
 
@@ -757,6 +912,7 @@ Before generating any markup, run through these:
 - [ ] If `<nav>` with breakpoint hide → Tactic 15 mobile nav contract included (Tactic 15.5)
 - [ ] If 3+ instances of any component pattern → Tactic 16 component reusability contract met (Tactic 16.6)
 - [ ] If build mixes light/dark surfaces (`.section--dark` containing light cards or vice versa) OR uses reveal animations → Tactic 17 surface-context checklist passed (Tactic 17.7)
+- [ ] If build adds a non-default theme (light derivation of a dark style, or vice versa) OR introduces theme-toggle → Tactic 18 interactive-state coverage checklist passed (Tactic 18.7)
 - [ ] If sensitive content → trauma-informed reference loaded (cross-reference section)
 
 These are gates, not suggestions. Skipping them means catching the same issues in Phase 4.3 / 4.7 — wastes the self-correction loop on stuff that should never have shipped.

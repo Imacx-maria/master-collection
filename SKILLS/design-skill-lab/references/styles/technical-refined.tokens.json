@@ -1,0 +1,277 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "primary": {
+        "$value": "#0A0A0A",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#555555",
+        "$type": "color"
+      },
+      "tertiary": {
+        "$value": "#2DD4CD",
+        "$type": "color"
+      },
+      "tertiary-deep": {
+        "$value": "#16B7B2",
+        "$type": "color"
+      },
+      "tertiary-vivid": {
+        "$value": "#00DED7",
+        "$type": "color"
+      },
+      "neutral": {
+        "$value": "#FAFAFA",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#141414",
+        "$type": "color"
+      },
+      "surface-elevated": {
+        "$value": "#1F1F1F",
+        "$type": "color"
+      },
+      "on-primary": {
+        "$value": "#FAFAFA",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "Geist Sans",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "160px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.02,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.03em",
+        "$type": "dimension"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "Geist Sans",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "112px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.02,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.025em",
+        "$type": "dimension"
+      }
+    },
+    "headline-xl": {
+      "fontFamily": {
+        "$value": "Geist Sans",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "96px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 650,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.04,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.025em",
+        "$type": "dimension"
+      }
+    },
+    "headline-lg": {
+      "fontFamily": {
+        "$value": "Geist Sans",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "70px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 650,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.05,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "body-md": {
+      "fontFamily": {
+        "$value": "Geist Sans",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.55,
+        "$type": "number"
+      }
+    },
+    "label-md": {
+      "fontFamily": {
+        "$value": "Geist Mono",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.0175em",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "full": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "4xl": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "5xl": {
+      "$value": "128px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "gutter": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "pad-button": {
+      "$value": "12px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Technical Refined",
+    "description": "Refined, technical, modern interface language for developer tools, SaaS dashboards, and documentation-heavy product surfaces.",
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.tertiary}",
+        "textColor": "{colors.primary}",
+        "typography": "{typography.label-md}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.pad-button}"
+      },
+      "button-primary-hover": {
+        "backgroundColor": "{colors.tertiary-deep}"
+      },
+      "card-default": {
+        "backgroundColor": "{colors.surface}",
+        "textColor": "{colors.on-primary}",
+        "rounded": "{rounded.md}",
+        "padding": "{spacing.lg}"
+      },
+      "badge-muted": {
+        "backgroundColor": "{colors.surface-elevated}",
+        "textColor": "{colors.on-primary}",
+        "typography": "{typography.label-md}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.sm}"
+      },
+      "page-shell": {
+        "backgroundColor": "{colors.neutral}",
+        "textColor": "{colors.secondary}",
+        "rounded": "{rounded.lg}",
+        "padding": "{spacing.xl}"
+      }
+    }
+  }
+}

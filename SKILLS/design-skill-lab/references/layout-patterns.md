@@ -16,7 +16,7 @@ Bento is the **deliberate, opt-in** choice when:
 
 When in doubt: **uniform grid** (equal weight) or **list** (sequential). These are the safe defaults. Bento is the loud option that has to earn its place.
 
-If your style is `editorial-portfolio`, `jocril-technical`, `basalt-ecommerce`, `memoir-blog`, `warm-serene-luxury`, `sanctuary-tech`, or `neo-brutalist` (when used reservedly) — **do not reach for bento as a fix-it tool**. The bento checks in this file apply *only when bento was correctly chosen*.
+If your style is `editorial-portfolio`, `technical-refined`, `basalt-ecommerce`, `memoir-blog`, `warm-serene-luxury`, `sanctuary-tech`, `adaptive-ai-console`, `motion-directed-spatial-portfolio`, `atmospheric-protocol`, `warm-editorial`, or `neo-brutalist` (when used reservedly) — **do not reach for bento as a fix-it tool**. The bento checks in this file apply *only when bento was correctly chosen*.
 
 ---
 

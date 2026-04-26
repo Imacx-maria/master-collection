@@ -550,7 +550,7 @@ Runner shape (50ms × 200 = 10s cap, bounded):
 
 1. Strip exactly ONE common root prefix if and only if ALL source entries share it. Do not strip if entries are mixed-root or already flat.
 2. Every file not mutated by pre-treatment is copied byte-for-byte — same path (minus the stripped prefix), same bytes, same mtime if the ZIP tool preserves it. Applies to `fonts/`, `images/`, `js/`, `documents/`, media, and any other non-HTML/CSS asset.
-3. Every local asset reference in processed HTML/CSS resolves against the output root after prefix stripping and URL rewrites. If a raw source reference is already broken, repair only when there is exactly one same-directory deterministic candidate after URL-decoding, Unicode normalization, case-folding, and whitespace/hyphen/underscore separator equivalence. If there is no unique candidate, preserve the source reference and label it as source-premise broken; do not invent a filename.
+3. Every local asset reference in processed HTML/CSS resolves against the output root after prefix stripping and URL rewrites. If a raw source reference is already broken, repair only when there is exactly one same-directory deterministic candidate after URL-decoding, Unicode normalization, case-folding, and punctuation/separator equivalence. If there is no unique candidate, preserve the source reference and label it as source-premise broken; do not invent a filename.
 4. Mutated files (`index.html`, any other processed HTML, potentially `css/*.css` under L-1 Option B's site-CSS deletion) go to their expected flat paths.
 5. Current skill runs write exactly one deterministic output pair per lane + source under `output/`: `output/{lane}_{source-slug}-file_output.zip` and `output/{lane}_{source-slug}-file_output/`, where `{lane}` is `claude` or `codex`. Reruns delete and replace that same pair.
 6. No extra directories, no renamed directories, no synthetic folders invented by the skill. Timestamped `fresh-runs`, `current-skill`, `rerun`, backup ZIPs, and comparison ZIPs are historical only and not valid current-skill outputs.
@@ -919,6 +919,8 @@ L-30 distinguishes the DATA from the ENGINE. Only the data — the arguments of 
 
 **Sync surface:** `docs/LESSONS.md` (this body); `docs/LESSON_INDEX.md` (new L-30 row; rule-count bump L-1..L-30); `AI_OS/SKILLS/webflow-pretreat/SKILL.md` (Hard Rule #1 carve-out language, Mode B description, new Per-Element entry + Mandatory Output Manifest row + Before-You-Zip checklist item); `AI_OS/SKILLS/webflow-pretreat/references/lessons.md` (L-30 entry); `AI_OS/SKILLS/webflow-pretreat/references/verification-gate.md` (L-30 gate row); `.claude/skills/webflow-pretreat/SKILL.md` + `~/.claude/skills/webflow-pretreat/SKILL.md` (Claude-runtime mirrors — sync to master). Codex lane (`AI_OS/SKILLS/webflow-pretreat/SKILL.md`) gets the Non-Negotiables pointer in a separate dual-lane pass if Maria authorizes it.
 
+**L-30/L-16 readiness note (2026-04-25):** L-30 IX data scripts may use the publish-safe Webflow queue shape `window.Webflow = window.Webflow || []; window.Webflow.push(function(){ ... });` instead of the full L-16 `need[]`/`requiredSelectors`/`fbRun` runner when the body is IX data registration only and has no DOM selector dependency. This queue is readiness-safe because it defers `Webflow.require(...)` until Webflow drains the queue. `paste_contract_probe.py` treats this shape as satisfying `mode-b-l16-readiness`; a bare top-level `Webflow.require(...)`, `Webflow.push(...)`, or `Webflow.env(...)` remains a FAIL.
+
 ---
 
 ## L-31 — Mode-B Transport Protocol for IX2-Hidden Initial States (`webflow-paste` only)
@@ -1034,6 +1036,98 @@ Per L-28 precedent.
 **No manifest row required:** this is AUTHORING-PROCESS — process rule for rule-authors, not artifact-touching. Compliance is verified at PR/commit time when adding a new rule, not at runtime when running the skill. The `lesson_surface_lint.py` schema accepts AUTHORING-PROCESS as a recognized classification (along with INFORMATIONAL, VERIFICATION-ONLY, ARTIFACT-TOUCHING).
 
 **Provenance:** retrospectively codified from item C1 in `experiments/POST-SHIP-RETROSPECTIVE-INPUT.md`, P0 batch 2026-04-25.
+
+---
+
+## L-33 — IX3 Name Hints for Mechanical Converter Consumption (`webflow-paste` only)
+
+**Date added:** 2026-04-26
+**Origin:** C-origin handoff from BigBuns IX3 naming investigation. The source `js/webflow.js` and L-30 inline IX3 data preserve working IDs and timelines but can expose only opaque export names (`i-*`, `ix3-*`, `ta-*`). The mechanical converter can synthesize fallback names, but AI pre-treatment has better semantic context from DOM class names, designer screenshots, and page structure. The fix is an advisory sidecar file, not mutation of IX data.
+**Classification:** ARTIFACT-TOUCHING
+**Maturity:** NEW (schema/consumer introduced 2026-04-26; needs more organic fixture evidence before promotion to mature).
+
+**Rule:** In `webflow-paste` mode, the skill MUST emit `flowbridge-ix3-name-hints.json` at the output root. The file suggests human-readable names for IX3 interactions and actions so the downstream converter can keep IDs intact while making the Webflow Interactions panel legible. If no confident hints exist, emit the schema with an empty `pages` map or empty per-page maps rather than inventing names.
+
+**Required schema:**
+
+```json
+{
+  "schema": "flowbridge/ix3-name-hints",
+  "version": 1,
+  "source": "webflow-pretreat",
+  "pages": {
+    "index.html": {
+      "interactions": {
+        "i-0d09c993": "mc-loop-text-effect"
+      },
+      "actions": {
+        "ta-2445dfc1": "stagger-text-loop-one"
+      }
+    }
+  }
+}
+```
+
+Use normalized ZIP-relative HTML paths as `pages` keys (`index.html`, `about.html`, `cms/foo.html`). For single-page outputs, still use the explicit page key instead of a global unscoped map. The converter may support root-level maps as a compatibility fallback, but the skill must write the page-scoped schema above.
+
+**What the skill may infer:**
+
+- Interaction names from trigger type plus target semantics: page load, scroll trigger class, hover target, `[ani="..."]`, dominant class prefix, and nearby source labels.
+- Action names from action targets: class chains (`mc-loop-text.one`), semantic `ani` attributes (`ani="intro"`), repeated SplitText/stagger patterns, image targets, nav/header/footer target names.
+- Designer-style slugs when the evidence is strong: `mc-loop-text-effect`, `mc-intro-load`, `mc-scroll-section`, `mc-btn-hover`, `stagger-text-loop-one`.
+
+**Hard boundaries:**
+
+- Do NOT change interaction IDs, timeline IDs, action IDs, targets, timings, properties, `js/webflow.js`, or the L-30 inline IX data.
+- Do NOT invent hints for IDs that do not exist in preserved IX3 evidence (`js/webflow.js` or the extracted L-30 inline data).
+- Do NOT emit a hint when the semantic name is low-confidence. The converter fallback is preferable to confident-looking fiction.
+- Do NOT use fixture-specific conditionals. BigBuns names are examples of naming style, not hardcoded site rules.
+- Suggested names must be ASCII, non-empty, ≤80 characters, and contain no control characters or path-forbidden characters (`/ \ < > : " | ? *`).
+
+**Application boundary:** The converter consumes this file mechanically after extracting IX3 data and after its own fallback naming. If a valid hint exists for an ID, the converter replaces only the `name` field. IDs and binding fields remain untouched.
+
+**Failure mode this prevents:** Webflow Designer's IX3 panel can show `i-0d09c993` / `ta-2445dfc1` even though the interaction still works. That makes manual review and post-paste repair almost impossible. L-33 lets the AI lane provide semantic labels while preserving the converter's mechanical safety boundary.
+
+**Verification gate (L-33 manifest row):**
+
+- In `webflow-paste`, parse `output/{runner}_{source-slug}-file_output/flowbridge-ix3-name-hints.json`.
+- Assert `schema == "flowbridge/ix3-name-hints"` and `version == 1`.
+- Enumerate IX3 IDs from source `js/webflow.js` or from the L-30 inline IX data. Assert every key under `pages.*.interactions` appears in the source interaction ID set and every key under `pages.*.actions` appears in the source action ID set.
+- Assert every value is a non-empty string ≤80 chars and contains no control/path-forbidden chars.
+- In `local-preview`, assert the sidecar file is absent.
+
+**Sync surface:** `references/lessons.md` (this body); `SKILL.md` workflow step 7b + output-mode wording + Mandatory Output Manifest L-33 row; converter consumer in `minimal-converter-4-1.html`; regression tests in `tests/minimal-converter-4-1-paste-proof.test.ts`.
+
+---
+
+## L-34 — Visible Text / Glyph Fidelity (KEEP; introduced 2026-04-26 from BigBuns + Señorita Colombia incident)
+
+**Maturity:** YOUNG (introduced from one cycle of evidence; promote to MATURE after a second clean cycle on organic fixtures with strong themes)
+
+**Classification:** ARTIFACT-TOUCHING (hard FAIL stops ZIP)
+
+**Evidence:** BigBuns paste 2026-04-26: source `<span class="mc-fade-text">®</span>` was rewritten to `<span class="mc-fade-text">🍔</span>` in three locations. Audit 329 confirmed S-origin (skill output mutated source). Señorita Colombia paste same date: 3 pages had `<title>` mutated — source `Concurso Nacional de Belleza | Colombia` was rewritten to `Señorita Colombia | Concurso Nacional de Belleza` (index.html); two sub-pages had titles generated from scratch and a typo (`Bellza`) was silently corrected. Both mutations passed all 4 existing probes (paste_contract, component_fidelity, asset_ref, lesson_surface_lint) because none checked visible-text fidelity. Root cause: implicit/emergent model behavior — no explicit prompt authorised the mutations; skill had no "leave text alone" instruction, creating a vacuum the model filled with "thematic helpfulness."
+
+**Rule:** The skill MUST preserve, byte-for-byte after whitespace normalization, all visible text in source HTML. Specifically:
+- `<body>` text nodes (excluding `<script>`, `<style>`, `<template>`, `<noscript>`, and `fb-*` skill-injected hosts).
+- `<head>` text in `<title>` and `<meta>` description/og/twitter content attributes.
+- `alt`, `title`, `placeholder`, `aria-label` attributes on body elements.
+- `data-*` attributes that hold user-authored content (Webflow `data-w-*` runtime attrs are exempted; `data-flowbridge-*` skill-managed attrs also exempted per L-32).
+
+**Anti-pattern (banned):**
+- Replacing decorative glyphs (`®`, `™`, `©`, `°`) with thematic emojis.
+- Reordering `<title>` for SEO "improvement".
+- Editing `alt` text to be more "accessible".
+- Translating any text.
+- Fixing typos, case inconsistencies, or formatting in source content.
+
+**If source content seems wrong:** preserve it byte-for-byte. Note it in MANIFEST.md as INFORMATIONAL. Do not edit.
+
+**Verification:** `scripts/content_fidelity_probe.py` with `--source-root <source> --output-root <output> --fail-on-contract`. Exit 0 = PASS. Any non-zero exit blocks ZIP.
+
+**Probe row id:** `content-fidelity-text-glyph` in `pretreat-manifest.json`.
+
+**Sync surface:** `SKILL.md` §Source Content Immutability, `MEMORY.md` Anti-lessons section, `references/verification-gate.md` SV gate row, `pretreat-manifest.json` row id `content-fidelity-text-glyph`, `docs/LESSONS.md`, `docs/LESSON_INDEX.md`.
 
 ---
 

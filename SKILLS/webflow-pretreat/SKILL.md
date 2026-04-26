@@ -12,6 +12,15 @@ This skill is **self-contained** — its lessons, verification gates, scripts, e
 
 This skill is **auto-research by design**. Every run is a bounded experiment with pre-declared hypothesis, metric, scope, single-change, and keep/discard criteria. Every failure mode promotes to a numbered lesson in `references/lessons.md` with an origin label (S/C/W/E). Every rule has a verification gate that runs at authoring time (lint) and runtime (manifest). New fixtures added later continue the learning loop under the same protocol.
 
+## Training vs Production — Two Forms
+
+This skill ships in two forms. Both share the same technical core (`references/`, `scripts/`, the L-rules, the SV gates, the HALT discipline) but differ in ceremony:
+
+- **Training (this folder, `Flowbridge-claude/AI_OS/SKILLS/webflow-pretreat/`):** carries the `Before You Run` discipline gate (7 fields + Protected Set), `Auto-Research Loop`, `experiments/EXP-NNN.md` logging. Maria invokes it inside bounded experiments to evolve rules, fix probes, and accumulate the lesson ledger.
+- **Production (`MASTER-COLLECTION/SKILLS/webflow-pretreat/`):** stripped of training-only ceremony. End users in Claude Code invoke it with a single sentence ("Pretreat my-export.webflow.zip") and receive a pretreated ZIP. No `Before You Run` gate, no Protected Set, no `experiments/` writes.
+
+**Sync direction is one-way: training → production.** When a learning here warrants promotion (new L-rule, probe fix, workflow refinement), the technical core syncs verbatim and the production SKILL.md / MEMORY.md are regenerated per the spec in `AI_OS/SESSION-PROMPTS/SESSIONS/2026-04-25/303-plan-fork-training-vs-production-skill.md`. Never reverse — bug reports from end users become training experiments first, then promote.
+
 ## Reference Index — Just-In-Time Loading
 
 Load a reference only when you hit its situation. SKILL.md stays lean so invocation cost is low.
@@ -22,9 +31,10 @@ Load a reference only when you hit its situation. SKILL.md stays lean so invocat
 | Migrate HEAD custom code, inline site CSS, place embeds, reason about IX3 capability gaps, preserve Webflow native element markers | `references/webflow-constraints.md` |
 | Decide `local-preview` vs `webflow-paste` output mode, consult archived mechanical-path evidence, inventory paste-contract hazards | `references/mechanical-consultation.md` |
 | Scan source CSS for body-dependent layout, choose compensating CSS, run the post-wrap self-verify checklist | `references/decision-patterns.md` |
-| Run Structural Verification Gate (SV-1..SV-18) + Mandatory Output Manifest attestation | `references/verification-gate.md` |
+| Run Structural Verification Gate (SV-1..SV-20) + Mandatory Output Manifest attestation | `references/verification-gate.md` |
 | Run output-mode contract probe on source + output | `scripts/paste_contract_probe.py` |
 | Run component fidelity fingerprint probe (L-22) | `scripts/component_fidelity_probe.py` |
+| Run visible text/glyph fidelity probe (L-34) | `scripts/content_fidelity_probe.py` |
 | Verify lessons/gates/manifest are in sync at authoring time | `scripts/lesson_surface_lint.py` |
 | Verify local asset references are not broken | `scripts/asset_ref_check.py` |
 | Bootstrap a new experiment prompt | `templates/EXPERIMENT-TEMPLATE.md` |
@@ -62,6 +72,29 @@ Input is exactly one `.zip` file path — a raw Webflow export. Nothing else is 
 
 Write `experiments/EXP-DRAFT-input-violation.md` naming the bypass and hand back.
 
+## Source Content Immutability — non-negotiable
+
+Pre-treatment is **structural-only**. The skill restructures HTML, migrates CSS, wraps embeds, gates IX runtime, and preserves assets. The skill does NOT — under any circumstance — alter the content of:
+
+- Body text nodes
+- `<title>`, `<meta>` description/og/twitter tags
+- `alt`, `title`, `placeholder`, `aria-label` attributes
+- `data-*` attributes that hold user-authored content
+
+Read-only means read-only. Even if the source text appears wrong, mis-spelled, mis-branded, off-theme, or obviously a typo — **DO NOT FIX IT**. The skill's job is restructuring, not editing.
+
+Mutation modes that have appeared in past failures and are explicitly banned:
+- Replacing `®` with thematic emojis (BigBuns 2026-04-26 incident)
+- Reordering or "improving" `<title>` SEO content (Señorita Colombia 2026-04-26 incident — 3 pages affected)
+- Swapping case for "consistency" (e.g. `BurGers` → `burgers`)
+- Adding emojis next to brand names "to match site theme"
+- Translating attribute text "for accessibility"
+- Fixing typos or spelling in source text (`Bellza` → `Belleza` is banned even if it is a typo)
+
+If the workflow encounters source text that seems wrong, report it in MANIFEST.md as an INFORMATIONAL note and preserve it byte-for-byte. Do not edit. Ever.
+
+The L-34 probe (`scripts/content_fidelity_probe.py`) enforces this. Any failure of L-34 means the skill mutated source content and the output ZIP must NOT ship.
+
 ## Lane Parameter — Runner
 
 The invoking prompt's `Runner:` field determines:
@@ -87,6 +120,7 @@ The invoking prompt's `Runner:` field determines:
 7. For every non-stub HTML file, apply every transformation, reasoning about each decision
    (consult references/ as the table above indicates).
 7a. For `webflow-paste` mode only, emit L-31 mode-B transport CSS into `fb-styles-site` (and into `fb-styles-{component_fallback_host}` for annotated targets) per `references/lessons.md` L-31 ("How to apply"). Invoke `python3 scripts/paste_contract_probe.py --source-root <raw zip or root> --mode webflow-paste --write-manifest <temp.json>` to obtain `inventories[0].modeBTargets`, then bucket targets by `tuple(target.classes)`. **Non-collision buckets** (one distinct `tuple(required)`): emit a single runtime-gated class-chain rule (`html:not(.w-mod-ix2) <selector> { <decls>; }`). **Collision buckets** (≥2 distinct `tuple(required)`, per L-31 collision-handling addendum, EXP-006): assign one marker per unique `required` tuple from a global sequential counter `ix-state-{N}`; for each source HTML element matching the bucket's class chain, identify which `required` tuple matches its inline `style=""` (substring on the canonical fragment) and add `data-flowbridge-ix-state="ix-state-{N}"` to that element (idempotent per L-6 — do not overwrite an existing marker); replace the would-be class-chain rules with marker-keyed runtime-gated rules (`html:not(.w-mod-ix2) [data-flowbridge-ix-state="ix-state-{N}"] { <decls>; }`). Group all L-31 rules into a contiguous block at the end of the host with comment header `/* L-31 mode-B transport (webflow-paste) */`. Skip entirely in `local-preview` mode.
+7b. For `webflow-paste` mode only, emit L-33 IX3 name hints as `flowbridge-ix3-name-hints.json` at the output root. This file is advisory metadata for the mechanical converter: it may suggest human-readable names for IX3 interactions/actions whose source export only exposes opaque IDs, but it MUST NOT mutate `js/webflow.js`, inline IX data, interaction IDs, timeline IDs, action IDs, targets, timings, or bindings. If no confident semantic name exists, omit that ID from the hints map; still emit the schema file with empty maps.
 8. Immediately after assembling fb-styles-site, run the L-1.5 fast-fail check:
    python3 scripts/paste_contract_probe.py \
      --source-root <raw export root or zip> \
@@ -95,7 +129,7 @@ The invoking prompt's `Runner:` field determines:
      --write-manifest --fail-on-contract
    If <mode>-font-face-absence-in-fb-styles-site fails, write HALT-REPORT.md and STOP.
 9. Run the Structural Verification Gate (references/verification-gate.md), including SV-18 output-mode contract probing.
-10. Produce pretreat-manifest.json beside index.html, then produce the Mandatory Output Manifest (see below).
+10. Produce pretreat-manifest.json beside index.html, produce `flowbridge-ix3-name-hints.json` at the output root when L-33 applies, then produce the Mandatory Output Manifest (see below).
     Run each L-rule row's check command; populate results. If ANY row FAILs, write HALT-REPORT.md and STOP.
 11. Confirm full-site coverage: every source ZIP entry is present in the output tree after the single allowed
     root-prefix normalization, except declared mutations/deletions.
@@ -125,6 +159,7 @@ Do NOT create `output/fresh-runs/`, timestamped `current-skill-*` names, `rerun`
 - Strip exactly ONE common top-level folder prefix if AND ONLY IF every source-ZIP entry shares it.
 - Every file NOT mutated by pre-treatment is copied byte-for-byte.
 - Every local asset reference in processed HTML/CSS resolves against the output root after prefix stripping.
+- If a raw source local reference is already broken, repair it only when there is exactly one same-directory deterministic candidate after URL-decoding, Unicode normalization, case-folding, and punctuation/separator equivalence. Record the original ref, repaired ref, and evidence in the manifest. If there is no unique candidate, preserve the source ref, label it source-premise broken, and HALT/HOLD instead of inventing a filename.
 - No synthetic folders invented by the skill. Declared mutations only.
 
 ## Output Mode Contract
@@ -134,7 +169,7 @@ This skill has two output modes because it serves two different consumers. `loca
 Every run declares exactly one of `local-preview` or `webflow-paste`. No silent default.
 
 - **`local-preview`** — preserves source Webflow runtime evidence for local browser verification. One late `fb-runtime.w-embed` with external `js/webflow.js`. IX2 inline start states preserved per L-8. SV-13-A and SV-13-B apply. Not valid input for the current minimal converter.
-- **`webflow-paste`** — explicit paste target for the current converter path. Source-runtime-preserved (preserve `js/webflow.js` reference, source scripts, `data-w-id`, IX-shaped source `style=""`). Do NOT convert IX2 to IX3. Extract IX DATA (not engine) from source `js/webflow.js` and inline the `Webflow.require("ix2").init(...)` / `.register([...])` calls as a dedicated `<script>` inside `fb-scripts.w-embed` per L-30. An artifact dropping source runtime/IX evidence is a hard FAIL.
+- **`webflow-paste`** — explicit paste target for the current converter path. Source-runtime-preserved (preserve `js/webflow.js` reference, source scripts, `data-w-id`, IX-shaped source `style=""`). Do NOT convert IX2 to IX3. Extract IX DATA (not engine) from source `js/webflow.js` and inline the `Webflow.require("ix2").init(...)` / `.register([...])` calls as a dedicated `<script>` inside `fb-scripts.w-embed` per L-30. Emit optional converter-readable IX3 naming suggestions in `flowbridge-ix3-name-hints.json` per L-33. An artifact dropping source runtime/IX evidence is a hard FAIL.
 
 ## Mandatory Output Manifest — Before You Zip (L-21)
 
@@ -157,7 +192,7 @@ Before zipping, produce `MANIFEST.md` with one row per artifact-touching L-rule.
 | L-4 | Webflow baseline + native component CSS present in `fb-styles-site` | parse `fb-styles-site` `<style>` and assert `html { height: 100% }`, universal `box-sizing: border-box`, `body { margin: 0 }`, `body { min-height: 100% }`. Any missing geometry property = FAIL. Retained HEAD `<link>` to `css/normalize.css`/`css/webflow.css` do NOT satisfy the check. If source DOM contains Webflow Tabs, assert `.w-tab-content`, `.w-tab-pane { display: none }`, `.w--tab-active { display: block }` in `fb-styles-site`. |
 | L-5 | Lazy video source behavior is explicit per mode | `python3 scripts/paste_contract_probe.py --mode <local-preview\|webflow-paste> --write-manifest --fail-on-contract` → `contractChecks[].id == "<mode>-lazy-video-idempotence"` must PASS. |
 | L-7 | Universal overlay neutralization — no fixture-specific class names | `python3 scripts/paste_contract_probe.py ... --mode <local-preview\|webflow-paste>` → `contractChecks[].id == "<mode>-overlay-neutralization-scope"` must PASS. The probe enumerates every non-framework class appearing in source DOM (`class="..."` attributes, excluding `w-*` and `fb-*` prefixes), then scans every output style host (`fb-styles-site` + each `fb-styles-{library}`) for top-level rules of the form `.{source-class}[.class...] { display: none | visibility: hidden | height: 0* | opacity: 0 }`. Any match is FAIL. Secondary check: any source element with ≥ 2 non-framework classes AND a `data-w-id` attribute AND an inline `style` containing `!important` collapse properties (or `pointer-events: none`) is also FAIL. Zero global class-based collapse CSS + zero combo inline collapses on IX2 targets. This rule fires on ANY class name — `.bg-whipe`, `.page-curtain`, `.loader`, `.hero-overlay`, whatever the source uses. |
-| L-8 | IX2 initial-state source evidence preserved | Parse for `data-w-id` elements; assert source inline-state attributes remain unless a named hard-stop exception is documented. In `webflow-paste`, require `mode-b-inline-ix-preserved` PASS: source and output IX-shaped inline style counts match, `data-w-id` counts match. |
+| L-8 | IX2 initial-state source evidence preserved | Parse for `data-w-id` elements; assert source inline-state attributes remain unless a named hard-stop exception is documented. In `webflow-paste`, require `mode-b-inline-ix-preserved` PASS: source and output IX-shaped inline style counts match, `data-w-id` counts match. This is not a substitute for L-31: paste-critical first-frame states still need converter-visible Mode B transport/fallback CSS when L-31 detects required targets. |
 | L-9 | Source-shipped runtime libraries preserved (not stripped) | enumerate GSAP-family `<script src>` in raw source HTML, count N; enumerate in output `fb-scripts.w-embed`, count M; assert M ≥ N. Any shortfall must be matched row-for-row by a named HALT-REPORT.md incompatibility entry. |
 | L-11 | Single-root `fb-page-wrapper` (body has exactly one element child) | parse `<body>`, assert exactly 1 element child whose class list contains `fb-page-wrapper` |
 | L-12 | All embed hosts inside first `fb-custom-code` (with L-15A carve-out for fb-runtime) | parsed-DOM enumeration of embed hosts, assert all inside `fb-custom-code` EXCEPT `fb-runtime` (sibling of source content per L-15A) |
@@ -178,6 +213,8 @@ Before zipping, produce `MANIFEST.md` with one row per artifact-touching L-rule.
 | L-28 | Anchors inside `w-dyn-item` carry `data-fb-link-role="template-page"` + L-6 idempotence marker; no anchor outside that ancestor scope carries the role | parsed-DOM enumeration: for each `<a>` whose `find_parent(class_="w-dyn-item")` is not None AND whose `href` is not absolute / scheme-special / fragment-id, assert `data-fb-link-role == "template-page"` AND `data-flowbridge-link-role-tagged == "true"`. Second assertion (counter-rule): for each `<a>` with no `w-dyn-item` ancestor, assert `data-fb-link-role` is absent. |
 | L-30 | IX runtime DATA (not engine) extracted from `js/webflow.js` and inlined as `<script>` inside `fb-scripts.w-embed` so converter HTML-only IX extractors can see IX2 and/or IX3 payloads (`webflow-paste` only; `local-preview` suppresses) | **Mode gate:** in `local-preview`, assert zero inline IX data script. **Mode B:** enumerate source `js/webflow.js` call counts `S_init`, `S_reg`, `S_tl`; enumerate output `index.html` inline counts `O_init`, `O_reg`, `O_tl`; assert `O_* >= S_*`. Assert inline IX-data `<script>` is child of `fb-scripts.w-embed` AFTER `<script src="js/webflow.js">`. L-19 engine-absence guard: `grep -cE 'var e=\{[0-9]+:' index.html` → 0. |
 | L-31 | Mode-B class-specific CSS fallback for IX2-hidden initial states (`webflow-paste` only). Runtime-gated `html:not(.w-mod-ix2) <target.selector>` rules emitted in `fb-styles-site` (or in `fb-styles-{library}` when the target carries a `component_fallback_host` annotation) for every target detected by `paste_contract_probe.detect_mode_b_targets`. Idempotent per `(selector, required)` pair. No `!important`; specificity wins via the runtime-gate prefix; IX2 runtime overrides remain free to take effect once `.w-mod-ix2` lands on `<html>`. | `python3 scripts/paste_contract_probe.py --source-root <raw export> --output-root output/{runner}_{source-slug}-file_output --mode webflow-paste --write-manifest --fail-on-contract` → assert `contractChecks[].id == "mode-b-initial-state-transport"` PASS with zero `missing` targets; assert `contractChecks[].id == "mode-b-d007-anchor-safety"` PASS; cross-check `contractChecks[].id == "webflow-paste-overlay-neutralization-scope"` STAYS PASS with `skill-injected=0` (L-7 anti-broaden held); anti-regression `contractChecks[].id == "mode-b-inline-ix-preserved"` STAYS PASS (L-8 preservation floor unchanged). Mode gate: in `local-preview`, assert zero L-31 rules emitted (the local Webflow runtime executes IX2 natively and would race a static fallback). |
+| L-33 | IX3 human-readable name hints emitted as output-root `flowbridge-ix3-name-hints.json` for the converter to consume mechanically (`webflow-paste` only). The file is advisory: it maps preserved IX3 IDs to suggested names by page path, never changes source IX data or any binding ID. | In `webflow-paste`, parse `output/{runner}_{source-slug}-file_output/flowbridge-ix3-name-hints.json` and assert `schema == "flowbridge/ix3-name-hints"`, `version == 1`, and every key under `pages.*.interactions` / `pages.*.actions` also appears as an IX3 interaction/action ID in source `js/webflow.js` or the L-30 inline IX data. Assert every suggested name is a non-empty string ≤80 chars and contains no control/path-forbidden chars. In `local-preview`, assert the file is absent. |
+| L-34 | Visible text / glyph fidelity — all body text nodes, `<title>`, `<meta>` description/og/twitter content, and source-content attributes (alt/title/placeholder/aria-label/data-* except data-w-* and data-flowbridge-*) must be preserved byte-for-byte after whitespace normalization. | `python scripts/content_fidelity_probe.py --source-root <raw-zip> --output-root output/{runner}_{source-slug}-file_output --fail-on-contract --write-manifest` → exit 0; assert manifest row `content-fidelity-text-glyph` status=`pass`; zero `changedSamples`, zero `missingFromOutput`, zero `addedInOutput`. |
 
 **Informational / superseded L-rules (acknowledged; no dedicated check row required):**
 

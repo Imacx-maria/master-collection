@@ -1,0 +1,244 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "primary": {
+        "$value": "#1A1A1A",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "rgba(26, 26, 26, 0.75)",
+        "$type": "color"
+      },
+      "tertiary": {
+        "$value": "rgba(26, 26, 26, 0.40)",
+        "$type": "color"
+      },
+      "neutral": {
+        "$value": "#FAFAFA",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "rgba(250, 250, 250, 0.75)",
+        "$type": "color"
+      },
+      "surface-muted": {
+        "$value": "rgba(250, 250, 250, 0.10)",
+        "$type": "color"
+      },
+      "on-primary": {
+        "$value": "#FAFAFA",
+        "$type": "color"
+      },
+      "border-soft": {
+        "$value": "rgba(26, 26, 26, 0.10)",
+        "$type": "color"
+      },
+      "hover-state": {
+        "$value": "rgba(26, 26, 26, 0.05)",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "fontFamily": {
+        "$value": "DM Serif Display",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "144px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.96,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "display-lg": {
+      "fontFamily": {
+        "$value": "DM Serif Display",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "104px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 0.98,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.02em",
+        "$type": "dimension"
+      }
+    },
+    "headline-lg": {
+      "fontFamily": {
+        "$value": "DM Serif Display",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "56px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.05,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.01em",
+        "$type": "dimension"
+      }
+    },
+    "body-md": {
+      "fontFamily": {
+        "$value": "Onest",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.6,
+        "$type": "number"
+      }
+    },
+    "label-number": {
+      "fontFamily": {
+        "$value": "Onest",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "11px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0.14em",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "8px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "4xl": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "5xl": {
+      "$value": "144px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "pad-card": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "zero": {
+      "$value": "0px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Warm Serene Luxury",
+    "description": "Hospitality and wellness aesthetic driven by photography, not accent colors. Minimal near-white palette lets imagery become the color story.",
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.primary}",
+        "textColor": "{colors.on-primary}",
+        "typography": "{typography.label-number}",
+        "rounded": "{rounded.sm}",
+        "padding": "{spacing.md}"
+      },
+      "button-primary-hover": {
+        "backgroundColor": "{colors.secondary}"
+      },
+      "card-default": {
+        "backgroundColor": "{colors.neutral}",
+        "textColor": "{colors.primary}",
+        "rounded": "{rounded.md}",
+        "padding": "{spacing.pad-card}"
+      },
+      "numbered-item": {
+        "backgroundColor": "transparent",
+        "textColor": "{colors.secondary}",
+        "typography": "{typography.label-number}",
+        "padding": "{spacing.zero}"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Style Tuning
 
-The skill picks a style library; **Style Tuning lets the user fine-tune 9 plain-language design questions (plus a 10th conditional axis for trauma-informed work)** before the project DESIGN.md is derived. The user never sees library names — the skill maps the 9 answers to the closest library internally and uses it as a base.
+The skill picks a style library; **Style Tuning lets the user fine-tune 10 plain-language design questions (plus an 11th conditional axis for trauma-informed work)** before the project DESIGN.md is derived. The user never sees library names — the skill maps the 10 answers to the closest library internally and uses it as a base.
 
 Load this in **Phase 2 Step 2.1** — BEFORE any library is chosen. The interview answers drive the library mapping in Step 2.2.
 
@@ -8,7 +8,7 @@ Load this in **Phase 2 Step 2.1** — BEFORE any library is chosen. The intervie
 
 ## When to use Style Tuning — BLOCKING INTERVIEW
 
-**This is a blocking interactive step. The skill CANNOT proceed to Step 2.2 (library mapping) without explicit user response on every question (1–9, plus optional 10 if trauma-informed).**
+**This is a blocking interactive step. The skill CANNOT proceed to Step 2.2 (library mapping) without explicit user response on every question (1–10, plus optional 11 if trauma-informed).**
 
 **Silence is NOT consent to defaults.** Absence of an answer means the agent must ask. The agent MUST wait for the user to respond before generating any markup or DESIGN.md content.
 
@@ -18,7 +18,7 @@ This is the same enforcement tone as Phase 4.7 (self-correction loop) — it exi
 
 | Situation | Blocked? |
 |---|---|
-| User has not yet been asked the 9 questions | YES — must ask now |
+| User has not yet been asked the 10 questions | YES — must ask now |
 | User was asked but hasn't responded | YES — must wait |
 | User responded "you decide" / "let Claude choose" on every axis | NO — proceed (their delegation is the answer) |
 | User responded with explicit values + "you decide" mix | NO — proceed (mixed delegation is valid) |
@@ -39,7 +39,7 @@ The agent **copies the template below verbatim** and presents it as a single mes
 ### Template
 
 ```
-Quick design interview — 9 questions before I build.
+Quick design interview — 10 questions before I build.
 
 Pick one option per question, or write "you decide" for any question you don't have an opinion on (I'll pick based on the brief). You can also reply "you decide for all" to delegate everything.
 
@@ -103,9 +103,15 @@ Pick one option per question, or write "you decide" for any question you don't h
    • branded intro — full-screen logo / curtain wipe / signature reveal (agency, portfolio, marketing splash)
    • you decide
 
-{conditional: append axis 10 if trauma-informed mode is active OR copy will be auto-generated}
+10. WEBGL / 3D — should the page include a live geometric backdrop?
+    • none — no WebGL, no 3D. The page is flat. Default for most product, marketing, blog, and e-commerce sites.
+    • shader-accents — animated fragment shader behind the page (warm noise, kinetic gradient, hover distortions, no imported 3D models). +~200 KB bundle, big atmosphere lift, low perf cost.
+    • 3d-scene — full Three.js scene with one geometric figure (blob, crystal, wireframe geode, torus knot, etc.), bloom postprocessing, scroll-reactive. +~2 MB bundle, real perf cost. Best for AI products, brand showcases, premium tech, agencies.
+    • you decide
 
-10. TONE — how should the writing sound?
+{conditional: append axis 11 if trauma-informed mode is active OR copy will be auto-generated}
+
+11. TONE — how should the writing sound?
     • playful — casual, energetic, light
     • professional — direct, factual, neutral
     • serious — formal, considered, weighted
@@ -261,9 +267,35 @@ The skill maps the user's role choice to a specific visual pattern internally (c
 
 ---
 
+### 10. Dimension (WebGL / 3D depth)
+
+Always asked. Promoted from conditional to mandatory because the failure mode (silently picking `none` and never offering 3D, OR silently picking 3D when the brief doesn't justify it) was observed in real builds. This decision is too consequential — bundle size, LCP, visual register all change — to be a brief-keyword trigger.
+
+The user picks the *tier*; the skill picks the *implementation* per `webgl-3d-tactics.md` (shader content tuned to library + DESIGN.md tokens; scroll integration via GSAP ScrollTrigger or R3F-scroll-rig; mobile LOD selection).
+
+- **`none`** — No WebGL, no 3D. Default for all imagery values except `3d`. The browser paints DOM and that's the end of it.
+- **`shader-accents`** — Fragment shaders only. Noise gradients, liquid hover distortions, kinetic backgrounds. ~200 KB bundle ceiling. No imported 3D models, no camera, no lights. Allowed on most libraries; default-on for Creative Studio, Playful Bento, Warm Editorial.
+- **`3d-scene`** — Full Three.js scene: imported GLB models (Draco-compressed), KTX2 textures, PBR materials, scroll-driven camera path, optional ONE post-processing pass. ≤ 2 MB compressed bundle. Best for product configurators, brand showcases, genuine 3D data viz.
+
+**There is no `immersive` tier.** WebXR, multiplayer, complex physics, ray tracing, Pixel Streaming are explicitly out of scope. The skill refuses these briefs and refers to a specialist (per `webgl-3d-tactics.md` § Out of scope).
+
+**When to push `none`:** the default for 90% of projects. Marketing landing pages, content sites, dashboards, blogs, e-commerce listings — DOM + strong typography + motion outperform decorative 3D every time.
+
+**When to push `shader-accents`:** AI-product / agency / creative-studio / playful-bento briefs where atmosphere matters. Cheap perf cost, big visual lift.
+
+**When to push `3d-scene`:** the product genuinely IS the 3D thing — configurators, 3D data viz, brand experience showcases. Or the brand is paying the 3D tax deliberately (premium tech, retro-futurist, hospitality with cinematic ambition).
+
+**Hard refusal — Sanctuary Tech + trauma-informed mode:** `dimension` is FORCED to `none` regardless of user pick. Cognitive load, GPU thermal throttling on older devices used by vulnerable users, and the trauma-informed "no surprise motion" contract make 3D contraindicated. Document forced override in provenance. See `webgl-3d-style-fit.md` § Override protocol.
+
+**Library compatibility:** see `webgl-3d-style-fit.md` for the per-library matrix. Memoir refuses 3D (reading-first); Spritify refuses `3d-scene` (kid audience, perf risk); Sanctuary Tech refuses both (trauma-informed).
+
+**Tier coupling:** `dimension: 3d-scene` requires `motion: medium` minimum. A static 3D scene reads as broken, not as deliberate. If user picked `motion: low` + `dimension: 3d-scene`, surface a tier-coupling warning and record the conflict in provenance.
+
+---
+
 ## Bonus question (conditional)
 
-### 10. Tone register
+### 11. Tone register
 
 Only asked when **trauma-informed mode** is active (Phase 1.0.5 fired) OR when copy will be auto-generated.
 
@@ -277,36 +309,68 @@ If trauma-informed mode is active and the user picks `playful` or `clinical`, fl
 
 ---
 
-## Per-library defaults (9-axis profile)
+## Effects (not an interview axis — set during Phase 1 detection)
 
-These are the starting points before user tuning. Each library has been profiled against the 9 questions; the user never sees this table.
+**Liquid Glass effect:** yes / no. Default: no.
 
-| Library | Color mode | Fonts | Layout | Width | Corners | Motion | Loudness | Imagery | Page load |
-|---|---|---|---|---|---|---|---|---|---|
-| **Neo-Brutalist** | light | sans | grid-based | wide | sharp | low | monochrome | type-only | branded-intro |
-| **Editorial Portfolio** | light | mix | loose | wide | sharp | low | muted | photographic | subtle |
-| **Technical Refined** | both | sans | grid-based | standard | soft | low | monochrome | abstract | none |
-| **Basalt E-Commerce** | light | mix | grid-based | wide | soft | low | muted | photographic | subtle |
-| **Memoir Blog** | light | mix | loose | narrow | sharp | low | muted | photographic | none |
-| **Creative Studio** | light | mix | loose | wide | soft | high | balanced | photographic | branded-intro |
-| **Warm Serene Luxury** | light | mix | loose | wide | sharp | medium | muted | photographic | subtle |
-| **Playful Bento** | light | sans | grid-based | standard | soft | medium | vibrant | abstract | branded-intro |
-| **Spritify** | light | sans | grid-based | standard | rounded | high | vibrant | illustrative | branded-intro |
-| **Sanctuary Tech** | dark | sans | loose | narrow | sharp | low | monochrome | type-only | none |
-| **Warm Editorial** | both | mix | loose | standard | soft | low | muted | abstract | subtle |
-| **Custom / Freestyle** | — | — | — | — | — | — | — | — | — |
+This flag is NOT asked in the style interview. It is set automatically in Phase 1 Step 1.5 when the user's prompt contains glass/liquid-glass/frosted/Apple-style/iOS-26 language. It can also be set manually if the user requests glass surfaces after the interview.
 
-When `Custom / Freestyle` is chosen, the skill skips library mapping entirely and builds DESIGN.md directly from the 9 user answers.
+When `liquid-glass: true`, the Phase 2 compatibility check (Step 2.6) runs before the build proceeds.
+
+### Per-library liquid-glass defaults
+
+| Style | Offer if | Behavior |
+|-------|---------|---------|
+| Atmospheric Protocol | Always — it's native | Native tier: glass compatible everywhere chrome appears |
+| Adaptive AI Console | Always — it's native | Native tier: glass compatible on command palette, composer, toasts |
+| Creative Studio | Always — it's native | Native tier: glass compatible on nav, lightbox, hero overlays |
+| Technical Refined | User prompt implies premium floating UI | Conditional: load constraints before build |
+| Warm Serene Luxury | User prompt implies premium floating UI | Conditional: load constraints before build |
+| Editorial Portfolio | User prompt implies premium floating UI | Conditional: load constraints before build |
+| Motion-Directed Spatial Portfolio | User prompt implies premium floating UI | Conditional: load constraints before build |
+| Neo-Brutalist | Do not offer | Refused: single-element override only if user names it |
+| Memoir Blog | Do not offer | Refused: single-element override only if user names it |
+| Sanctuary Tech | Never offer — hard refuse | Hard refuse: reject if user names it, no override |
+| Basalt E-Commerce | Do not offer | Refused: single-element override only if user names it |
+| Spritify | Do not offer | Refused: single-element override only if user names it |
+| Playful Bento | Do not offer | Refused: single-element override only if user names it |
+| Warm Editorial | Do not offer | Refused: single-element override only if user names it |
+
+---
+
+## Per-library defaults (10-axis profile)
+
+These are the starting points before user tuning. Each library has been profiled against the 10 questions; the user never sees this table.
+
+| Library | Color mode | Fonts | Layout | Width | Corners | Motion | Loudness | Imagery | Page load | Dimension |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Neo-Brutalist** | light | sans | grid-based | wide | sharp | low | monochrome | type-only | branded-intro | none |
+| **Editorial Portfolio** | light | mix | loose | wide | sharp | low | muted | photographic | subtle | none |
+| **Technical Refined** | both | sans | grid-based | standard | soft | low | monochrome | abstract | none | none |
+| **Adaptive AI Console** | dark | sans | grid-based | standard | soft | low | monochrome | abstract | functional | none |
+| **Basalt E-Commerce** | light | mix | grid-based | wide | soft | low | muted | photographic | subtle | none |
+| **Memoir Blog** | light | mix | loose | narrow | sharp | low | muted | photographic | none | none (refuse 3d-scene) |
+| **Creative Studio** | light | mix | loose | wide | soft | high | balanced | photographic | branded-intro | shader-accents |
+| **Motion-Directed Spatial Portfolio** | dark | mix | loose | full-bleed | sharp | high | monochrome | 3d | subtle | 3d-scene |
+| **Warm Serene Luxury** | light | mix | loose | wide | sharp | medium | muted | photographic | subtle | none |
+| **Playful Bento** | light | sans | grid-based | standard | soft | medium | vibrant | abstract | branded-intro | shader-accents |
+| **Spritify** | light | sans | grid-based | standard | rounded | high | vibrant | illustrative | branded-intro | none (refuse 3d-scene) |
+| **Sanctuary Tech** | dark | sans | loose | narrow | sharp | low | monochrome | type-only | none | none (FORCED — trauma-informed) |
+| **Warm Editorial** | both | mix | loose | standard | soft | low | muted | abstract | subtle | shader-accents |
+| **Hushed Premium SaaS** | light | mix | loose | wide | rounded | medium | muted | abstract | subtle | none |
+| **Custom / Freestyle** | — | — | — | — | — | — | — | — | — | — |
+
+When `Custom / Freestyle` is chosen, the skill skips library mapping entirely and builds DESIGN.md directly from the 10 user answers.
 
 ---
 
 ## Library mapping logic (Step 2.2 in SKILL.md)
 
-The skill maps the 9 user answers against the per-library defaults table and counts matches per library. Then:
+The skill maps the 10 user answers against the per-library defaults table and counts matches per library. Then:
 
-- **Highest match score ≥ 6/9** → that library is the **base**. The skill applies its full system as foundation, then overrides only the specific axes the user answered differently. The chosen library is logged in `provenance.library-derivation`, never announced to the user for confirmation.
-- **Highest match score < 6/9** → no clear winner. The skill mixes the **top 2-3 libraries** (those with the highest scores, even if below threshold) to cover the answer set. This produces a genuine hybrid built from the mixture — no single template, constructed from the parts that match.
-- **All scores tied at low values** → fall back to **Custom / Freestyle**: build DESIGN.md directly from the 9 user answers without any library template as foundation.
+- **Highest match score ≥ 7/10** → that library is the **base**. The skill applies its full system as foundation, then overrides only the specific axes the user answered differently. The chosen library is logged in `provenance.library-derivation`, never announced to the user for confirmation.
+- **Highest match score < 7/10** → no clear winner. The skill mixes the **top 2-3 libraries** (those with the highest scores, even if below threshold) to cover the answer set. This produces a genuine hybrid built from the mixture — no single template, constructed from the parts that match.
+- **All scores tied at low values** → fall back to **Custom / Freestyle**: build DESIGN.md directly from the 10 user answers without any library template as foundation.
 
 The user NEVER sees the library mapping. It is internal craft, recorded in provenance for audit only. The user sees the output (the DESIGN.md and the build) and judges it on its own merits — they don't have to learn library names to use this skill.
 
@@ -318,7 +382,7 @@ If the user dislikes the result, they course-correct in plain language ("more te
 
 The agent runs this sequence. **Each step blocks the next.**
 
-1. **Compose the interview message** by copying the prescribed template above verbatim. No library has been chosen at this stage. Append axis 10 (tone) only if trauma-informed mode is active OR copy will be auto-generated.
+1. **Compose the interview message** by copying the prescribed template above verbatim. No library has been chosen at this stage. Axes 1-10 are always asked (including dimension at axis 10). Append axis 11 (tone) only if trauma-informed mode is active OR copy will be auto-generated.
 
 2. **Send the interview as a single message and STOP.** Do not generate any markup, DESIGN.md, library guess, or follow-up reasoning before the user responds. The skill is paused at this point.
 
@@ -327,9 +391,9 @@ The agent runs this sequence. **Each step blocks the next.**
 4. **If response is partial** (some axes missing) — send a single follow-up asking only the missing axes. Do not re-ask answered ones. Do not loop more than twice.
 
 5. **Map answers to libraries** using the per-library defaults table:
-   - Count match score per library (0-9 axes match).
-   - If top score ≥ 6/9 → that library is base; overrides applied for non-matching axes.
-   - If top score < 6/9 → mix top 2-3 libraries.
+   - Count match score per library (0-10 axes match).
+   - If top score ≥ 7/10 → that library is base; overrides applied for non-matching axes.
+   - If top score < 7/10 → mix top 2-3 libraries.
    - Log mapping in `provenance.library-derivation` with method, top scores, and final decision.
 
 6. **Build the tuning manifesto** (YAML format below) with `user-confirmed: true`, per-axis `source` field, and the library derivation block. The user is NOT shown library names; they're recorded for audit only.
@@ -383,13 +447,19 @@ style-tuning:
       value: branded-intro                 # none | subtle | functional | branded-intro
       source: user-chosen
       pattern: curtain-wipe                # internal pick by skill from loader-patterns.md
-    # axis 10 (tone) only present if asked
+    dimension:
+      value: none                          # none | shader-accents | 3d-scene
+      source: user-chosen                  # axis 10 always asked, always has explicit answer
+      library: three.js                    # three.js | r3f | webgl-vanilla — only present if value > none
+      geometry: 1                          # 1-6 from webgl-3d-geometries.md — only present if value > none
+      forced-override: false               # true if library or trauma-informed mode forced the value
+    # axis 11 (tone) only present if asked (trauma-informed mode or auto-generated copy)
 provenance:
   fidelity: adapted
   trauma-informed-mode: false
   interview-conducted-at: 2026-04-25T16:42:00
   library-derivation:
-    method: 9-axis match scoring against per-library defaults
+    method: 10-axis match scoring against per-library defaults
     scores:
       creative-studio: 7
       editorial-portfolio: 4
@@ -427,7 +497,7 @@ If `user-confirmed: false` or the `axes` block is missing or any axis has no `so
 
 - ❌ **Asking the user "which library?"** — library names are jargon. Even designers don't always know what `Spritify` means. The skill maps internally.
 - ❌ **Announcing the chosen library for confirmation** — same problem. The user can't validate a name they don't know. They validate the *output*, not the *label*.
-- ❌ **Forcing 12 prompts on the user.** The skill is capped at 9 questions (10 if trauma-informed); the user can `you decide` any of them.
+- ❌ **Forcing 12 prompts on the user.** The skill is capped at 10 questions (11 if trauma-informed); the user can `you decide` any of them.
 - ❌ **Hiding the tuning step.** It's BLOCKING. The opt-out is the user's; the offer is mandatory.
 - ❌ **Letting unrecognised axes silently fail.** Ask once for clarification, then move on with what you understood.
 - ❌ **Mixing tuning with overrides in the prompt.** Tuning = character axes. Overrides (colors/fonts/URL/image) = literal tokens. They are processed in different files (`user-overrides.md` vs this file).
@@ -441,8 +511,8 @@ If `user-confirmed: false` or the `axes` block is missing or any axis has no `so
 
 | Situation | Action |
 |---|---|
-| User wrote "make me a kindergarten site for tech-genius kids" | Ask the 9 questions. User answers. Skill maps internally — likely Creative Studio + Editorial Portfolio mix. Build. |
-| User wrote "agency landing page, energetic" | Ask the 9 questions. Likely Creative Studio base. Build. |
+| User wrote "make me a kindergarten site for tech-genius kids" | Ask the 10 questions. User answers. Skill maps internally — likely Creative Studio + Editorial Portfolio mix. Build. |
+| User wrote "agency landing page, energetic" | Ask the 10 questions. Likely Creative Studio base. Build. |
 | User wrote "calming legal aid resource for survivors" | Phase 1.0.5 already loaded trauma-informed.md. Ask 9 + axis 10 (tone). Likely Sanctuary Tech base (page-load: none); force tone=empowering if user picks playful/clinical. |
-| User wrote "everything custom, freestyle" | Ask the 9 questions. If no library matches ≥6/9, fall back to Custom mode — build DESIGN.md directly from the 9 answers. |
+| User wrote "everything custom, freestyle" | Ask the 10 questions. If no library matches ≥7/10, fall back to Custom mode — build DESIGN.md directly from the 10 answers. |
 | User wrote "skip interview, just build" | Log `interview-mode: user-skipped`. Pick a starting library from the brief alone. Document the bypass. |

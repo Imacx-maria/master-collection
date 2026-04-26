@@ -19,3 +19,6 @@ settings.local.json
 # Test outputs from design-skill-lab
 _tests/
 
+# Local/raw research workspace for design-skill-lab validation
+SKILLS/design-skill-lab-research/
+

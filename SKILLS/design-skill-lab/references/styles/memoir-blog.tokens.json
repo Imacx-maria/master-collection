@@ -1,0 +1,262 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "default": {
+      "primary": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#755F59",
+        "$type": "color"
+      },
+      "tertiary": {
+        "$value": "#EDEAE7",
+        "$type": "color"
+      },
+      "neutral": {
+        "$value": "#F4F2F0",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "on-primary": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "muted": {
+        "$value": "rgba(0, 0, 0, 0.48)",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "display-lg": {
+      "fontFamily": {
+        "$value": "Manrope",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "96px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.0,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.06em",
+        "$type": "dimension"
+      }
+    },
+    "headline-xl": {
+      "fontFamily": {
+        "$value": "Manrope",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "64px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.05,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.06em",
+        "$type": "dimension"
+      }
+    },
+    "headline-md": {
+      "fontFamily": {
+        "$value": "Manrope",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "32px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 700,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.15,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "-0.03em",
+        "$type": "dimension"
+      }
+    },
+    "accent-italic": {
+      "fontFamily": {
+        "$value": "Source Serif 4",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "18px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.5,
+        "$type": "number"
+      }
+    },
+    "body-md": {
+      "fontFamily": {
+        "$value": "Manrope",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 400,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1.65,
+        "$type": "number"
+      }
+    },
+    "label-sm": {
+      "fontFamily": {
+        "$value": "Manrope",
+        "$type": "fontFamily"
+      },
+      "fontSize": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "fontWeight": {
+        "$value": 600,
+        "$type": "fontWeight"
+      },
+      "lineHeight": {
+        "$value": 1,
+        "$type": "number"
+      },
+      "letterSpacing": {
+        "$value": "0.06em",
+        "$type": "dimension"
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "full": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "spacing": {
+    "xs": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "3xl": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "4xl": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "5xl": {
+      "$value": "128px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "pad-button": {
+      "$value": "12px",
+      "$type": "dimension"
+    }
+  },
+  "extras": {
+    "version": "alpha",
+    "name": "Memoir Blog",
+    "description": "Reading-first blog and newsletter system with creamy neutrals, Manrope + Source Serif 4 italic pairing, and tidy blog card grids.",
+    "components": {
+      "button-primary": {
+        "backgroundColor": "{colors.primary}",
+        "textColor": "{colors.on-primary}",
+        "typography": "{typography.label-sm}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.pad-button}"
+      },
+      "button-primary-hover": {
+        "backgroundColor": "{colors.secondary}"
+      },
+      "blog-card": {
+        "backgroundColor": "{colors.surface}",
+        "textColor": "{colors.primary}",
+        "rounded": "{rounded.md}",
+        "padding": "{spacing.lg}"
+      },
+      "filter-pill-active": {
+        "backgroundColor": "{colors.surface}",
+        "textColor": "{colors.primary}",
+        "typography": "{typography.label-sm}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.sm}"
+      },
+      "filter-pill-inactive": {
+        "backgroundColor": "{colors.tertiary}",
+        "textColor": "{colors.secondary}",
+        "typography": "{typography.label-sm}",
+        "rounded": "{rounded.full}",
+        "padding": "{spacing.sm}"
+      }
+    }
+  }
+}

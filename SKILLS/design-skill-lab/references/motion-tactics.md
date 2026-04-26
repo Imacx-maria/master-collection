@@ -128,7 +128,7 @@ Every reveal animation in the medium tier (and high tier) must use the `.js-read
 })();
 ```
 
-The `.js-ready` gate is the failure-mode fix for the Spritify oneshot bug, where the hero testimonial card shipped invisible when JS hadn't run yet. **This pattern is also documented in build-tactics.md Tactic 17.4** as part of the surface-context contract — they're the same defect class (content invisible despite valid markup).
+The `.js-ready` gate is the failure-mode fix for content that ships permanently invisible when JS hasn't run yet (CDN blocked, slow network, JS error before init). **This pattern is also documented in build-tactics.md Tactic 17.4** as part of the surface-context contract — they're the same defect class (content invisible despite valid markup).
 
 ### Pre-build checklist
 
@@ -145,6 +145,31 @@ The `.js-ready` gate is the failure-mode fix for the Spritify oneshot bug, where
 ---
 
 ## High contract — GSAP-tier orchestration
+
+### ⚠️ CARDINAL RULE — never let CSS and GSAP both write `transform`
+
+**The single rule this section exists to enforce, before anything else:**
+
+> **A `.js-ready` CSS rule MUST NOT set `transform:` on any element GSAP will tween.**
+> CSS owns `opacity` for the pre-JS hide. GSAP owns `transform` fully. They never touch the same property.
+
+This is not a style preference. It is the only failure mode at the High tier that:
+- Passes every other check (`.js-ready` gate present, GSAP loaded, no console errors, watchdog ran, reduced-motion respected)
+- Ships permanently invisible content
+- Cannot be caught by visual review without DevTools
+
+**Mechanical check before every High-tier delivery:**
+
+```bash
+# If this returns ANY match, the build is broken. Move the transform out of CSS.
+grep -E "\.js-ready[^{]*transform" <build-file>
+```
+
+If grep returns nothing, the cardinal rule is held. If it returns anything, the fix is in § CSS-vs-GSAP transform handoff below — but the bug is real and shipping it = invisible hero. Do not deliver until grep is clean.
+
+**Why a cardinal rule and not a normal anti-pattern:** every one of the High-tier audit questions can be misjudged ("eh, the easing is consistent enough"); this one is binary. Either the grep returns matches or it doesn't. Make it mechanical, run it every time, never argue with the result.
+
+---
 
 ### Stack choice
 
@@ -215,7 +240,7 @@ Wrap each `.line` in `overflow: hidden` on the parent for the "rolling-up from b
 - On `gsap.com`, `localhost`, and Webflow paid domains → SplitText works normally
 - On standalone HTML files (`file://`, custom domains, GitHub Pages, Vercel free, etc.) → SplitText constructor returns an object but **does not animate** — text stays in initial state forever
 
-The bug is silent. The build appears to ship with SplitText, the `<script>` tag is there, the constructor doesn't throw, but the user never sees the animation. The skill's previous Creative Studio heavy-motion build hit this exact failure: SplitText "implemented" in code, never visible to the user.
+The bug is silent. The build appears to ship with SplitText, the `<script>` tag is there, the constructor doesn't throw, but the user never sees the animation. The build looks correct in code review and fails only in production on unlicensed origins.
 
 **Required fallback chain.** Every SplitText usage must have a graceful fallback to vanilla word-split that animates equivalently. Pattern:
 
@@ -362,6 +387,82 @@ CustomEase.create("verum-out", "M0,0 C0.2,0 0.1,1 1,1");
 gsap.to(".hero-cta", { y: 0, ease: "verum-out", duration: 1 });
 ```
 
+### CSS-vs-GSAP transform handoff — never let CSS pre-seed transforms for GSAP-tweened elements
+
+**The trap.** A common pattern at the High tier is to pair a `.js-ready` CSS gate with a GSAP entrance animation. The intuitive (and wrong) instinct is to set the hidden state in CSS via a transform:
+
+```css
+/* WRONG — CSS-side transform hide */
+html.js-ready .hero-headline .word > span { transform: translateY(110%); }
+```
+
+```js
+/* WRONG — GSAP tween that's supposed to take over */
+gsap.to(".hero-headline .word > span", { yPercent: 0, duration: 0.95 });
+```
+
+**Why this fails — transform stacking, not unit mismatch.** GSAP does NOT replace the CSS transform. It writes its own transform value alongside the CSS one. Modern GSAP 3 emits inline styles like:
+
+```
+transform: translate(0%, 110%) translate(0px, 161.918px);
+```
+
+Two `translate()` calls space-separated — they **stack**. The first comes from the stylesheet rule (`.js-ready` hide), the second from `gsap.set({yPercent: 110})`. GSAP-only writes the second one, so when its tween runs `yPercent: 110 → 0`, only that second translate animates. The CSS `translate(0%, 110%)` stays applied forever and the element stays double-translated → permanently outside the `overflow: hidden` mask → invisible.
+
+Reading the inline style on a stuck element confirms the pattern:
+- After `gsap.set({yPercent: 110})` and during the "animation": `transform: translate(0%, 110%) translate(0px, 161.918px)` — both translates stacked.
+- The GSAP-emitted inline style sits on the element, and the CSS rule continues to apply when GSAP doesn't write a transform (e.g. between set and tween-start, or when `clearProps` runs).
+
+In practice the symptom is always the same: **content stays masked**, even though every other check passes (`.js-ready` gate present, GSAP loaded, no console errors, watchdog ran, reduced-motion respected).
+
+The same trap applies to ANY transform property pre-seeded in CSS that GSAP also touches:
+
+- `transform: scale(0.9)` + `gsap.to({scale: 1})` → element stays at 0.9 × GSAP scale
+- `transform: rotate(-15deg)` + `gsap.to({rotation: 0})` → cumulative rotation
+- `transform: translate3d(0, 100%, 0)` + `gsap.to({y: 0})` → double translation
+
+**Required pattern — split responsibility cleanly.** CSS owns *opacity* for the pre-JS hide. GSAP owns *transform* entirely. They never touch the same property.
+
+```css
+/* CORRECT — CSS hide is opacity-only, no transform */
+html.js-ready .hero-headline .word > span { opacity: 0; }
+```
+
+```js
+/* CORRECT — GSAP fully owns the transform: hidden state via set, animated via to */
+var heroWords = gsap.utils.toArray('.hero-headline .word > span');
+gsap.set(heroWords, { yPercent: 110, opacity: 1 });  // overrides CSS opacity, sets GSAP transform
+gsap.timeline().to(heroWords, { yPercent: 0, duration: 0.95, stagger: 0.06 });
+```
+
+Why `opacity: 1` in the `gsap.set()`? Because the CSS rule set `opacity: 0` for the pre-JS hide. Once GSAP takes over, it bumps opacity to 1 (element is now visible) but `yPercent: 110` keeps it positioned outside the `.word { overflow: hidden }` mask. Then the tween slides it up. At no point does CSS and GSAP fight over the same property.
+
+**The .js-ready CSS gate stays — but uses opacity, not transform.** The two layers cover different failure modes; they are not redundant:
+
+| Failure mode | Covered by |
+|---|---|
+| JS doesn't run at all | `.js-ready` class never added → no `opacity: 0` rule applied → content fully visible |
+| JS runs, GSAP fails to load | `typeof window.gsap === 'undefined'` branch in IIFE removes the loader and reveals content (must also clear the `.js-ready` opacity hide for hero — see fallback below) |
+| JS runs, GSAP loads, animation works | GSAP writes `opacity: 1` and tweens `yPercent` cleanly with no CSS transform conflict |
+
+**Hero fallback when GSAP fails to load.** The IIFE's GSAP-undefined branch must also force `opacity: 1` on the hero items, otherwise the `.js-ready` hide stays in effect:
+
+```js
+if (typeof window.gsap === 'undefined') {
+  clearTimeout(watchdog);
+  hideLoaderImmediately();
+  // CRITICAL: clear the hero hide state since GSAP can't tween it back
+  document.querySelectorAll('.hero-eyebrow, .hero-lead, .hero-actions, .hero-meta, .hero-headline .word > span')
+    .forEach(function (el) { el.style.opacity = '1'; });
+  initFallbackReveals();
+  return;
+}
+```
+
+**Why this is its own rule, not a one-line anti-pattern.** This is one of the few High-tier failure modes that passes every other check (`.js-ready` gate present, reduced-motion fallback present, watchdog timer present, GSAP loaded successfully, no console errors) and still ships permanently invisible content. The bug is mechanical: the CSS `translate()` and the GSAP `translate()` stack instead of replacing each other. Same defect family as the SplitText silent-fail (CDN trap) and reveal-without-js-ready-gate: the build looks correct in code review, fails in production. Document it once here, audit for it at every build.
+
+**Audit test.** Open the build in DevTools → Elements panel. Find a GSAP-tweened element pre-animation. Check the **inline `style` attribute**: if it contains TWO `translate()` calls (e.g. `translate(0%, 110%) translate(0px, 161.918px)`), the CSS is fighting GSAP. Move the CSS hide to opacity-only.
+
 ### Anti-patterns at this tier
 
 - ❌ **GSAP for everything**, including hover states. Hover is still CSS. GSAP is for orchestration, not state.
@@ -371,6 +472,7 @@ gsap.to(".hero-cta", { y: 0, ease: "verum-out", duration: 1 });
 - ❌ **Pinned sections taller than the viewport.** Pin only sections shorter than `100vh` — taller pins create scroll dead-zones.
 - ❌ **Scrub: true with heavy timelines.** Scrub recomputes every frame; keep tweened properties to ≤4 simultaneously per scrub timeline.
 - ❌ **GSAP `gsap.from()` on hero content without `.js-ready` gate or `clearProps`.** If GSAP fails to load (CDN down, blocked, slow), the page hero stays at the `from` state forever. Use `.js-ready` gate on hero opacity, OR use `gsap.set()` to establish the hidden state only after GSAP confirms ready.
+- ❌ **CSS transform as pre-seed for GSAP-tweened elements.** `transform: translateY(110%)` in CSS + `gsap.to({yPercent: 0})` = stacked translates (`translate(0%, 110%) translate(0px, ...)`), element stays masked. Split responsibility: CSS owns opacity for the pre-JS hide; GSAP owns transform fully. See § CSS-vs-GSAP transform handoff above.
 
 ### Pre-build checklist
 
@@ -383,7 +485,11 @@ gsap.to(".hero-cta", { y: 0, ease: "verum-out", duration: 1 });
 - [ ] All `ScrollTrigger` instances have `markers: false` in production (markers are dev-only)
 - [ ] Bundle size measured: GSAP core + plugins should not exceed ~80kb gzipped total
 - [ ] **Hero / above-the-fold content is visible without GSAP**: either use `.js-ready` CSS gate (medium-tier pattern, preferred) OR run `gsap.set(".hero", {opacity: 0})` AFTER confirming `window.gsap` exists. Never start hero in `opacity: 0` purely via CSS without a JS-ready guard.
+- [ ] **🛑 CARDINAL — `grep -E "\.js-ready[^{]*transform" <build-file>` returns ZERO matches.** Mechanical, binary, non-negotiable. Any match = invisible-hero bug. (See § Cardinal rule at top of High contract.)
+- [ ] **CSS-vs-GSAP transform handoff** — corollary of cardinal rule: `.js-ready` CSS hide for GSAP-tweened elements is OPACITY-ONLY. (See § CSS-vs-GSAP transform handoff.)
+- [ ] **GSAP-undefined branch unhides hero** — the `typeof window.gsap === 'undefined'` fallback in the IIFE explicitly sets `style.opacity = '1'` on every hero item that the `.js-ready` rule hid. Otherwise GSAP failure leaves the hero permanently invisible.
 - [ ] **Disable-JS test passes** (DevTools → Sources → Disable JavaScript → reload): hero is readable, page navigation works, content not gated behind animation
+- [ ] **Visible-without-tween test passes** — temporarily comment out the GSAP timeline and reload. The hero should appear (CSS hide + GSAP show is wrong; the hide must be removable cleanly). If the hero stays invisible after commenting out the timeline, the CSS gate is over-aggressive and a CDN failure scenario is uncovered.
 
 ---
 
@@ -456,3 +562,4 @@ When `motion != low`, run these in addition to the style-specific review.
 8. **5-second rule (WCAG 2.2.2).** Any auto-running motion >5 seconds must have a pause control OR be gated behind `prefers-reduced-motion`. This applies to: auto-playing video, auto-rotating carousels, persistent background animations. Decorative ambient loops (subtle float, breathing logo at <5% scale change) are usually fine — judgment call.
 9. **GPU-only check.** Grep the build for animated `width`, `height`, `top`, `left`, `margin` properties. Replace with `transform` equivalents. Layout-triggering properties on a 60fps animation = jank.
 10. **Duration sourced from canonical table.** Every duration in the build either comes from `motion-principles.md` § Temporal design table OR is documented as a brand-driven exception in DESIGN.md.
+11. **CSS-vs-GSAP transform handoff audit (high tier).** Grep the build for any `.js-ready` CSS rule containing `transform:` on an element that GSAP will tween. If found = bug. The `.js-ready` hide must be opacity-only; GSAP owns transform via `gsap.set()` + `.to()`. Audit test in DevTools: inspect a stuck element's inline `style` attribute. Two `translate()` calls = stacking bug. (Full failure-mode analysis: § CSS-vs-GSAP transform handoff.)
