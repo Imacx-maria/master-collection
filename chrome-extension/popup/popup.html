@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=360">
+  <title>Master Collection Companion</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <div>
+        <h1>Master Collection</h1>
+        <p class="subtitle">Chrome Extension Companion</p>
+      </div>
+      <button class="theme-button" id="theme-toggle" type="button" aria-label="Change theme">
+        System
+      </button>
+    </header>
+
+    <div class="tab-bar">
+      <button class="tab active" id="tab-guard">Paste Guard</button>
+      <button class="tab" id="tab-ix">Interactions</button>
+    </div>
+
+    <!-- State: Not on Designer page -->
+    <div id="state-not-designer" class="state" hidden>
+      <div class="message warning">
+        Navigate to a Webflow Designer page first.
+      </div>
+    </div>
+
+    <!-- State: Scanning -->
+    <div id="state-scanning" class="state" hidden>
+      <div class="spinner"></div>
+      <p>Scanning interactions...</p>
+    </div>
+
+    <!-- State: Scan results — mode selection -->
+    <div id="state-results" class="state" hidden>
+      <div class="mode-cards">
+
+        <button class="mode-card" id="mode-all" disabled>
+          <span class="mode-count" id="count-all">0</span>
+          <span class="mode-label">All Interactions</span>
+          <span class="mode-desc">Everything in the project</span>
+        </button>
+
+        <button class="mode-card" id="mode-page" disabled>
+          <span class="mode-count" id="count-page">0</span>
+          <span class="mode-label">On This Page</span>
+          <span class="mode-desc">Used on the current page</span>
+        </button>
+
+        <button class="mode-card" id="mode-unused" disabled>
+          <span class="mode-count" id="count-unused">0</span>
+          <span class="mode-label">Unused</span>
+          <span class="mode-desc">Not on this page</span>
+        </button>
+
+      </div>
+
+      <div id="ix-preview" class="preview-list" hidden></div>
+
+      <button id="btn-rescan" class="btn btn-ghost">
+        Rescan
+      </button>
+    </div>
+
+    <!-- State: Confirm dialog -->
+    <div id="state-confirm" class="state" hidden>
+      <div class="confirm-box">
+        <p class="confirm-text">
+          Delete <strong id="confirm-count">0</strong> <span id="confirm-scope"></span> interactions?
+        </p>
+        <p class="confirm-warning">This cannot be undone except via Ctrl+Z.</p>
+        <div class="confirm-actions">
+          <button id="btn-confirm-yes" class="btn btn-danger">Yes, Delete</button>
+          <button id="btn-confirm-no" class="btn btn-secondary">Back</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Deleting (progress) -->
+    <div id="state-deleting" class="state" hidden>
+      <p id="progress-text">Deleting... 0/0</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+      </div>
+      <p id="progress-detail" class="detail-text"></p>
+      <button id="btn-cancel" class="btn btn-secondary">Cancel</button>
+    </div>
+
+    <!-- State: Done -->
+    <div id="state-done" class="state" hidden>
+      <div id="done-message" class="message success"></div>
+      <p class="tip">Tip: Ctrl+Z to undo if needed.</p>
+      <button id="btn-close" class="btn btn-secondary">Close</button>
+    </div>
+
+    <!-- State: Error -->
+    <div id="state-error" class="state" hidden>
+      <div id="error-message" class="message error"></div>
+      <button id="btn-retry" class="btn btn-secondary">Retry Scan</button>
+    </div>
+
+    <!-- State: Paste Guard -->
+    <div id="state-guard" class="state" hidden>
+      <div class="guard-card">
+        <div class="guard-toggle-row">
+          <div>
+            <span class="guard-title">Paste Guard</span>
+            <span class="guard-desc">Intercepts XscpData pastes and detects class conflicts.</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="guard-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p id="guard-status" class="guard-status">Toggle on to guard pastes.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
