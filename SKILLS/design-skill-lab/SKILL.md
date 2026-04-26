@@ -102,9 +102,15 @@ State the divergences explicitly at the top of the DESIGN.md in the Provenance s
 
 Goal: implement using the project DESIGN.md as the source of truth.
 
+**Step 3.0.04 — Load motion principles (conditional).** If `style-tuning.axes.motion.value` is `medium` or `high`, load `references/motion-principles.md` BEFORE `motion-tactics.md`. Skip if `low` (the universal hover-transition rule in `base-principles.md` is enough).
+
+The file defines the **design lens** for motion: vocabulary (animation vs micro-interaction vs functional motion), Saffer's Four Pillars per micro-interaction (Trigger / Rules / Feedback / Loops & Modes), the canonical duration table (button feedback 80–100ms → success celebration 600–1000ms), the 100ms perception threshold + 20% Weber-Fechner rule, easing intent (ease-out for entering, ease-in for leaving permanent, ease-in-out for in-bounds), spring physics vs fixed timing, the GPU-only rule (transform + opacity), the C.U.R.E. audit framework (Context / Usefulness / Restraint / Emotion), WCAG criteria 2.2.2 (5-second pause) and 2.3.1 (3-flash rule), and a pattern catalog (shake-for-error, pull-to-refresh, FLIP, parallax depth, etc.).
+
+This step exists because `motion-tactics.md` alone is mechanical — "load GSAP, animate things". Without principles first, the skill ships motion that compiles but isn't designed. Read principles → classify the moments → then apply tactics.
+
 **Step 3.0.05 — Load motion tactics (conditional).** If `style-tuning.axes.motion.value` is `medium` or `high`, load `references/motion-tactics.md`. Skip if `low` (CSS transitions are sufficient — no orchestration contract needed).
 
-The file defines the technical contract per tier: `medium` = CSS animations + IntersectionObserver only, no JS animation library; `high` = GSAP 3.12+ orchestration with ScrollTrigger / SplitText / Flip / parallax / FLIP / CustomEase + Webflow's Club GSAP plugin set (DrawSVG, MorphSVG, ScrambleText, Inertia, Physics2D, MotionPathHelper, ScrollSmoother). The pre-build checklist at the bottom is the contract — including the `prefers-reduced-motion` fallback (non-negotiable at every tier above `low`).
+The file defines the **technical contract** per tier: `medium` = CSS animations + IntersectionObserver only, no JS animation library; `high` = GSAP 3.12+ orchestration with ScrollTrigger / SplitText / Flip / parallax / FLIP / CustomEase + Webflow's Club GSAP plugin set (DrawSVG, MorphSVG, ScrambleText, Inertia, Physics2D, MotionPathHelper, ScrollSmoother). The pre-build checklist at the bottom is the contract — including the `prefers-reduced-motion` fallback (non-negotiable at every tier above `low`).
 
 This step exists because `motion: high` was being interpreted as "more CSS animations" — which is `medium` dressed up. Real `high` requires a different mental model and a JS animation runtime; the file makes that contract explicit before markup is generated.
 
@@ -236,7 +242,8 @@ design-skill-lab/
 │   ├── user-overrides.md                 # detection + protocol for user colors/fonts/URL/image, fidelity scale
 │   ├── style-tuning.md                   # 9-question interview + per-library defaults table (Phase 2.1)
 │   ├── layout-patterns.md                # bento vs uniform vs list, alignment rules, span vocabulary
-│   ├── motion-tactics.md                 # technical contract per motion tier (medium=CSS+IO, high=GSAP+ScrollTrigger+SplitText+Flip)
+│   ├── motion-principles.md              # design lens for motion: taxonomy, 4 pillars, canonical duration table, easing intent, C.U.R.E. audit, WCAG 2.2.2/2.3.1, pattern catalog (Phase 3 Step 3.0.04)
+│   ├── motion-tactics.md                 # technical contract per motion tier (medium=CSS+IO, high=GSAP+ScrollTrigger+SplitText+Flip) (Phase 3 Step 3.0.05)
 │   ├── loader-patterns.md                # page-loader contract per page-load value (subtle / functional / branded-intro); 9 recipes; 4 mandatory failure-mode guards (Phase 3 Step 3.0.06)
 │   ├── typography-safety.md              # tier+modifier model, language adjustments, failure modes
 │   ├── sidecar-contract.md               # .design.md → tokens.json + tailwind.config.js transform spec (Phase 4.8.1)
@@ -265,7 +272,7 @@ design-skill-lab/
 |-----------|------|
 | User provides colors / fonts / image / URL | `references/user-overrides.md` (run first in Phase 1) |
 | User mentions image/inspiration | `references/inspiration-analysis.md` |
-| `style-tuning.axes.motion` is `medium` or `high` | `references/motion-tactics.md` (Phase 3 — technical contract per tier; medium=CSS-only, high=GSAP) |
+| `style-tuning.axes.motion` is `medium` or `high` | `references/motion-principles.md` FIRST (Phase 3 Step 3.0.04 — design lens, vocabulary, duration table, C.U.R.E.), then `references/motion-tactics.md` (Phase 3 Step 3.0.05 — technical contract; medium=CSS-only, high=GSAP) |
 | `style-tuning.axes.page-load` is anything other than `none` | `references/loader-patterns.md` (Phase 3 — pattern map + 9 recipes + 4 mandatory failure-mode guards) |
 | Build mixes light/dark surfaces (light card in dark section, etc.) OR uses reveal animations | `references/build-tactics.md` § Tactic 17 (Phase 3 — surface-scoped colour tokens + `.js-ready` reveal gate) |
 | About to build markup with grids/cards | `references/layout-patterns.md` (Phase 3 — pick pattern deliberately) |

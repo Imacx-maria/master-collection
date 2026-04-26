@@ -1,8 +1,8 @@
 # Build Tactics
 
-Tactical do/don't recipes for the **build moment** — decisions made *before* writing markup, not caught after. Tactics 1–13 come from Refactoring UI (Wathan & Schoger), Don't Make Me Think (Krug), and 100 Things Every Designer Needs to Know (Weinschenk). Tactics 14–16 are conditional gates added from verification-build evidence (kindertech, os-traquinas, ledger, mainframe): dark-mode discipline, mobile nav implementation, component reusability.
+Tactical do/don't recipes for the **build moment** — decisions made *before* writing markup, not caught after. Tactics 1–13 come from Refactoring UI (Wathan & Schoger), Don't Make Me Think (Krug), and 100 Things Every Designer Needs to Know (Weinschenk). Tactics 14–17 are conditional gates added from verification-build evidence (kindertech, os-traquinas, ledger, mainframe, oneshot stress test): dark-mode discipline, mobile nav implementation, component reusability, surface-context text scoping.
 
-Tactics 1–13 always run. Tactics 14, 15, and 16 are **conditional** — run only when their trigger axis or markup pattern is present.
+Tactics 1–13 always run. Tactics 14, 15, 16, and 17 are **conditional** — run only when their trigger axis or markup pattern is present.
 
 `base-principles.md` answers "is this right?" (audit lens). This file answers "what should I do *now*?" (build lens). Load both in Phase 3.
 
@@ -565,6 +565,158 @@ If the build has 3+ instances of any component type, every item below must be tr
 
 If any item fails, refactor. Component discipline failures are the difference between "this build is a system" and "this build is a collage".
 
+## 17. Surface-context text scoping (conditional — runs when build mixes light/dark surfaces)
+
+Two stress-test failures (Spritify testimonial, Warm Editorial dark section) shipped invisible text because text colours inherited from the *page/section* context instead of being scoped to the *immediate surface*. The pattern is generic and recurs across libraries; this tactic is the build-time gate that catches it before delivery.
+
+**When to run:** any build where the markup contains a surface-flip — a light section containing a dark card / panel / testimonial / quote / modal / callout, OR a dark section containing a light variant of the same. Trigger keywords in CSS: `.section--dark`, `.section--inverted`, `[data-theme="dark"]` scoped to a section, or any class that swaps the local background to the opposite of the page's `body`. If the build is single-mode and surfaces don't flip locally, skip.
+
+The corollary trigger: **JS-driven reveal animations** (`.reveal { opacity: 0 }`, `.fade-in`, `[data-aos]`, etc.) without progressive-enhancement gating. These hide content until JS confirms — if JS fails, content stays invisible. See 17.4.
+
+### 17.1 The contract
+
+Every text element inside a flipped surface must declare its colour against its **local** surface, not inherit from the page.
+
+- ❌ `.section--dark { color: var(--text-light); }` then a nested `.testimonial-card { background: white; }` with no colour reset → testimonial inherits light text on white = invisible.
+- ✅ `.section--dark { color: var(--text-light); } .section--dark .testimonial-card { background: white; color: var(--text-dark); }` → reset.
+
+The simplest implementation: every component that can sit on either light or dark surfaces (testimonial, card, quote, callout, panel) defines its own surface + colour pair as a unit. No exceptions.
+
+### 17.2 The four common failure shapes
+
+These are the patterns to scan for:
+
+| Shape | Symptom | Fix |
+|---|---|---|
+| **Light card in dark section** (Spritify, Warm Editorial) | Card body text white-on-white; only avatar / icon visible | Component sets its own `color: var(--text-on-light-surface)` |
+| **Dark card in light section** (testimonial-on-coloured) | Card body text dark-on-dark; only background visible | Component sets its own `color: var(--text-on-dark-surface)` |
+| **Inherited via `color: inherit`** | Text "looks fine" in one section, breaks when component reused elsewhere | Replace `inherit` with explicit token from local surface |
+| **JS-gated reveal without fallback** | Content invisible until scroll triggers `.visible`. If JS fails or runs late → permanent invisibility | See 17.4 progressive-enhancement gate |
+
+### 17.3 Code patterns — token discipline for surface-aware components
+
+The cleanest implementation uses **per-surface colour tokens** that are namespaced by the surface they belong to:
+
+```css
+:root {
+  /* Page-level defaults */
+  --bg-page: #FFFFFF;
+  --text-page: #1A1A1A;
+
+  /* Per-surface tokens — declared once, used everywhere the surface appears */
+  --surface-light: #FFFFFF;
+  --text-on-surface-light: #1A1A1A;
+  --text-muted-on-surface-light: #6B6B6B;
+
+  --surface-dark: #1A1A1A;
+  --text-on-surface-dark: #F5F5F5;
+  --text-muted-on-surface-dark: #A0A0A0;
+}
+
+/* Component declares its surface + colour as a unit */
+.testimonial-card {
+  background: var(--surface-light);
+  color: var(--text-on-surface-light);
+}
+.testimonial-card .role {
+  color: var(--text-muted-on-surface-light);
+}
+
+/* Same component, dark variant */
+.testimonial-card--dark {
+  background: var(--surface-dark);
+  color: var(--text-on-surface-dark);
+}
+.testimonial-card--dark .role {
+  color: var(--text-muted-on-surface-dark);
+}
+```
+
+The principle: **a component's text colour is determined by its own background, not by the section it sits in**. This pattern survives nesting, reordering, and theme switches.
+
+### 17.4 Progressive-enhancement gate for reveal animations
+
+If the build uses CSS-driven reveal animations (`opacity: 0` initial state, `opacity: 1` on `.visible` class added by JS), the initial hidden state must be **gated by a `.js-ready` class on the html/body element**. Without this gate, a JS failure leaves all `.reveal` content permanently invisible.
+
+❌ **Broken pattern (Spritify v1):**
+```css
+.reveal { opacity: 0; transform: translateY(20px); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+```
+```js
+// If this script fails, .reveal stays at opacity: 0 forever.
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+```
+
+✅ **Progressive-enhancement pattern:**
+```css
+/* Reveal hidden state ONLY applies once JS confirms it can animate */
+.js-ready .reveal { opacity: 0; transform: translateY(20px); }
+.js-ready .reveal.visible { opacity: 1; transform: translateY(0); }
+/* Without .js-ready, .reveal renders fully visible (graceful fallback) */
+```
+```js
+(function() {
+  // Mark JS as ready FIRST — enables the hidden state in CSS
+  document.documentElement.classList.add('js-ready');
+
+  // Defensive: if IntersectionObserver missing, show everything
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  // Respect prefers-reduced-motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  // Standard observer setup
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    observer.observe(el);
+  });
+})();
+```
+
+The `.js-ready` gate is the single most important line. Without it, every reveal-animated build is one JS error away from looking broken to the user.
+
+### 17.5 Anti-patterns
+
+- ❌ **Global `color: white` on a dark page body** without per-component overrides for nested light cards. Inheritance turns nested cards invisible.
+- ❌ **`color: inherit`** on testimonial-name, card-title, quote-author. These elements are reused across surfaces; explicit tokens beat inheritance.
+- ❌ **Reveal animations gated only by `prefers-reduced-motion`**. The reduced-motion fallback handles user preference, not JS failure. Use `.js-ready` for failure resilience.
+- ❌ **Single `--text-default` variable used everywhere**. The variable name implies "use this for all text", which is exactly what creates the inheritance bug. Name tokens by surface (`--text-on-surface-light`), not by hierarchy (`--text-default`).
+- ❌ **Single dark-mode override** like `[data-theme="dark"] { color: white }`. This works for top-level body text; it doesn't work for nested light cards intentionally placed on dark sections within dark mode (the inversion-of-inversion case).
+
+### 17.6 Audit test (mental flip)
+
+Before delivery, walk the build mentally. **Flip every surface**: every dark surface becomes light, every light surface becomes dark. Walk through every text element. If any text becomes invisible, illegible, or fails 4.5:1 contrast against its *new* surface — the colour was inherited instead of scoped. Refactor.
+
+If the build has reveal animations, also: **disable JS** in the browser (DevTools → Sources → Disable JavaScript → reload). Every page section should be readable. If anything is invisible, the `.js-ready` gate is missing.
+
+### 17.7 Checklist (run before delivery if Tactic 17 triggered)
+
+- [ ] Every component that can appear on multiple surfaces declares its `background` AND `color` as a pair (no `color: inherit` on testimonial/card/quote/callout text)
+- [ ] Per-surface colour tokens are namespaced (`--text-on-surface-dark`, not `--text-muted`)
+- [ ] Mental flip test passes: flipping every surface mode exposes no invisible text
+- [ ] If reveal animations are used: `.js-ready` gate present in CSS (`opacity: 0` only applies under `.js-ready`)
+- [ ] If reveal animations are used: JS adds `.js-ready` to `document.documentElement` as the FIRST line of the IIFE
+- [ ] If reveal animations are used: IntersectionObserver fallback present (if API missing → show everything)
+- [ ] Disable-JS test passes: page renders fully readable without JS
+- [ ] Disable-CSS test passes: page renders fully readable without CSS (semantic markup only — sanity check)
+
+If any item fails, refactor before delivery. Surface-context bugs are the most user-visible failure mode in stress test history (2/11 builds in the oneshot run shipped with this defect).
+
 ---
 
 ## Trauma-informed mode (cross-reference)
@@ -604,6 +756,7 @@ Before generating any markup, run through these:
 - [ ] If `color-mode = both` or `dark` → Tactic 14 dark-mode checklist passed (Tactic 14.7)
 - [ ] If `<nav>` with breakpoint hide → Tactic 15 mobile nav contract included (Tactic 15.5)
 - [ ] If 3+ instances of any component pattern → Tactic 16 component reusability contract met (Tactic 16.6)
+- [ ] If build mixes light/dark surfaces (`.section--dark` containing light cards or vice versa) OR uses reveal animations → Tactic 17 surface-context checklist passed (Tactic 17.7)
 - [ ] If sensitive content → trauma-informed reference loaded (cross-reference section)
 
 These are gates, not suggestions. Skipping them means catching the same issues in Phase 4.3 / 4.7 — wastes the self-correction loop on stuff that should never have shipped.

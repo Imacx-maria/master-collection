@@ -287,6 +287,108 @@ Schedule with `[time] [activity] [meta]` rows rendered at `max-width: 720px` whi
 **Failure 7 — list when grid was the right call.**
 6+ short items with no sequential meaning rendered as a vertical list creates an unnecessarily tall section. If the items don't *need* to be read in order and have similar weight, use Uniform Grid. Use list only when sequence or reading is the point.
 
+**Failure 8 — narrow column with bare `1fr` (word-per-word breakdown).**
+A 2-col layout `grid-template-columns: 1fr 1fr` where one column contains a list of short text items (deliverables, features, bullet items). At intermediate viewport widths (900-1100px), or when the LEFT column has wider content (longer headings, taller cards), the right column collapses to ~120-180px and text breaks **word-per-word**:
+
+```
+Pre-
+audit
+walkthrough
+four
+weeks
+ahead
+```
+
+Each word on its own line because the column is narrower than the longest word's natural width plus padding. The rendering is technically valid HTML/CSS but reads as broken.
+
+**Cause:** `1fr` is **flexible without floor**. Once the left column claims more than half the available space (because of intrinsic content width or `min-content` wider items), the right column shrinks below readable threshold.
+
+**Fix — minmax with content-appropriate floor:**
+
+```css
+/* ❌ Wrong — no minimum */
+grid-template-columns: 1fr 1fr;
+
+/* ✅ Right — minimum reading width per column */
+grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
+/*                    ^^^^^^^^^^^^^^^^                                */
+/*                    Allows left to shrink so the right doesn't get  */
+/*                    pushed; right has 280px floor to stay readable. */
+```
+
+**Floor recipes by content type (the right minmax min):**
+
+| Content in column | Min floor | Why |
+|---|---|---|
+| Bullet list with 3-5 word items | `220px` | Fits "pre-audit walkthrough" without breaking |
+| Bullet list with 6-10 word items | `280px` | Fits "Materiality recalibrated for your size" without breaking |
+| Body paragraph (prose) | `360px` | Reading column minimum; below this, line length is uncomfortable |
+| Form fields | `260px` | Fits typical input + label width |
+| Stat / KPI block | `180px` | Number + 1-line label minimum |
+
+**Special case — `minmax(0, 1fr)` on the OTHER column.** When you set a floor on column B, also set `minmax(0, 1fr)` on column A. This permits column A to shrink (the `0` min) so column B can claim its floor. Without this, A might refuse to shrink and the layout overflows the container.
+
+**General rule for ALL multi-col grids with text content:** never use bare `1fr` for any column with text. Use `minmax(<content-floor>, 1fr)` for the column that needs to stay readable, and `minmax(0, 1fr)` for the column that can shrink.
+
+This was the creative-studio-heavy.html use-case panel bug: tab content rendered with `1fr 1fr`, deliverables column collapsed at 1100-1280px to ~140px, breaking every list item word-per-word.
+
+**Failure 9 — stat / KPI grid with mixed line counts in description (baseline misalignment).**
+A row of stats: `[number] [label]` with the label being a 1-2 line description that varies per stat:
+
+```
+84M+        412         97%        22
+"Across     "Each       "Year      "From SaaS to manufacturing
+Series A    one signed  over year, to professional services."
+through C   off and     since
+and one     defended."  2014."
+IPO."
+```
+
+If each cell uses `flex-direction: column; gap: var(--sm)`, the labels start immediately under their numbers — but at different vertical positions across the row, because each label has different line count. Result: the **97%** number sits at the same top as the others, but its description hangs in space below with no follow-up content; the visual baseline of "where the description starts" is broken across the row.
+
+**Cause:** vertical content stacks naturally; without an explicit row structure, each cell's height is independent.
+
+**Fix — grid template rows with explicit alignment:**
+
+```css
+/* ❌ Wrong — flex column, each cell sized independently */
+.stat-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sm);
+}
+
+/* ✅ Right — grid rows shared across all cells in the row */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* This creates 3 implicit rows, each cell respects them */
+}
+.stat-cell {
+  display: grid;
+  grid-template-rows: auto 1fr;  /* number = auto, description = fills remaining */
+  gap: var(--sm);
+}
+.stat-description {
+  align-self: end;  /* push description to bottom of its row */
+}
+```
+
+OR — simpler if descriptions vary by ≤1 line — equalise via min-height:
+
+```css
+.stat-description {
+  min-height: calc(2 * 1.5em);  /* reserves 2 lines of space, even if 1-line content */
+}
+```
+
+**General rule for ALL multi-cell stat / KPI / feature blocks where description copy can vary in line count:**
+- Either share a grid-template-rows across the parent so all cells inherit row heights, OR
+- Set min-height on the description to the longest expected line count, OR
+- Use `align-items: end` on the description if descriptions should baseline at the bottom of the cell
+
+The 1-line outlier becomes the "broken" cell visually if not handled. The fix takes 3 lines of CSS and applies to every dashboard / KPI grid the skill produces.
+
 ---
 
 ## Quick reference table
@@ -295,7 +397,7 @@ Schedule with `[time] [activity] [meta]` rows rendered at `max-width: 720px` whi
 |---------------|---------------------------|
 | `neo-brutalist` | Bento (asymmetric, grid-visible) |
 | `editorial-portfolio` | Hero + Supporting (image-led asymmetric) |
-| `jocril-technical` | Uniform Grid (technical clarity) |
+| `technical-refined` | Uniform Grid (technical clarity) |
 | `basalt-ecommerce` | Uniform Grid (product-led, equal weight) |
 | `memoir-blog` | List + Uniform Grid (reading-first) |
 | `creative-studio` | Bento + Hero + Supporting (mixed) |

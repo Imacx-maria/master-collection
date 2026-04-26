@@ -172,7 +172,7 @@ Headline at `line-height: 0.85` AND condensed font AND 3+ lines AND non-English 
 DM Mono / Geist Mono at headline size with `line-height: 0.95`. Mono glyphs don't have the optical metrics for tight leading at scale. Fix: mono headlines need 1.10-1.20 even when display-equivalent sans is at 1.0.
 
 ### Failure T5 — Display caps without tracking
-Uppercase display with `letter-spacing: 0` and tight line-height. Letters read as a wall. Fix: add `+0.02em` to `+0.04em` tracking; tight line-height is fine.
+Uppercase display with `letter-spacing: 0` and tight line-height. Letters read as a wall. Fix: add `+0.02em` to `+0.04em` tracking; tight line-height is fine. See § "Tier-based letter-spacing for condensed/heavy display" below for the full tier model.
 
 ### Failure T6 — Body too small AND too tight
 14px body with line-height 1.3 = 18.2px line distance. Cramped. Fix: either size up to 16px+, or push line-height to 1.5.
@@ -190,6 +190,70 @@ Typography safety isn't a floor. It's **choosing the right tier and tuning withi
 
 ---
 
+## Tier-based letter-spacing for condensed/heavy display
+
+Line-height has a tier model. Letter-spacing for **condensed and heavy display** has a parallel one — and ignoring it is the single most common reason a build that "looks great in the hero" reads as a black slab in the section headings and card titles below.
+
+The problem: condensed grotesks (Anton, Bebas Neue, Druk Condensed, Acumin Pro Condensed Heavy, Inter Black, etc.) are designed to maximise visual mass per character. At hero sizes (>60px), that mass becomes architecture — the letters carry the page. At smaller sizes (subheadings, card titles, ~24-40px), the same mass causes **bowl collision** — the curves of B/O/R/D/Q/G touch, and a phrase like `STATUTORY AUDIT` reads as a single black brick rather than two readable words.
+
+The fix isn't "use less heavy type at small sizes" (that breaks the brand voice). The fix is to scale letter-spacing **inversely with size**: tighter at hero, looser as size shrinks.
+
+### The tier model
+
+| Tier | Size range | Min letter-spacing | Notes |
+|---|---|---|---|
+| **Hero display** | >60px | `0` (or -0.01em for editorial impact) | Mass is the point; letters at scale already have visual breathing room |
+| **Section heading** | 32–60px | `0.01em` minimum | Where bowl collision starts becoming visible — open it just enough |
+| **Card title / subhead** | <32px | `0.02em` minimum | Where collision is most visible; this is the tier most builds get wrong |
+| **Uppercase label** | ≤14px | `0.04em – 0.12em` | Existing rule (separate from condensed-display problem) — small caps need wide tracking regardless of weight |
+
+This applies to **condensed AND/OR heavy** display. Non-condensed regular weights (Inter 400, Source Sans 400, Söhne 500) don't suffer bowl collision and can stay at `letter-spacing: 0` across all sizes.
+
+### Why "min" — you can always go wider
+
+These are floors, not targets. If the design needs more breathing room (editorial restraint, brand voice), open further. What you cannot do is go below the floor for the size tier.
+
+### The convergent failure case
+
+Worst combination, where every modifier compounds against legibility:
+
+- **Uppercase** (no descenders to anchor optical balance)
+- **Condensed** (already narrow proportions)
+- **Heavy** (700+ weight)
+- **Small size** (<32px)
+- **Tight line-height** (<1.0)
+- **letter-spacing: 0**
+
+This is the "STATUTORY AUDIT in a card grid" failure — visually a wall of black, every word collides, the user can't scan the section. Fix: open letter-spacing to `0.025em` minimum AND give line-height >1.1 AND consider whether the uppercase is doing real work (sometimes downgrading to title-case is the right move).
+
+### Light mode amplifies the problem
+
+Black text on a near-white surface (typical light mode) has the maximum possible contrast — which means letter collisions are **more visible**, not less. A heading that reads OK in dark mode (Ivory-on-charcoal at 5:1 contrast) can read as a black slab in light mode (charcoal-on-parchment at 17:1). When auditing, always check the light-mode rendering of every condensed/heavy headline below 60px — it's where this bug surfaces first.
+
+### Pre-build pattern
+
+When defining type tokens for a condensed/heavy library (Neo-Brutalist, parts of Spritify, Playful Bento headers), set tracking per tier in your DESIGN.md frontmatter:
+
+```yaml
+typography:
+  display-xl:
+    fontSize: 96px
+    letterSpacing: 0       # hero tier
+  headline-lg:
+    fontSize: 48px
+    letterSpacing: 0.01em  # section tier
+  card-title:
+    fontSize: 24px
+    letterSpacing: 0.02em  # card tier
+  label:
+    fontSize: 12px
+    letterSpacing: 0.08em  # uppercase label tier
+```
+
+And when reviewing, walk through every condensed/heavy type token in the build and verify it sits at or above its tier floor.
+
+---
+
 ## Audit checklist (Phase 4)
 
 For every type token in the build:
@@ -202,6 +266,9 @@ For every type token in the build:
 - [ ] Body never below 1.3
 - [ ] Hero loose ( >1.2 ) flagged — usually a bug
 - [ ] No compounding compression (1 tight axis max on the same token)
+- [ ] **For condensed/heavy display tokens**: letter-spacing meets the tier floor (hero >60px ≥0; section 32-60px ≥0.01em; card <32px ≥0.02em)
+- [ ] **For mixed-font pairings** (serif+sans, italic+roman, two weights together): at least ONE part is ≤400 (light/regular). Heavy+heavy = forbidden. See base-principles.md Q18.
+- [ ] **For nested surfaces** (light card in dark section, or vice versa): text colour is scoped to the local surface, not inherited from parent. See base-principles.md Q17.
 
 If a token is **deliberately outside** its tier range (e.g., hero at 0.85 for impact), document the reason in DESIGN.md provenance. Outside-range without rationale = refactor.
 
