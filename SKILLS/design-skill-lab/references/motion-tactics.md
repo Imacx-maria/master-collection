@@ -4,6 +4,8 @@ Load in **Phase 3** whenever `style-tuning.axes.motion.value` is `medium` or `hi
 
 This file defines the technical contract per motion tier. Without it, "high" is interpreted as "more CSS animations" — which is medium dressed up. Real "high" requires GSAP-tier orchestration and a different mental model.
 
+**See also: `loader-patterns.md`** — page loaders are a separate concern (governed by Axis 9 `page-load`, not this file's `motion` axis). A page can have `motion: low` + `page-load: branded-intro`, or `motion: high` + `page-load: none`. They are orthogonal. Branded intro loaders DO count toward this file's "3 distinct motion moments" budget when justifying GSAP at the High tier (see Decision rule below).
+
 ---
 
 ## Tier definitions — what each value commits to
@@ -30,9 +32,9 @@ Examples: agency sites, brand showcases, immersive landing pages, anything that 
 Before generating any markup with `motion: high`, verify:
 
 - [ ] User explicitly chose `high` in the style-tuning interview, OR delegated and the brief explicitly mentions agency / immersive / GSAP / "wow factor" / scroll-driven storytelling.
-- [ ] Page has at least 3 distinct motion moments planned (hero entrance + scroll sequence + transition between sections is the minimum). One animated element does not justify GSAP weight.
-- [ ] Performance budget allows ~30–60kb of JS for animation. If the page is performance-critical (LCP <2.5s on 3G), drop to `medium` and document the trade-off.
-- [ ] Reduced-motion fallback is part of the plan, not an afterthought (see §Accessibility).
+- [ ] Page has at least 3 distinct motion moments planned (hero entrance + scroll sequence + transition between sections is the minimum). One animated element does not justify GSAP weight. **A `page-load: branded-intro` loader counts as one moment** — pair it with hero entrance + at least one scroll moment to clear the bar.
+- [ ] Performance budget allows ~30–60kb of JS for animation. If the page is performance-critical (LCP <2.5s on 3G), drop to `medium` and document the trade-off. **A branded loader adds 600-2500ms of perceived load time on top of GSAP weight** — factor this in.
+- [ ] Reduced-motion fallback is part of the plan, not an afterthought (see §Accessibility). Loaders skip entirely under reduced motion (see `loader-patterns.md` § Failure 4).
 
 If any of these fail, demote to `medium` and note the reason in the delivery summary.
 
@@ -54,6 +56,59 @@ If any of these fail, demote to `medium` and note the reason in the delivery sum
 - ❌ Scroll-driven JS sequences with multiple synchronized properties (that's `high`'s job).
 - ❌ Parallax that depends on scroll position math.
 - ❌ Character-by-character text reveals (CSS-only attempts always look amateur — defer to `high` with SplitText).
+- ❌ **Reveal animations gated only by `.reveal { opacity: 0 }` without a JS-ready guard.** If JS fails or runs late, content stays invisible. Required pattern below.
+
+### Required pattern — progressive-enhancement gate for reveals
+
+Every reveal animation in the medium tier (and high tier) must use the `.js-ready` progressive-enhancement gate. The hidden initial state (`opacity: 0`) only applies once JS confirms it can run the animation. If JS fails for any reason — error, blocked script, slow network — content stays fully visible.
+
+```css
+/* WITHOUT .js-ready gate, .reveal stays at opacity:0 forever if JS fails */
+.js-ready .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms cubic-bezier(.2,.7,.2,1),
+              transform 600ms cubic-bezier(.2,.7,.2,1);
+}
+.js-ready .reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+```
+
+```js
+(function() {
+  // STEP 1 — Mark JS as ready FIRST. This enables the .reveal hidden state in CSS.
+  // Any line above this that throws will leave .reveal fully visible (graceful fallback).
+  document.documentElement.classList.add('js-ready');
+
+  // STEP 2 — Defensive: if IntersectionObserver missing (very old browsers), show everything.
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  // STEP 3 — Respect prefers-reduced-motion (skip animation, show immediately).
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  // STEP 4 — Standard observer.
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+```
+
+The `.js-ready` gate is the failure-mode fix for the Spritify oneshot bug, where the hero testimonial card shipped invisible when JS hadn't run yet. **This pattern is also documented in build-tactics.md Tactic 17.4** as part of the surface-context contract — they're the same defect class (content invisible despite valid markup).
 
 ### Pre-build checklist
 
@@ -62,6 +117,10 @@ If any of these fail, demote to `medium` and note the reason in the delivery sum
 - [ ] All transitions are ≤500ms (longer feels sluggish on UI)
 - [ ] All ambient loops are ≥3s (faster reads as anxious)
 - [ ] No animation depends on a layout that breaks at narrow widths
+- [ ] **If reveal animations used: `.js-ready` gate present in CSS** (`.js-ready .reveal { opacity: 0 }`, not bare `.reveal { opacity: 0 }`)
+- [ ] **If reveal animations used: JS adds `js-ready` class to `document.documentElement` as the FIRST line** of the IIFE (before any other logic that could throw)
+- [ ] **If reveal animations used: IntersectionObserver fallback present** (if API missing → show everything)
+- [ ] **Disable-JS test passes**: page renders fully readable in DevTools with JS disabled
 
 ---
 
@@ -189,6 +248,7 @@ gsap.to(".hero-cta", { y: 0, ease: "verum-out", duration: 1 });
 - ❌ **Animations that block LCP.** Hero entrance starts after `DOMContentLoaded`, not on `load`. The headline must paint before GSAP overrides it.
 - ❌ **Pinned sections taller than the viewport.** Pin only sections shorter than `100vh` — taller pins create scroll dead-zones.
 - ❌ **Scrub: true with heavy timelines.** Scrub recomputes every frame; keep tweened properties to ≤4 simultaneously per scrub timeline.
+- ❌ **GSAP `gsap.from()` on hero content without `.js-ready` gate or `clearProps`.** If GSAP fails to load (CDN down, blocked, slow), the page hero stays at the `from` state forever. Use `.js-ready` gate on hero opacity, OR use `gsap.set()` to establish the hidden state only after GSAP confirms ready.
 
 ### Pre-build checklist
 
@@ -200,6 +260,8 @@ gsap.to(".hero-cta", { y: 0, ease: "verum-out", duration: 1 });
 - [ ] `gsap.config({ trialWarn: false })` in dev builds; production should not log warnings
 - [ ] All `ScrollTrigger` instances have `markers: false` in production (markers are dev-only)
 - [ ] Bundle size measured: GSAP core + plugins should not exceed ~80kb gzipped total
+- [ ] **Hero / above-the-fold content is visible without GSAP**: either use `.js-ready` CSS gate (medium-tier pattern, preferred) OR run `gsap.set(".hero", {opacity: 0})` AFTER confirming `window.gsap` exists. Never start hero in `opacity: 0` purely via CSS without a JS-ready guard.
+- [ ] **Disable-JS test passes** (DevTools → Sources → Disable JavaScript → reload): hero is readable, page navigation works, content not gated behind animation
 
 ---
 

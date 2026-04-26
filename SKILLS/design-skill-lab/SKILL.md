@@ -108,6 +108,26 @@ The file defines the technical contract per tier: `medium` = CSS animations + In
 
 This step exists because `motion: high` was being interpreted as "more CSS animations" — which is `medium` dressed up. Real `high` requires a different mental model and a JS animation runtime; the file makes that contract explicit before markup is generated.
 
+**Step 3.0.06 — Load loader patterns (conditional).** If `style-tuning.axes.page-load.value` is anything other than `none`, load `references/loader-patterns.md`. Skip if `none` (no loader markup, no JS, no failure surface — the browser paints natively).
+
+The file is the technical contract for page loaders — a separate concern from in-page motion. It covers: the 4 primitives every loader reduces to (rotation / translation / opacity-scale / content-mimic); the per-role pattern map (subtle → fade-in or shimmer; functional → skeleton / spinner / progress bar; branded-intro → curtain / DrawSVG / SplitText / mask reveal); 9 full recipes with GSAP code; the four mandatory failure-mode patterns (max-timeout safeguard, LCP-safe overlay, `.js-ready` gate, reduced-motion skip); per-library default recipes; and Webflow injection notes.
+
+This step exists because `page-load` was being silently invented when `motion` was `high` — usually a generic spinner with no failure-mode coverage. The two highest-severity loader bugs ("loader never resolves" and "page hidden behind loader breaks LCP") are the contract this file enforces. Without it, any loader the skill ships is one CDN failure away from being broken.
+
+**Tier-coupling note:** `motion: low` + `page-load: functional` or `branded-intro` is allowed but flagged. Build as specified, surface a one-line warning in delivery summary, log in `provenance.tuning-conflicts`. See `style-tuning.md` § Tier-coupling rule for the contract. The only auto-demote is when trauma-informed mode is active + Sanctuary Tech library — page-load is forced to `none` or `subtle` regardless of user pick (rationale in `loader-patterns.md`).
+
+**Step 3.0.07 — Surface-context check (conditional).** Before generating any markup that places **a card / testimonial / quote / panel / callout inside a section with the OPPOSITE surface mode** (light card in dark section, or dark card in light section), OR uses **JS-driven reveal animations** (`.reveal { opacity: 0 }`, scroll-triggered fades), load `references/build-tactics.md` § Tactic 17.
+
+Tactic 17 is the contract that catches the two most user-visible defects from the oneshot stress test (Spritify hero testimonial invisible; Warm Editorial dark section text inheritance):
+
+- **17.3 Per-surface colour tokens** — components that can sit on multiple surface contexts must declare their `background` AND `color` as a unit, never inherit from parent context. Token names are surface-scoped (`--text-on-surface-light`), not hierarchy-scoped (`--text-default`).
+- **17.4 Progressive-enhancement gate for reveals** — `.reveal { opacity: 0 }` must be gated by `.js-ready` class added by JS as the FIRST line of the IIFE. Without this, JS failure leaves content permanently invisible.
+- **17.6 Audit test (mental flip)** — before delivery, mentally flip every surface in the build. Any text that becomes invisible was inherited instead of scoped. Refactor.
+
+The 17.7 checklist is the contract; failures here are the highest-severity bugs the skill has shipped (2/11 builds in the oneshot run had this defect).
+
+This step pairs with `base-principles.md` Q17 (audit lens — "is the colour scoped?"). Tactic 17 is the build lens — "scope it now, before markup."
+
 **Step 3.0 — Load layout patterns.** Before generating markup for any section with multiple items, load `references/layout-patterns.md`. Decide explicitly per section: bento, uniform grid, list, or hero+supporting. Don't default to `auto-fit minmax(...)` — this produces orphan rows and visual misalignment.
 
 For each multi-item section, document the decision in your build:
@@ -211,12 +231,13 @@ design-skill-lab/
 ├── SKILL.md                              # this file — workflow orchestrator
 ├── references/
 │   ├── base-principles.md                # universal rules (typography, a11y, spacing)
-│   ├── build-tactics.md                  # tactical do/don't recipes for build moment
+│   ├── build-tactics.md                  # tactical do/don't recipes for build moment (17 tactics: 1-13 always-on; 14 dark-mode, 15 mobile-nav, 16 component-reusability, 17 surface-context conditional)
 │   ├── inspiration-analysis.md           # how to extract from an image without copying
 │   ├── user-overrides.md                 # detection + protocol for user colors/fonts/URL/image, fidelity scale
-│   ├── style-tuning.md                   # 8-question interview + per-library defaults table (Phase 2.1)
+│   ├── style-tuning.md                   # 9-question interview + per-library defaults table (Phase 2.1)
 │   ├── layout-patterns.md                # bento vs uniform vs list, alignment rules, span vocabulary
 │   ├── motion-tactics.md                 # technical contract per motion tier (medium=CSS+IO, high=GSAP+ScrollTrigger+SplitText+Flip)
+│   ├── loader-patterns.md                # page-loader contract per page-load value (subtle / functional / branded-intro); 9 recipes; 4 mandatory failure-mode guards (Phase 3 Step 3.0.06)
 │   ├── typography-safety.md              # tier+modifier model, language adjustments, failure modes
 │   ├── sidecar-contract.md               # .design.md → tokens.json + tailwind.config.js transform spec (Phase 4.8.1)
 │   ├── scripts/
@@ -245,6 +266,8 @@ design-skill-lab/
 | User provides colors / fonts / image / URL | `references/user-overrides.md` (run first in Phase 1) |
 | User mentions image/inspiration | `references/inspiration-analysis.md` |
 | `style-tuning.axes.motion` is `medium` or `high` | `references/motion-tactics.md` (Phase 3 — technical contract per tier; medium=CSS-only, high=GSAP) |
+| `style-tuning.axes.page-load` is anything other than `none` | `references/loader-patterns.md` (Phase 3 — pattern map + 9 recipes + 4 mandatory failure-mode guards) |
+| Build mixes light/dark surfaces (light card in dark section, etc.) OR uses reveal animations | `references/build-tactics.md` § Tactic 17 (Phase 3 — surface-scoped colour tokens + `.js-ready` reveal gate) |
 | About to build markup with grids/cards | `references/layout-patterns.md` (Phase 3 — pick pattern deliberately) |
 | Chosen a library, starting build | `references/styles/<style>.md` + `.design.md` |
 | About to deliver, pre-review | `references/style-reviews/<style>.md` |

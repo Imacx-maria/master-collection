@@ -1,6 +1,6 @@
 # Style Tuning
 
-The skill picks a style library; **Style Tuning lets the user fine-tune 8 plain-language design questions (plus a 9th conditional axis for trauma-informed work)** before the project DESIGN.md is derived. The user never sees library names — the skill maps the 8 answers to the closest library internally and uses it as a base.
+The skill picks a style library; **Style Tuning lets the user fine-tune 9 plain-language design questions (plus a 10th conditional axis for trauma-informed work)** before the project DESIGN.md is derived. The user never sees library names — the skill maps the 9 answers to the closest library internally and uses it as a base.
 
 Load this in **Phase 2 Step 2.1** — BEFORE any library is chosen. The interview answers drive the library mapping in Step 2.2.
 
@@ -8,7 +8,7 @@ Load this in **Phase 2 Step 2.1** — BEFORE any library is chosen. The intervie
 
 ## When to use Style Tuning — BLOCKING INTERVIEW
 
-**This is a blocking interactive step. The skill CANNOT proceed to Step 2.2 (library mapping) without explicit user response on every question (1–8, plus optional 9 if trauma-informed).**
+**This is a blocking interactive step. The skill CANNOT proceed to Step 2.2 (library mapping) without explicit user response on every question (1–9, plus optional 10 if trauma-informed).**
 
 **Silence is NOT consent to defaults.** Absence of an answer means the agent must ask. The agent MUST wait for the user to respond before generating any markup or DESIGN.md content.
 
@@ -18,7 +18,7 @@ This is the same enforcement tone as Phase 4.7 (self-correction loop) — it exi
 
 | Situation | Blocked? |
 |---|---|
-| User has not yet been asked the 8 questions | YES — must ask now |
+| User has not yet been asked the 9 questions | YES — must ask now |
 | User was asked but hasn't responded | YES — must wait |
 | User responded "you decide" / "let Claude choose" on every axis | NO — proceed (their delegation is the answer) |
 | User responded with explicit values + "you decide" mix | NO — proceed (mixed delegation is valid) |
@@ -26,20 +26,20 @@ This is the same enforcement tone as Phase 4.7 (self-correction loop) — it exi
 
 **Universal escape per axis: every question offers `you decide` as a valid response.** The user can delegate any individual axis to the skill — but the delegation itself is an explicit answer, recorded in the manifesto as `user-delegated`. The agent never makes an axis decision silently.
 
-**Library is never asked, never announced.** The user does not pick a library, does not see library names, and is never asked to confirm one. The skill maps the 8 answers to libraries internally in Step 2.2 (≥5/8 matches → that library is base; <5/8 → mix top 2-3) and records the mapping in `provenance.library-derivation` for audit only. The user judges the *output*, not the *label*.
+**Library is never asked, never announced.** The user does not pick a library, does not see library names, and is never asked to confirm one. The skill maps the 9 answers to libraries internally in Step 2.2 (≥6/9 matches → that library is base; <6/9 → mix top 2-3) and records the mapping in `provenance.library-derivation` for audit only. The user judges the *output*, not the *label*.
 
 ---
 
 ## The interview format (prescribed — do not improvise)
 
-The interview is **library-agnostic and silent on library mapping**. The user does not pick a library, does not see library names, does not need to know what `Spritify` or `Technical Refined` mean. They answer 8 plain-language questions about the look they want. The skill maps the answers to libraries internally in Step 2.2 (≥5/8 → base library; <5/8 → mix top 2-3 libraries; tied low → Custom / Freestyle). The user is never shown the chosen library and never asked to confirm one.
+The interview is **library-agnostic and silent on library mapping**. The user does not pick a library, does not see library names, does not need to know what `Spritify` or `Technical Refined` mean. They answer 9 plain-language questions about the look they want. The skill maps the answers to libraries internally in Step 2.2 (≥6/9 → base library; <6/9 → mix top 2-3 libraries; tied low → Custom / Freestyle). The user is never shown the chosen library and never asked to confirm one.
 
 The agent **copies the template below verbatim** and presents it as a single message. Then the agent **stops and waits for a response**.
 
 ### Template
 
 ```
-Quick design interview — 8 questions before I build.
+Quick design interview — 9 questions before I build.
 
 Pick one option per question, or write "you decide" for any question you don't have an opinion on (I'll pick based on the brief). You can also reply "you decide for all" to delegate everything.
 
@@ -96,15 +96,22 @@ Pick one option per question, or write "you decide" for any question you don't h
    • 3d — ThreeJS / WebGL particles, shaders
    • you decide
 
-{conditional: append axis 9 if trauma-informed mode is active OR copy will be auto-generated}
-
-9. TONE — how should the writing sound?
-   • playful — casual, energetic, light
-   • professional — direct, factual, neutral
-   • serious — formal, considered, weighted
-   • clinical — precise, sterile, observational
-   • empowering — strength-based, agency-focused, supportive
+9. PAGE LOAD — what should happen before the page appears?
+   • none — page just appears, no loader (fastest, default for most product sites)
+   • subtle — quick fade-in or content-aware shimmer (refined polish, no spectacle)
+   • functional — skeleton blocks, spinner, or progress bar while content loads (apps, feeds, dashboards, slow assets)
+   • branded intro — full-screen logo / curtain wipe / signature reveal (agency, portfolio, marketing splash)
    • you decide
+
+{conditional: append axis 10 if trauma-informed mode is active OR copy will be auto-generated}
+
+10. TONE — how should the writing sound?
+    • playful — casual, energetic, light
+    • professional — direct, factual, neutral
+    • serious — formal, considered, weighted
+    • clinical — precise, sterile, observational
+    • empowering — strength-based, agency-focused, supportive
+    • you decide
 
 ────────────────────────────────────────
 
@@ -115,7 +122,7 @@ Quick paths:
 
 ### What was cut from earlier versions, and why
 
-Previous versions of this skill asked 12 axes. Five were cut after observed user-facing failures:
+Previous versions of this skill asked 12 axes. Five were cut after observed user-facing failures (page-load was added back in a later iteration as Axis 9 once it became clear loaders were being silently invented):
 
 - **Type weight** (light-airy / regular / bold) — cut. Weight is a consequence of the chosen library + type pairing, not a meaningful standalone question. Asking it forces design jargon.
 - **Framing** (open / contained / panelled / floating) — cut. Even designers struggle to name what these mean. The library + corners choice already telegraph the answer.
@@ -135,7 +142,19 @@ The agent parses the user's reply and produces the tuning manifesto:
 - **Missing axis in response** → re-ask only the missing ones (single follow-up — don't loop more than twice)
 - **Contradictory or unrecognised value** → ask once for clarification on that axis only, then accept whatever the user says
 
-After the second reply (if needed), the agent maps the 12 answers to the nearest library (Step 2.2 in SKILL.md), announces it for confirmation, then proceeds to derive the DESIGN.md.
+After the second reply (if needed), the agent maps the 9 answers to the nearest library (Step 2.2 in SKILL.md), announces it for confirmation, then proceeds to derive the DESIGN.md.
+
+### Tier-coupling rule — motion × page-load
+
+When `motion: low` AND `page-load` is `functional` or `branded-intro`, the combination is permissive but contradictory ("almost nothing moves" + "the page enters with a 2-second curtain wipe"). It can be a coherent design choice — brutalist sites with one signature intro then dead silence are real — but it is more often a misclick.
+
+**Rule (soft warn-and-build):**
+1. Build the requested combination as specified — do not auto-demote.
+2. Surface a one-line warning in the delivery summary: `Note: motion: low + page-load: branded-intro is unusual. The page will load with a full intro animation, then sit nearly static. Reply "demote loader" to drop to subtle, or "lock motion" to keep as-is.`
+3. Record the conflict in `provenance.tuning-conflicts` with `acknowledged: false` until the user responds.
+4. The conflict is non-blocking. Build proceeds.
+
+This rule is documented here AND mirrored in `loader-patterns.md` § Tier compatibility. Do not silently demote.
 
 ### What the agent must NOT do
 
@@ -147,7 +166,7 @@ After the second reply (if needed), the agent maps the 12 answers to the nearest
 
 ---
 
-## The 8 Questions (plus 1 conditional)
+## The 9 Questions (plus 1 conditional)
 
 Each question has 2-5 options. The user picks one OR writes `you decide`. Library is derived from the answers (Step 2.2 in SKILL.md), never asked.
 
@@ -222,11 +241,29 @@ How visual assets shape the page.
 - **`type-only`** — No imagery; typography carries the page. Brutalist, editorial-poster, manifesto sites.
 - **`3d`** — ThreeJS / WebGL hero, particle fields, shader effects. Premium tech, retro-futurist, AI tools.
 
+### 9. Page load
+
+What happens before / as the page first becomes visible. This is a separate concern from `motion` (which governs in-page animation). A `motion: low` page can still have a `branded-intro` loader; a `motion: high` page can ship with `page-load: none` if the LCP budget is tight.
+
+The skill maps the user's role choice to a specific visual pattern internally (curtain wipe vs logo reveal vs SplitText reveal vs skeleton+shimmer vs spinner vs progress bar) based on the chosen library + imagery + corners. The user picks the *role*; the skill picks the *pattern*. See `loader-patterns.md` for the mapping table.
+
+- **`none`** — No loader. Browser-native paint. Default for most product surfaces; speed > theatre. The page just appears.
+- **`subtle`** — Quick fade-in (~200-400ms) on `body`, or content-aware shimmer on hero image while it decodes. Polish without spectacle. The user notices the page loaded smoothly, never that there *was* a loader.
+- **`functional`** — Skeleton blocks (fake layout that mimics final structure), spinner, or progress bar. Communicates "wait, content coming" when the wait is real (heavy assets, async data, predictable structure). Best for apps, dashboards, content feeds.
+- **`branded-intro`** — Full-screen loader as a brand statement: logo reveal (DrawSVG stroke animation), curtain wipe (clip-path translation), animated wordmark (SplitText), or signature mask reveal. Adds 600-2000ms before content paints. Use when the brand earns it — agency, portfolio, hero-driven marketing splash. Not for product surfaces.
+
+**When to push `none`:** technical-refined, sanctuary-tech, memoir, anything where every millisecond toward LCP matters more than craft theatre.
+**When to push `subtle`:** warm-editorial, basalt, warm-serene-luxury, anything that wants polish but not spectacle.
+**When to push `functional`:** dashboards, e-commerce listings with image grids, content feeds, anywhere the wait is real and unpredictable.
+**When to push `branded-intro`:** creative-studio, neo-brutalist (signature curtain), spritify (bouncy logo), playful-bento — sites that already commit to motion as identity.
+
+**Tier compatibility (soft warn):** `motion: low` + `page-load: functional` or `branded-intro` is allowed but flagged. The page enters loud and then sits silent. Coherent in some brutalist / single-statement designs; usually a misclick. See "Tier-coupling rule" above.
+
 ---
 
 ## Bonus question (conditional)
 
-### 9. Tone register
+### 10. Tone register
 
 Only asked when **trauma-informed mode** is active (Phase 1.0.5 fired) OR when copy will be auto-generated.
 
@@ -240,36 +277,36 @@ If trauma-informed mode is active and the user picks `playful` or `clinical`, fl
 
 ---
 
-## Per-library defaults (8-axis profile)
+## Per-library defaults (9-axis profile)
 
-These are the starting points before user tuning. Each library has been profiled against the 8 questions; the user never sees this table.
+These are the starting points before user tuning. Each library has been profiled against the 9 questions; the user never sees this table.
 
-| Library | Color mode | Fonts | Layout | Width | Corners | Motion | Loudness | Imagery |
-|---|---|---|---|---|---|---|---|---|
-| **Neo-Brutalist** | light | sans | grid-based | wide | sharp | low | monochrome | type-only |
-| **Editorial Portfolio** | light | mix | loose | wide | sharp | low | muted | photographic |
-| **Technical Refined** | both | sans | grid-based | standard | soft | low | monochrome | abstract |
-| **Basalt E-Commerce** | light | mix | grid-based | wide | soft | low | muted | photographic |
-| **Memoir Blog** | light | mix | loose | narrow | sharp | low | muted | photographic |
-| **Creative Studio** | light | mix | loose | wide | soft | high | balanced | photographic |
-| **Warm Serene Luxury** | light | mix | loose | wide | sharp | medium | muted | photographic |
-| **Playful Bento** | light | sans | grid-based | standard | soft | medium | vibrant | abstract |
-| **Spritify** | light | sans | grid-based | standard | rounded | high | vibrant | illustrative |
-| **Sanctuary Tech** | dark | sans | loose | narrow | sharp | low | monochrome | type-only |
-| **Warm Editorial** | both | mix | loose | standard | soft | low | muted | abstract |
-| **Custom / Freestyle** | — | — | — | — | — | — | — | — |
+| Library | Color mode | Fonts | Layout | Width | Corners | Motion | Loudness | Imagery | Page load |
+|---|---|---|---|---|---|---|---|---|---|
+| **Neo-Brutalist** | light | sans | grid-based | wide | sharp | low | monochrome | type-only | branded-intro |
+| **Editorial Portfolio** | light | mix | loose | wide | sharp | low | muted | photographic | subtle |
+| **Technical Refined** | both | sans | grid-based | standard | soft | low | monochrome | abstract | none |
+| **Basalt E-Commerce** | light | mix | grid-based | wide | soft | low | muted | photographic | subtle |
+| **Memoir Blog** | light | mix | loose | narrow | sharp | low | muted | photographic | none |
+| **Creative Studio** | light | mix | loose | wide | soft | high | balanced | photographic | branded-intro |
+| **Warm Serene Luxury** | light | mix | loose | wide | sharp | medium | muted | photographic | subtle |
+| **Playful Bento** | light | sans | grid-based | standard | soft | medium | vibrant | abstract | branded-intro |
+| **Spritify** | light | sans | grid-based | standard | rounded | high | vibrant | illustrative | branded-intro |
+| **Sanctuary Tech** | dark | sans | loose | narrow | sharp | low | monochrome | type-only | none |
+| **Warm Editorial** | both | mix | loose | standard | soft | low | muted | abstract | subtle |
+| **Custom / Freestyle** | — | — | — | — | — | — | — | — | — |
 
-When `Custom / Freestyle` is chosen, the skill skips library mapping entirely and builds DESIGN.md directly from the 8 user answers.
+When `Custom / Freestyle` is chosen, the skill skips library mapping entirely and builds DESIGN.md directly from the 9 user answers.
 
 ---
 
 ## Library mapping logic (Step 2.2 in SKILL.md)
 
-The skill maps the 8 user answers against the per-library defaults table and counts matches per library. Then:
+The skill maps the 9 user answers against the per-library defaults table and counts matches per library. Then:
 
-- **Highest match score ≥ 5/8** → that library is the **base**. The skill applies its full system as foundation, then overrides only the specific axes the user answered differently. The chosen library is logged in `provenance.library-derivation`, never announced to the user for confirmation.
-- **Highest match score < 5/8** → no clear winner. The skill mixes the **top 2-3 libraries** (those with the highest scores, even if below threshold) to cover the answer set. This produces a genuine hybrid built from the mixture — no single template, constructed from the parts that match.
-- **All scores tied at low values** → fall back to **Custom / Freestyle**: build DESIGN.md directly from the 8 user answers without any library template as foundation.
+- **Highest match score ≥ 6/9** → that library is the **base**. The skill applies its full system as foundation, then overrides only the specific axes the user answered differently. The chosen library is logged in `provenance.library-derivation`, never announced to the user for confirmation.
+- **Highest match score < 6/9** → no clear winner. The skill mixes the **top 2-3 libraries** (those with the highest scores, even if below threshold) to cover the answer set. This produces a genuine hybrid built from the mixture — no single template, constructed from the parts that match.
+- **All scores tied at low values** → fall back to **Custom / Freestyle**: build DESIGN.md directly from the 9 user answers without any library template as foundation.
 
 The user NEVER sees the library mapping. It is internal craft, recorded in provenance for audit only. The user sees the output (the DESIGN.md and the build) and judges it on its own merits — they don't have to learn library names to use this skill.
 
@@ -281,7 +318,7 @@ If the user dislikes the result, they course-correct in plain language ("more te
 
 The agent runs this sequence. **Each step blocks the next.**
 
-1. **Compose the interview message** by copying the prescribed template above verbatim. No library has been chosen at this stage. Append axis 9 only if trauma-informed mode is active OR copy will be auto-generated.
+1. **Compose the interview message** by copying the prescribed template above verbatim. No library has been chosen at this stage. Append axis 10 (tone) only if trauma-informed mode is active OR copy will be auto-generated.
 
 2. **Send the interview as a single message and STOP.** Do not generate any markup, DESIGN.md, library guess, or follow-up reasoning before the user responds. The skill is paused at this point.
 
@@ -290,9 +327,9 @@ The agent runs this sequence. **Each step blocks the next.**
 4. **If response is partial** (some axes missing) — send a single follow-up asking only the missing axes. Do not re-ask answered ones. Do not loop more than twice.
 
 5. **Map answers to libraries** using the per-library defaults table:
-   - Count match score per library (0-8 axes match).
-   - If top score ≥ 5/8 → that library is base; overrides applied for non-matching axes.
-   - If top score < 5/8 → mix top 2-3 libraries.
+   - Count match score per library (0-9 axes match).
+   - If top score ≥ 6/9 → that library is base; overrides applied for non-matching axes.
+   - If top score < 6/9 → mix top 2-3 libraries.
    - Log mapping in `provenance.library-derivation` with method, top scores, and final decision.
 
 6. **Build the tuning manifesto** (YAML format below) with `user-confirmed: true`, per-axis `source` field, and the library derivation block. The user is NOT shown library names; they're recorded for audit only.
@@ -342,23 +379,40 @@ style-tuning:
     imagery:
       value: abstract
       source: user-chosen
-    # axis 9 (tone) only present if asked
+    page-load:
+      value: branded-intro                 # none | subtle | functional | branded-intro
+      source: user-chosen
+      pattern: curtain-wipe                # internal pick by skill from loader-patterns.md
+    # axis 10 (tone) only present if asked
 provenance:
   fidelity: adapted
   trauma-informed-mode: false
   interview-conducted-at: 2026-04-25T16:42:00
   library-derivation:
-    method: 8-axis match scoring against per-library defaults
+    method: 9-axis match scoring against per-library defaults
     scores:
-      creative-studio: 6
+      creative-studio: 7
       editorial-portfolio: 4
       technical-refined: 3
       others: <3
-    decision: creative-studio is base (≥5/8 threshold met); overrides applied for color-mode (both) and imagery (abstract)
+    decision: creative-studio is base (≥6/9 threshold met); overrides applied for color-mode (both) and imagery (abstract)
     user-shown-library: false              # always false; library names are internal craft
+  tuning-conflicts: []                     # populated only if motion/page-load mismatch detected
 divergences-from-library:
   - 2 axes overridden from creative-studio defaults: color-mode (light → both), imagery (photographic → abstract)
 ---
+```
+
+When a tier-coupling conflict exists (e.g., `motion: low` + `page-load: branded-intro`), `tuning-conflicts` is populated:
+
+```yaml
+  tuning-conflicts:
+    - axes: [motion, page-load]
+      values: [low, branded-intro]
+      severity: soft-warn
+      message: "motion: low + branded intro loader is unusual; page enters loud then sits silent"
+      acknowledged: false                  # flips to true after user responds to delivery warning
+      resolution: build-as-specified       # build-as-specified | demoted-to-subtle | locked-by-user
 ```
 
 This block becomes the **source of truth** for Phase 3 (BUILD) and Phase 4 (REVIEW).
@@ -373,11 +427,13 @@ If `user-confirmed: false` or the `axes` block is missing or any axis has no `so
 
 - ❌ **Asking the user "which library?"** — library names are jargon. Even designers don't always know what `Spritify` means. The skill maps internally.
 - ❌ **Announcing the chosen library for confirmation** — same problem. The user can't validate a name they don't know. They validate the *output*, not the *label*.
-- ❌ **Forcing 12 prompts on the user.** The skill cuts to 8 questions; the user can `you decide` any of them.
+- ❌ **Forcing 12 prompts on the user.** The skill is capped at 9 questions (10 if trauma-informed); the user can `you decide` any of them.
 - ❌ **Hiding the tuning step.** It's BLOCKING. The opt-out is the user's; the offer is mandatory.
 - ❌ **Letting unrecognised axes silently fail.** Ask once for clarification, then move on with what you understood.
 - ❌ **Mixing tuning with overrides in the prompt.** Tuning = character axes. Overrides (colors/fonts/URL/image) = literal tokens. They are processed in different files (`user-overrides.md` vs this file).
 - ❌ **Treating tuning as cosmetic.** A tuning shift is a design decision — document it in provenance, validate in Phase 4.5.
+- ❌ **Inventing a loader without asking.** Page-load is Axis 9 — never silently ship a curtain wipe or skeleton. If the axis wasn't answered, follow the missing-axis follow-up rule.
+- ❌ **Auto-demoting a tuning conflict.** `motion: low` + `branded-intro` is allowed under the soft warn-and-build rule. Build it, surface the warning, log the conflict in provenance — do not change the user's choice silently.
 
 ---
 
@@ -385,8 +441,8 @@ If `user-confirmed: false` or the `axes` block is missing or any axis has no `so
 
 | Situation | Action |
 |---|---|
-| User wrote "make me a kindergarten site for tech-genius kids" | Ask the 8 questions. User answers. Skill maps internally — likely Creative Studio + Editorial Portfolio mix. Build. |
-| User wrote "agency landing page, energetic" | Ask the 8 questions. Likely Creative Studio base. Build. |
-| User wrote "calming legal aid resource for survivors" | Phase 1.0.5 already loaded trauma-informed.md. Ask 8 + axis 9 (tone). Likely Sanctuary Tech base; force tone=empowering if user picks playful/clinical. |
-| User wrote "everything custom, freestyle" | Ask the 8 questions. If no library matches ≥5/8, fall back to Custom mode — build DESIGN.md directly from the 8 answers. |
+| User wrote "make me a kindergarten site for tech-genius kids" | Ask the 9 questions. User answers. Skill maps internally — likely Creative Studio + Editorial Portfolio mix. Build. |
+| User wrote "agency landing page, energetic" | Ask the 9 questions. Likely Creative Studio base. Build. |
+| User wrote "calming legal aid resource for survivors" | Phase 1.0.5 already loaded trauma-informed.md. Ask 9 + axis 10 (tone). Likely Sanctuary Tech base (page-load: none); force tone=empowering if user picks playful/clinical. |
+| User wrote "everything custom, freestyle" | Ask the 9 questions. If no library matches ≥6/9, fall back to Custom mode — build DESIGN.md directly from the 9 answers. |
 | User wrote "skip interview, just build" | Log `interview-mode: user-skipped`. Pick a starting library from the brief alone. Document the bypass. |
